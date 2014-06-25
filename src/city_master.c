@@ -21,6 +21,7 @@ Point down_point;
 Point up_point;
 
 bool ready_to_place = false;
+bool updating_plan = false;
 Point plan_up;
 Point plan_down;
 
@@ -167,7 +168,10 @@ int main(int argc, char* argv[])
                         screen_y -= 10;
                         break;
                     case SDLK_ESCAPE:
-                        mode = MODE_VIEW;
+                        if(ready_to_place) ready_to_place = false;
+                        else {
+                            mode = MODE_VIEW;
+                        }
                         break;
                     case SDLK_RETURN:
                         if(ready_to_place) placePlannedBuild();
@@ -178,7 +182,14 @@ int main(int argc, char* argv[])
             } else if(e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
-                ready_to_place = false;
+                if(mode == MODE_BUILD_ROAD) {
+                    Point d;
+                    mouseToGrid(down_point.x, down_point.y, &d);
+                    updating_plan = true;
+                    ready_to_place = true;
+                    plan_down.x = d.x;
+                    plan_down.y = d.y;
+                }
                 //
             } else if(e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT) {
                 up_point.x = e.button.x;
@@ -196,6 +207,7 @@ int main(int argc, char* argv[])
                             break;
                         case MODE_BUILD_ROAD://map_value[MAP_SIZE_X][MAP_SIZE_Y] 
                             // if not on edge of map
+                            updating_plan = false;
                             planRoad(u, d);
                             break;
                         case MODE_BUILD_DESTROY:
@@ -209,6 +221,12 @@ int main(int argc, char* argv[])
                     //map_value[u.x][u.y] = map_value[u.x][u.y]==0 ? 1 : 0;
                 }
                 
+            } else if(e.type == SDL_MOUSEMOTION) {
+                if(updating_plan) {
+                    Point u;
+                    mouseToGrid(e.button.x, e.button.y, &u);
+                    plan_up = u;
+                }
             }
         }
 
