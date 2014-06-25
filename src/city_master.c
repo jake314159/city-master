@@ -44,7 +44,7 @@ void typeRoad(Point u)
 
 void placeRoad(Point u)
 {
-    if(u.x >1 && u.y>1 && u.x < MAP_SIZE_X-1 && u.y < MAP_SIZE_Y-1) {
+    if(u.x >1 && u.y>1 && u.x < MAP_SIZE_X-1 && u.y < MAP_SIZE_Y-1 && canBuildOn(map_value[u.x][u.y])) {
         typeRoad(u);
         u.x += 1;
         if(isRoad(map_value[u.x][u.y])) typeRoad(u);
@@ -62,23 +62,19 @@ void placeRoad(Point u)
 
 void planRoad(Point u, Point d)
 {
-    if(u.x == d.x && u.y == d.y) {
-        placeRoad(u);
-    } else {
-        ready_to_place = true;
-        plan_up.x = u.x;
-        plan_up.y = u.y;
-        plan_down.x = d.x;
-        plan_down.y = d.y;
-    }
+    ready_to_place = true;
+    plan_up.x = u.x;
+    plan_up.y = u.y;
+    plan_down.x = d.x;
+    plan_down.y = d.y;
 }
 
 void placePlannedBuild()
 {
     if(!ready_to_place) return;
+    Point p, p2;
     switch(mode) {
-        case MODE_BUILD_ROAD:;
-            Point p;
+        case MODE_BUILD_ROAD:
             p = plan_down;
             placeRoad(plan_down);
             placeRoad(plan_up);
@@ -99,11 +95,59 @@ void placePlannedBuild()
                 placeRoad(p);
             }
             break;
+        case MODE_BUILD_RESIDENTIAL_1:
+            p.x = plan_down.x;
+            p.y = plan_down.y;
+            while(p.x != plan_up.x) {
+                p2 = p;
+                while(p.y != plan_up.y) {
+                    if(canBuildOn(map_value[p.x][p.y])) {
+                        map_value[p.x][p.y] = TILE_BUILDING;
+                    }
+                    if(p.y < plan_up.y) {
+                        p.y += 1;
+                    } else {
+                        p.y -=1;
+                    }
+                }
+                p = p2;
+                if(p.x < plan_up.x) {
+                    p.x += 1;
+                } else {
+                    p.x -=1;
+                }
+            }
+
+            break;
+        case MODE_BUILD_DESTROY:
+            p.x = plan_down.x;
+            p.y = plan_down.y;
+            while(p.x != plan_up.x) {
+                p2 = p;
+                while(p.y != plan_up.y) {
+                    map_value[p.x][p.y] = TILE_GRASS;
+                    if(p.y < plan_up.y) {
+                        p.y += 1;
+                    } else {
+                        p.y -=1;
+                    }
+                }
+                p = p2;
+                if(p.x < plan_up.x) {
+                    p.x += 1;
+                } else {
+                    p.x -=1;
+                }
+            }
+
+            break;
         default:
             break;
     }
 
     ready_to_place = false;
+    plan_down.x = 0;
+    plan_down.y = 0;
 }
 
 int main(int argc, char* argv[]) 
@@ -168,8 +212,11 @@ int main(int argc, char* argv[])
                         screen_y -= 10;
                         break;
                     case SDLK_ESCAPE:
-                        if(ready_to_place) ready_to_place = false;
-                        else {
+                        if(ready_to_place) {
+                            ready_to_place = false;
+                            plan_down.x = 0;
+                            plan_down.y = 0;
+                        } else {
                             mode = MODE_VIEW;
                         }
                         break;
@@ -182,7 +229,7 @@ int main(int argc, char* argv[])
             } else if(e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
-                if(mode == MODE_BUILD_ROAD) {
+                if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_DESTROY)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -194,21 +241,32 @@ int main(int argc, char* argv[])
             } else if(e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT) {
                 up_point.x = e.button.x;
                 up_point.y = e.button.y;
+                updating_plan = false;
 
                 if( !touch_HUD(&down_point, &up_point)) {
                     Point u, d;
                     mouseToGrid(up_point.x, up_point.y, &u);
                     mouseToGrid(down_point.x, down_point.y, &d);
+                    
                     switch(mode) {
                         case MODE_BUILD_RESIDENTIAL_1:
                             if(u.x == d.x && u.y == d.y) {
-                                map_value[u.x][u.y] = TILE_BUILDING;
+                                ready_to_place = false; //as we are placing it
+                                if(canBuildOn(map_value[u.x][u.y])) {
+                                    map_value[u.x][u.y] = TILE_BUILDING;
+                                }
+                            } else {
+                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
                             }
                             break;
-                        case MODE_BUILD_ROAD://map_value[MAP_SIZE_X][MAP_SIZE_Y] 
-                            // if not on edge of map
-                            updating_plan = false;
-                            planRoad(u, d);
+                        case MODE_BUILD_ROAD:
+                            if(u.x == d.x && u.y == d.y) {
+                                if(canBuildOn(map_value[u.x][u.y])) {
+                                    placeRoad(u);
+                                }
+                            } else {
+                                planRoad(u, d);
+                            }
                             break;
                         case MODE_BUILD_DESTROY:
                             if(u.x == d.x && u.y == d.y) {
@@ -219,8 +277,13 @@ int main(int argc, char* argv[])
                             break;
                     }
                     //map_value[u.x][u.y] = map_value[u.x][u.y]==0 ? 1 : 0;
+                } else {
+                    updating_plan = false;
+                    ready_to_place = false;
+                    plan_down.x = 0;
+                    plan_down.y = 0;
                 }
-                
+
             } else if(e.type == SDL_MOUSEMOTION) {
                 if(updating_plan) {
                     Point u;

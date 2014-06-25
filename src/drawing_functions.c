@@ -85,31 +85,61 @@ void draw_city(SDL_Renderer* ren)
     drawTile(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
 
     if(ready_to_place) {
-        Point p2;
-        p = plan_down;
+        Point p2, p3;
+        switch(getMode()) {
+            case MODE_BUILD_ROAD:
+                p = plan_down;
 
-        p2 = plan_down;
-        drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_GREEN));
-        plan_down = p2;
-        while(p.x != plan_up.x) {
-            if(p.x < plan_up.x) {
-                p.x += 1;
-            } else {
-                p.x -=1;
-            }
-            p2 = p;
-            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
-            p = p2;
-        }
-        while(p.y != plan_up.y) {
-            if(p.y < plan_up.y) {
-                p.y += 1;
-            } else {
-                p.y -=1;
-            }
-            p2 = p;
-            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
-            p = p2;
+                p2 = plan_down;
+                drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_GREEN));
+                plan_down = p2;
+                while(p.x != plan_up.x) {
+                    if(p.x < plan_up.x) {
+                        p.x += 1;
+                    } else {
+                        p.x -=1;
+                    }
+                    p2 = p;
+                    drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                    p = p2;
+                }
+                while(p.y != plan_up.y) {
+                    if(p.y < plan_up.y) {
+                        p.y += 1;
+                    } else {
+                        p.y -=1;
+                    }
+                    p2 = p;
+                    drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                    p = p2;
+                }
+                break;
+            case MODE_BUILD_RESIDENTIAL_1:
+            case MODE_BUILD_DESTROY:
+                p = plan_down;
+                //p2 = plan_down;
+                //drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_GREEN));
+                //plan_down = p2;
+                while(p.x != plan_up.x) {
+                    p3 = p;
+                    while(p.y != plan_up.y) {
+                        p2 = p;
+                        drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                        p = p2;
+                        if(p.y < plan_up.y) {
+                            p.y += 1;
+                        } else {
+                            p.y -=1;
+                        }
+                    }
+                    p = p3;
+                    if(p.x < plan_up.x) {
+                        p.x += 1;
+                    } else {
+                        p.x -=1;
+                    }
+                }
+                break;
         }
     }
 }

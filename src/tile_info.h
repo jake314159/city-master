@@ -45,3 +45,5 @@ SDL_Rect* getClip(SPRITE s);
 // Gets the type of road based on which directions there are roads and which there aren't
 TILE_TYPE typeOfRoad(bool north, bool east, bool south, bool west);
 bool isRoad(TILE_TYPE t);
+
+bool canBuildOn(TILE_TYPE t);

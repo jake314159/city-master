@@ -103,3 +103,8 @@ SDL_Rect* getClip(SPRITE s)
 {
     return &spriteClips[s];
 }
+
+bool canBuildOn(TILE_TYPE t)
+{
+    return t == TILE_GRASS;
+}
