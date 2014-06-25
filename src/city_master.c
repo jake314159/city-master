@@ -6,6 +6,9 @@
 #include "tile_info.h"
 #include "draw_utils.h"
 
+#define MIN(A, B) ((A) < (B) ? (A) : (B))
+#define MAX(A, B) ((A) > (B) ? (A) : (B))
+
 #define FRAME_TIME_DELAY 20
 
 const char* WINDOW_NAME = "City Master";
@@ -73,6 +76,7 @@ void placePlannedBuild()
 {
     if(!ready_to_place) return;
     Point p, p2;
+    int x, y;
     switch(mode) {
         case MODE_BUILD_ROAD:
             p = plan_down;
@@ -95,48 +99,22 @@ void placePlannedBuild()
                 placeRoad(p);
             }
             break;
-        case MODE_BUILD_RESIDENTIAL_1:
-            p.x = plan_down.x;
-            p.y = plan_down.y;
-            while(p.x != plan_up.x) {
-                p2 = p;
-                while(p.y != plan_up.y) {
-                    if(canBuildOn(map_value[p.x][p.y])) {
-                        map_value[p.x][p.y] = TILE_BUILDING;
-                    }
-                    if(p.y < plan_up.y) {
-                        p.y += 1;
-                    } else {
-                        p.y -=1;
-                    }
-                }
-                p = p2;
-                if(p.x < plan_up.x) {
-                    p.x += 1;
-                } else {
-                    p.x -=1;
+        case MODE_BUILD_RESIDENTIAL_1:;
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    map_value[p.x][p.y] = TILE_BUILDING;
                 }
             }
 
             break;
         case MODE_BUILD_DESTROY:
-            p.x = plan_down.x;
-            p.y = plan_down.y;
-            while(p.x != plan_up.x) {
-                p2 = p;
-                while(p.y != plan_up.y) {
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
                     map_value[p.x][p.y] = TILE_GRASS;
-                    if(p.y < plan_up.y) {
-                        p.y += 1;
-                    } else {
-                        p.y -=1;
-                    }
-                }
-                p = p2;
-                if(p.x < plan_up.x) {
-                    p.x += 1;
-                } else {
-                    p.x -=1;
                 }
             }
 

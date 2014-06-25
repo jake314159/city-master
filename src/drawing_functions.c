@@ -16,6 +16,9 @@ const char* fontFile = "fonts/sample.ttf";
 SDL_Texture *sheet;
 TTF_Font *font;
 
+#define MIN(A, B) ((A) < (B) ? (A) : (B))
+#define MAX(A, B) ((A) > (B) ? (A) : (B))
+
 void drawTileFromGridPoint(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
 {
     p->x *= GRID_TILE_SIZE;
@@ -115,28 +118,17 @@ void draw_city(SDL_Renderer* ren)
                 }
                 break;
             case MODE_BUILD_RESIDENTIAL_1:
-            case MODE_BUILD_DESTROY:
-                p = plan_down;
+            case MODE_BUILD_DESTROY:;
+                //p = plan_down;
                 //p2 = plan_down;
                 //drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_GREEN));
                 //plan_down = p2;
-                while(p.x != plan_up.x) {
-                    p3 = p;
-                    while(p.y != plan_up.y) {
-                        p2 = p;
+                int x, y;
+                for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                    for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                        p.x = x;
+                        p.y = y;
                         drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
-                        p = p2;
-                        if(p.y < plan_up.y) {
-                            p.y += 1;
-                        } else {
-                            p.y -=1;
-                        }
-                    }
-                    p = p3;
-                    if(p.x < plan_up.x) {
-                        p.x += 1;
-                    } else {
-                        p.x -=1;
                     }
                 }
                 break;
