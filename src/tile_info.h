@@ -54,3 +54,4 @@ TILE_TYPE typeOfRoad(bool north, bool east, bool south, bool west);
 bool isRoad(TILE_TYPE t);
 
 bool canBuildOn(TILE_TYPE t);
+int getPowerUsage(TILE_TYPE t);

@@ -31,6 +31,9 @@ Point plan_down;
 int build_prob = 1500;
 int build_finish_prob = 600;
 
+int reqired_power = 0;
+int power_avalible = 1000;
+
 void setMode(MODE m)
 {
     mode = m;
@@ -159,16 +162,32 @@ void map_update()
         for(y=1;y<MAP_SIZE_Y; y++) {
             switch(map_value[x][y]) {
                 case TILE_RESIDENTIAL_1_ZONE:
-                    if(grid_supplied(x, y) && rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
+                    if(grid_supplied(x, y) && rand()%build_prob==0 && 
+                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_1_BUILDING))) {
+                        map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_ZONE) + getPowerUsage(TILE_RESIDENTIAL_1_BUILDING);
+                    }
                     break;
                 case TILE_RESIDENTIAL_1_BUILDING:
-                    if(grid_supplied(x, y) && rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_B1;
+                    if(grid_supplied(x, y) && rand()%build_finish_prob==0 && 
+                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_1_BUILDING))) {
+                        map_value[x][y] = TILE_RESIDENTIAL_1_B1;
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_BUILDING) + getPowerUsage(TILE_RESIDENTIAL_1_B1);
+                    }
                     break;
                 case TILE_RESIDENTIAL_2_ZONE:
-                    if(grid_supplied(x, y) && rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
+                    if(grid_supplied(x, y) && rand()%build_prob==0 && 
+                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_2_BUILDING))) { 
+                        map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_ZONE) + getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
+                    }
                     break;
                 case TILE_RESIDENTIAL_2_BUILDING:
-                    if(grid_supplied(x, y) && rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_B1;
+                    if(grid_supplied(x, y) && rand()%build_finish_prob==0 && 
+                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_2_BUILDING))) {
+                        map_value[x][y] = TILE_RESIDENTIAL_2_B1;
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING) + getPowerUsage(TILE_RESIDENTIAL_2_B1);
+                    }
                     break;
                 default:
                     break;

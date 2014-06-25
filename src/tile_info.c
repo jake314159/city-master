@@ -5,8 +5,23 @@ SDL_Rect tileClips[NUMBER_OF_TILES];
 SDL_Rect spriteClips[NUMBER_OF_SPRITES];
 SDL_Rect roadClips[16];
 
+int tilePowerRequirements[NUMBER_OF_TILES];
+
 void initClips()
 {
+    tilePowerRequirements[TILE_GRASS] = 0;
+    tilePowerRequirements[TILE_BUILDING] = 0;
+    tilePowerRequirements[TILE_HIGHLIGHT_BLUE] = 0;
+    tilePowerRequirements[TILE_HIGHLIGHT_RED] = 0;
+    tilePowerRequirements[TILE_HIGHLIGHT_YELLOW] = 0;
+    tilePowerRequirements[TILE_HIGHLIGHT_GREEN] = 0;
+    tilePowerRequirements[TILE_RESIDENTIAL_1_ZONE] = 0;
+    tilePowerRequirements[TILE_RESIDENTIAL_1_BUILDING] = 50;
+    tilePowerRequirements[TILE_RESIDENTIAL_1_B1] = 100;
+    tilePowerRequirements[TILE_RESIDENTIAL_2_ZONE] = 0;
+    tilePowerRequirements[TILE_RESIDENTIAL_2_BUILDING] = 30;
+    tilePowerRequirements[TILE_RESIDENTIAL_2_B1] = 60;
+
     // Tiles
     tileClips[TILE_GRASS].x = 0;
     tileClips[TILE_GRASS].y = 0;
@@ -142,4 +157,9 @@ SDL_Rect* getClip(SPRITE s)
 bool canBuildOn(TILE_TYPE t)
 {
     return t == TILE_GRASS;
+}
+
+int getPowerUsage(TILE_TYPE t) 
+{
+    return tilePowerRequirements[t];
 }
