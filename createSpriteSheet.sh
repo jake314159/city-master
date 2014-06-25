@@ -4,9 +4,11 @@ mkdir images/temp
 
 
 
-python sprite_line_maker.py images/temp/1_ground.png v images/1_ground/*.png
-python sprite_line_maker.py images/temp/2_highlight.png v images/2_highlight/*.png
-python sprite_line_maker.py images/temp/3_single_tile_buildings.png v images/3_single_tile_buildings/*.png
+python sprite_line_maker.py images/temp/001_ground.png v images/001_ground/*.png
+python sprite_line_maker.py images/temp/002_highlight.png v images/002_highlight/*.png
+python sprite_line_maker.py images/temp/003_single_tile_buildings.png v images/003_single_tile_buildings/*.png
+python sprite_line_maker.py images/temp/004_road.png v images/004_road/*.png
+python sprite_line_maker.py images/temp/005_build_icons.png v images/005_build_icons/*.png
 
 python sprite_line_maker.py images/tile_sheet.png h images/temp/*.png
 

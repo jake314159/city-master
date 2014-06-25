@@ -46,11 +46,7 @@ void draw_city(SDL_Renderer* ren)
             twoDToIso(&p);
             p.x += screen_x;
             p.y += screen_y;
-            if(map_value[x][y] != 0) {
-                drawTile(ren, &p, getTileClip(TILE_BUILDING));
-            } else {
-                drawTile(ren, &p, getTileClip(TILE_GRASS));
-            }
+            drawTile(ren, &p, getTileClip(map_value[x][y]));
         }
     }
     p.x = down_point.x*GRID_TILE_SIZE;
@@ -70,5 +66,23 @@ void draw_city(SDL_Renderer* ren)
     p.x += screen_x;
     p.y += screen_y;
     drawTile(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
+}
+
+void draw_HUD(SDL_Renderer* ren)
+{
+    int i;
+    Point p;
+    p.x = 0;
+    p.y = BUILDBAR_TILE_START;
+    for(i=0; i<5; i++) {
+        drawTile(ren, &p, getClip(SPRITE_BUILD_BACKGROUND));
+        p.y += BUILDBAR_TILE_SPACING; //tile spacing
+    }
+    
+    p.y = BUILDBAR_TILE_START;
+    drawTile(ren, &p, getClip(SPRITE_BUILD_ZONE));
+    p.y += BUILDBAR_TILE_SPACING;
+    drawTile(ren, &p, getClip(SPRITE_BUILD_ROAD));
+    p.y += BUILDBAR_TILE_SPACING;
 }
 

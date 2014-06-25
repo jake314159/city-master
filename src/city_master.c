@@ -15,8 +15,44 @@ const int SCREEN_HEIGHT = 480;
 int screen_x, screen_y = 0;
 int map_value[MAP_SIZE_X][MAP_SIZE_Y] = {0};
 
+MODE mode = MODE_VIEW;
+
 Point down_point;
 Point up_point;
+
+void setMode(MODE m)
+{
+    mode = m;
+}
+
+MODE getMode()
+{
+    return mode;
+}
+
+//sets the road to the correct type
+void typeRoad(Point u)
+{
+    map_value[u.x][u.y] = typeOfRoad(isRoad(map_value[u.x][u.y-1]), isRoad(map_value[u.x+1][u.y]), 
+                                isRoad(map_value[u.x][u.y+1]), isRoad(map_value[u.x-1][u.y]));
+}
+
+void placeRoad(Point u)
+{
+    typeRoad(u);
+    u.x += 1;
+    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+    u.x -= 2;
+    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+    u.x += 1;
+
+    u.y += 1;
+    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+    u.y -= 2;
+    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+    u.y += 1;
+
+}
 
 int main(int argc, char* argv[]) 
 {
@@ -64,7 +100,6 @@ int main(int argc, char* argv[])
             if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym){
                     case SDLK_q:
-                    case SDLK_ESCAPE:
                     case SDL_QUIT:
                         quit = true;
                         break;
@@ -80,22 +115,48 @@ int main(int argc, char* argv[])
                     case SDLK_DOWN:
                         screen_y -= 10;
                         break;
+                    case SDLK_ESCAPE:
+                        mode = MODE_VIEW;
+                        break;
                     default:
                         break;
                 }
             } else if(e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
-                mouseToGrid(e.button.x, e.button.y, &down_point);
+                down_point.x = e.button.x;
+                down_point.y = e.button.y;
+                //
             } else if(e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT) {
-                mouseToGrid(e.button.x, e.button.y, &up_point);
+                up_point.x = e.button.x;
+                up_point.y = e.button.y;
 
-                if(up_point.x == down_point.x && up_point.y == down_point.y) {
-                    map_value[up_point.x][up_point.y] = map_value[up_point.x][up_point.y]==0 ? 1 : 0;
+                if( !touch_HUD(&down_point, &up_point)) {
+                    Point u, d;
+                    mouseToGrid(up_point.x, up_point.y, &u);
+                    mouseToGrid(down_point.x, down_point.y, &d);
+                    if(u.x == d.x && u.y == d.y) {
+                        switch(mode) {
+                            case MODE_BUILD_RESIDENTIAL_1:
+                                map_value[u.x][u.y] = TILE_BUILDING;
+                                break;
+                            case MODE_BUILD_ROAD://map_value[MAP_SIZE_X][MAP_SIZE_Y] 
+                                if(u.x >1 && u.y>1 && u.x < MAP_SIZE_X-1 && u.y < MAP_SIZE_Y-1) {
+                                // if not on edge of map
+                                    placeRoad(u);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        //map_value[u.x][u.y] = map_value[u.x][u.y]==0 ? 1 : 0;
+                    }
                 }
+                
             }
         }
 
         SDL_RenderClear(ren);
         draw_city(ren);
+        draw_HUD(ren);
         SDL_RenderPresent(ren);
     }
 
