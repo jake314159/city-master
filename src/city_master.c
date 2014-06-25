@@ -12,7 +12,7 @@
 #define FRAME_TIME_DELAY 20
 
 const char* WINDOW_NAME = "City Master";
-const int SCREEN_WIDTH = 800;//640;
+const int SCREEN_WIDTH = 900;//640;
 const int SCREEN_HEIGHT = 620;//480;
 
 int screen_x, screen_y = 0;
@@ -145,6 +145,13 @@ void placePlannedBuild()
     plan_down.y = 0;
 }
 
+bool grid_supplied(int x, int y)
+{
+    bool road = isRoad(map_value[x+1][y]) || isRoad(map_value[x+1][y+1]) || isRoad(map_value[x+1][y-1]) || 
+                isRoad(map_value[x-1][y]) || isRoad(map_value[x-1][y+1]) || isRoad(map_value[x-1][y-1]);
+    return road;
+}
+
 void map_update()
 {
     int x, y;
@@ -152,16 +159,16 @@ void map_update()
         for(y=1;y<MAP_SIZE_Y; y++) {
             switch(map_value[x][y]) {
                 case TILE_RESIDENTIAL_1_ZONE:
-                    if(rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
+                    if(grid_supplied(x, y) && rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
                     break;
                 case TILE_RESIDENTIAL_1_BUILDING:
-                    if(rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_B1;
+                    if(grid_supplied(x, y) && rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_B1;
                     break;
                 case TILE_RESIDENTIAL_2_ZONE:
-                    if(rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
+                    if(grid_supplied(x, y) && rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
                     break;
                 case TILE_RESIDENTIAL_2_BUILDING:
-                    if(rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_B1;
+                    if(grid_supplied(x, y) && rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_B1;
                     break;
                 default:
                     break;
