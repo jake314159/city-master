@@ -20,6 +20,10 @@ MODE mode = MODE_VIEW;
 Point down_point;
 Point up_point;
 
+bool ready_to_place = false;
+Point plan_up;
+Point plan_down;
+
 void setMode(MODE m)
 {
     mode = m;
@@ -39,19 +43,66 @@ void typeRoad(Point u)
 
 void placeRoad(Point u)
 {
-    typeRoad(u);
-    u.x += 1;
-    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
-    u.x -= 2;
-    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
-    u.x += 1;
+    if(u.x >1 && u.y>1 && u.x < MAP_SIZE_X-1 && u.y < MAP_SIZE_Y-1) {
+        typeRoad(u);
+        u.x += 1;
+        if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+        u.x -= 2;
+        if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+        u.x += 1;
 
-    u.y += 1;
-    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
-    u.y -= 2;
-    if(isRoad(map_value[u.x][u.y])) typeRoad(u);
-    u.y += 1;
+        u.y += 1;
+        if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+        u.y -= 2;
+        if(isRoad(map_value[u.x][u.y])) typeRoad(u);
+        u.y += 1;
+    }
+}
 
+void planRoad(Point u, Point d)
+{
+    if(u.x == d.x && u.y == d.y) {
+        placeRoad(u);
+    } else {
+        ready_to_place = true;
+        plan_up.x = u.x;
+        plan_up.y = u.y;
+        plan_down.x = d.x;
+        plan_down.y = d.y;
+    }
+}
+
+void placePlannedBuild()
+{
+    if(!ready_to_place) return;
+    switch(mode) {
+        case MODE_BUILD_ROAD:;
+            Point p;
+            p = plan_down;
+            placeRoad(plan_down);
+            placeRoad(plan_up);
+            while(p.x != plan_up.x) {
+                if(p.x < plan_up.x) {
+                    p.x += 1;
+                } else {
+                    p.x -=1;
+                }
+                placeRoad(p);
+            }
+            while(p.y != plan_up.y) {
+                if(p.y < plan_up.y) {
+                    p.y += 1;
+                } else {
+                    p.y -=1;
+                }
+                placeRoad(p);
+            }
+            break;
+        default:
+            break;
+    }
+
+    ready_to_place = false;
 }
 
 int main(int argc, char* argv[]) 
@@ -118,12 +169,16 @@ int main(int argc, char* argv[])
                     case SDLK_ESCAPE:
                         mode = MODE_VIEW;
                         break;
+                    case SDLK_RETURN:
+                        if(ready_to_place) placePlannedBuild();
+                        break;
                     default:
                         break;
                 }
             } else if(e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
+                ready_to_place = false;
                 //
             } else if(e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT) {
                 up_point.x = e.button.x;
@@ -133,25 +188,25 @@ int main(int argc, char* argv[])
                     Point u, d;
                     mouseToGrid(up_point.x, up_point.y, &u);
                     mouseToGrid(down_point.x, down_point.y, &d);
-                    if(u.x == d.x && u.y == d.y) {
-                        switch(mode) {
-                            case MODE_BUILD_RESIDENTIAL_1:
+                    switch(mode) {
+                        case MODE_BUILD_RESIDENTIAL_1:
+                            if(u.x == d.x && u.y == d.y) {
                                 map_value[u.x][u.y] = TILE_BUILDING;
-                                break;
-                            case MODE_BUILD_ROAD://map_value[MAP_SIZE_X][MAP_SIZE_Y] 
-                                if(u.x >1 && u.y>1 && u.x < MAP_SIZE_X-1 && u.y < MAP_SIZE_Y-1) {
-                                // if not on edge of map
-                                    placeRoad(u);
-                                }
-                                break;
-                            case MODE_BUILD_DESTROY:
+                            }
+                            break;
+                        case MODE_BUILD_ROAD://map_value[MAP_SIZE_X][MAP_SIZE_Y] 
+                            // if not on edge of map
+                            planRoad(u, d);
+                            break;
+                        case MODE_BUILD_DESTROY:
+                            if(u.x == d.x && u.y == d.y) {
                                 map_value[u.x][u.y] = TILE_GRASS;
-                                break;
-                            default:
-                                break;
-                        }
-                        //map_value[u.x][u.y] = map_value[u.x][u.y]==0 ? 1 : 0;
+                            }
+                            break;
+                        default:
+                            break;
                     }
+                    //map_value[u.x][u.y] = map_value[u.x][u.y]==0 ? 1 : 0;
                 }
                 
             }

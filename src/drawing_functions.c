@@ -6,14 +6,31 @@ extern int screen_x, screen_y;
 extern Point down_point;
 extern Point up_point;
 
+extern bool ready_to_place;
+extern Point plan_up;
+extern Point plan_down;
+
 const int fontSize = 48;
 const char* fontFile = "fonts/sample.ttf";
 
 SDL_Texture *sheet;
 TTF_Font *font;
 
+void drawTileFromGridPoint(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
+{
+    p->x *= GRID_TILE_SIZE;
+    p->y *= GRID_TILE_SIZE;
+    //printf("(%d,%d) -> ", p.x, p.y);
+    twoDToIso(p);
+    //printf("(%d,%d)\n", p.x, p.y);
+    p->x += screen_x;
+    p->y += screen_y;
+    renderTextureClip(sheet, ren, p->x, (p->y - clip->h), clip);
+}
+
 void drawTile(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
 {
+    
     renderTextureClip(sheet, ren, p->x, (p->y - clip->h), clip);
 }
 
@@ -66,6 +83,38 @@ void draw_city(SDL_Renderer* ren)
     p.x += screen_x;
     p.y += screen_y;
     drawTile(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
+
+    if(ready_to_place) {
+        Point p2;
+        p = plan_down;
+
+        p2 = plan_down;
+        drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_BLUE));
+        plan_down = p2;
+        //p2 = plan_up;
+        //drawTileFromGridPoint(ren, &plan_up, getTileClip(TILE_HIGHLIGHT_BLUE));
+        //plan_up = p2;
+        while(p.x != plan_up.x) {
+            if(p.x < plan_up.x) {
+                p.x += 1;
+            } else {
+                p.x -=1;
+            }
+            p2 = p;
+            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
+            p = p2;
+        }
+        while(p.y != plan_up.y) {
+            if(p.y < plan_up.y) {
+                p.y += 1;
+            } else {
+                p.y -=1;
+            }
+            p2 = p;
+            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
+            p = p2;
+        }
+    }
 }
 
 void draw_HUD(SDL_Renderer* ren)
