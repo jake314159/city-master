@@ -18,6 +18,21 @@ void initClips()
     tileClips[TILE_HIGHLIGHT_BLUE].w = 100;
     tileClips[TILE_HIGHLIGHT_BLUE].h = 65;
 
+    tileClips[TILE_HIGHLIGHT_RED].x = 100;
+    tileClips[TILE_HIGHLIGHT_RED].y = 65;
+    tileClips[TILE_HIGHLIGHT_RED].w = 100;
+    tileClips[TILE_HIGHLIGHT_RED].h = 65;
+
+    tileClips[TILE_HIGHLIGHT_YELLOW].x = 100;
+    tileClips[TILE_HIGHLIGHT_YELLOW].y = 65*2;
+    tileClips[TILE_HIGHLIGHT_YELLOW].w = 100;
+    tileClips[TILE_HIGHLIGHT_YELLOW].h = 65;
+
+    tileClips[TILE_HIGHLIGHT_GREEN].x = 100;
+    tileClips[TILE_HIGHLIGHT_GREEN].y = 65*3;
+    tileClips[TILE_HIGHLIGHT_GREEN].w = 100;
+    tileClips[TILE_HIGHLIGHT_GREEN].h = 65;
+
     tileClips[TILE_BUILDING].x = 200;
     tileClips[TILE_BUILDING].y = 0;
     tileClips[TILE_BUILDING].w = 100;

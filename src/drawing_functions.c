@@ -89,11 +89,8 @@ void draw_city(SDL_Renderer* ren)
         p = plan_down;
 
         p2 = plan_down;
-        drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_BLUE));
+        drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_GREEN));
         plan_down = p2;
-        //p2 = plan_up;
-        //drawTileFromGridPoint(ren, &plan_up, getTileClip(TILE_HIGHLIGHT_BLUE));
-        //plan_up = p2;
         while(p.x != plan_up.x) {
             if(p.x < plan_up.x) {
                 p.x += 1;
@@ -101,7 +98,7 @@ void draw_city(SDL_Renderer* ren)
                 p.x -=1;
             }
             p2 = p;
-            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
+            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
             p = p2;
         }
         while(p.y != plan_up.y) {
@@ -111,7 +108,7 @@ void draw_city(SDL_Renderer* ren)
                 p.y -=1;
             }
             p2 = p;
-            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
+            drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
             p = p2;
         }
     }

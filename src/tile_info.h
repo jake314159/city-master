@@ -4,11 +4,14 @@
 #include <stdbool.h>
 
 //Number NOT including the road tiles!
-#define NUMBER_OF_TILES 3
+#define NUMBER_OF_TILES 6
 typedef enum {
     TILE_GRASS = 0,
     TILE_BUILDING = 1,
     TILE_HIGHLIGHT_BLUE = 2,
+    TILE_HIGHLIGHT_RED = 3,
+    TILE_HIGHLIGHT_YELLOW = 4,
+    TILE_HIGHLIGHT_GREEN = 5,
 
     TILE_ROAD_0 = 200,
     TILE_ROAD_1 = 201,
