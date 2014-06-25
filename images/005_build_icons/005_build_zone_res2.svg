@@ -309,9 +309,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="15.556349"
-     inkscape:cx="11.564397"
+     inkscape:cx="22.878106"
      inkscape:cy="13.830072"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer7"
      showgrid="true"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
@@ -337,7 +337,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -368,7 +368,7 @@
     </g>
     <g
        sodipodi:type="inkscape:box3d"
-       style="fill:#01c6ff;fill-opacity:1"
+       style="fill:#ffff00;fill-opacity:1"
        id="g7445"
        inkscape:perspectiveID="#perspective7443-8"
        inkscape:corner0="-1.1296778 : 0.012719226 : 0 : 1"
@@ -376,7 +376,7 @@
       <path
          sodipodi:type="inkscape:box3dside"
          id="path7449"
-         style="fill:#01c6ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none"
          inkscape:box3dsidetype="5"
          d="m 4.8909,54.053094 7.12569,4.114009 6.778587,-3.913609 -7.125689,-4.114009 z" />
     </g>
@@ -385,18 +385,18 @@
        inkscape:corner0="-1.1296778 : 0.012719226 : 0 : 1"
        inkscape:perspectiveID="#perspective7463-3"
        id="g7459"
-       style="fill:#00c6ff;fill-opacity:1"
+       style="fill:#ffff00;fill-opacity:1"
        sodipodi:type="inkscape:box3d">
       <path
          d="m 11.746689,50.058646 7.125689,4.114009 6.778588,-3.913609 -7.12569,-4.114009 z"
          inkscape:box3dsidetype="5"
-         style="fill:#00c6ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none"
          id="path7461"
          sodipodi:type="inkscape:box3dside" />
     </g>
     <g
        sodipodi:type="inkscape:box3d"
-       style="fill:#00c4ff;fill-opacity:1"
+       style="fill:#ffff00;fill-opacity:1"
        id="g7465-9"
        inkscape:perspectiveID="#perspective7469-0"
        inkscape:corner0="-1.1296778 : 0.012719226 : 0 : 1"
@@ -404,7 +404,7 @@
       <path
          sodipodi:type="inkscape:box3dside"
          id="path7467-6"
-         style="fill:#00c4ff;fill-rule:evenodd;stroke:none;fill-opacity:1"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none"
          inkscape:box3dsidetype="5"
          d="m 4.514965,45.848186 7.12569,4.114009 6.778587,-3.913609 -7.125689,-4.114009 z" />
     </g>
@@ -413,18 +413,18 @@
        inkscape:corner0="-1.1296778 : 0.012719226 : 0 : 1"
        inkscape:perspectiveID="#perspective7475-2"
        id="g7471"
-       style="fill:#00c6ff;fill-opacity:1"
+       style="fill:#ffff00;fill-opacity:1"
        sodipodi:type="inkscape:box3d">
       <path
          d="m 11.42528,41.862712 7.125689,4.114009 6.778588,-3.913609 -7.12569,-4.114009 z"
          inkscape:box3dsidetype="5"
-         style="fill:#00c6ff;fill-rule:evenodd;stroke:none;fill-opacity:1"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none"
          id="path7473"
          sodipodi:type="inkscape:box3dside" />
     </g>
     <g
        sodipodi:type="inkscape:box3d"
-       style="fill:#01c6ff;fill-opacity:1"
+       style="fill:#ffff00;fill-opacity:1"
        id="g7954"
        inkscape:perspectiveID="#perspective7958"
        inkscape:corner0="-1.1296778 : 0.012719226 : 0 : 1"
@@ -433,7 +433,7 @@
       <path
          sodipodi:type="inkscape:box3dside"
          id="path7956"
-         style="fill:#01c6ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none"
          inkscape:box3dsidetype="5"
          d="m 18.689192,46.073136 7.12569,4.114009 6.778587,-3.913609 -7.12569,-4.114009 z" />
     </g>
@@ -442,19 +442,19 @@
        inkscape:corner0="-1.1296778 : 0.012719226 : 0 : 1"
        inkscape:perspectiveID="#perspective7964"
        id="g7960"
-       style="fill:#00c6ff;fill-opacity:1"
+       style="fill:#ffff00;fill-opacity:1"
        sodipodi:type="inkscape:box3d"
        mask="url(#mask7978)">
       <path
          d="m 25.919016,50.251495 7.12569,4.114009 6.778587,-3.913609 -7.125689,-4.114009 z"
          inkscape:box3dsidetype="5"
-         style="fill:#00c6ff;fill-rule:evenodd;stroke:none;fill-opacity:1"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none"
          id="path7962"
          sodipodi:type="inkscape:box3dside" />
     </g>
     <g
        sodipodi:type="inkscape:box3d"
-       style="fill:#00c6ff;fill-opacity:1"
+       style="fill:#ffff00;fill-opacity:1"
        id="g7966"
        inkscape:perspectiveID="#perspective7970"
        inkscape:corner0="-1.1296778 : 0.012719226 : 0 : 1"
@@ -463,7 +463,7 @@
       <path
          sodipodi:type="inkscape:box3dside"
          id="path7968"
-         style="fill:#00c6ff;fill-rule:evenodd;stroke:none;fill-opacity:1"
+         style="fill:#4d4d9f;fill-rule:evenodd;stroke:none"
          inkscape:box3dsidetype="5"
          d="m 25.620331,42.076261 7.12569,4.114009 6.778588,-3.913609 -7.12569,-4.114009 z" />
     </g>

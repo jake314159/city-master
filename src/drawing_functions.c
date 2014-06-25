@@ -118,6 +118,7 @@ void draw_city(SDL_Renderer* ren)
                 }
                 break;
             case MODE_BUILD_RESIDENTIAL_1:
+            case MODE_BUILD_RESIDENTIAL_2:
             case MODE_BUILD_DESTROY:;
                 //p = plan_down;
                 //p2 = plan_down;
@@ -148,7 +149,9 @@ void draw_HUD(SDL_Renderer* ren)
     }
     
     p.y = BUILDBAR_TILE_START;
-    drawTile(ren, &p, getClip(SPRITE_BUILD_ZONE));
+    drawTile(ren, &p, getClip(SPRITE_BUILD_ZONE_RES1));
+    p.y += BUILDBAR_TILE_SPACING;
+    drawTile(ren, &p, getClip(SPRITE_BUILD_ZONE_RES2));
     p.y += BUILDBAR_TILE_SPACING;
     drawTile(ren, &p, getClip(SPRITE_BUILD_ROAD));
     p.y += BUILDBAR_TILE_SPACING;

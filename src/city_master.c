@@ -12,8 +12,8 @@
 #define FRAME_TIME_DELAY 20
 
 const char* WINDOW_NAME = "City Master";
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 800;//640;
+const int SCREEN_HEIGHT = 620;//480;
 
 int screen_x, screen_y = 0;
 int map_value[MAP_SIZE_X][MAP_SIZE_Y] = {0};
@@ -27,6 +27,9 @@ bool ready_to_place = false;
 bool updating_plan = false;
 Point plan_up;
 Point plan_down;
+
+int build_prob = 1500;
+int build_finish_prob = 600;
 
 void setMode(MODE m)
 {
@@ -104,7 +107,21 @@ void placePlannedBuild()
                 for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
                     p.x = x;
                     p.y = y;
-                    map_value[p.x][p.y] = TILE_BUILDING;
+                    if(canBuildOn(map_value[p.x][p.y])) {
+                        map_value[p.x][p.y] = TILE_RESIDENTIAL_1_ZONE;
+                    }
+                }
+            }
+
+            break;
+        case MODE_BUILD_RESIDENTIAL_2:;
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    if(canBuildOn(map_value[p.x][p.y])) {
+                        map_value[p.x][p.y] = TILE_RESIDENTIAL_2_ZONE;
+                    }
                 }
             }
 
@@ -126,6 +143,31 @@ void placePlannedBuild()
     ready_to_place = false;
     plan_down.x = 0;
     plan_down.y = 0;
+}
+
+void map_update()
+{
+    int x, y;
+    for(x=1; x<MAP_SIZE_X; x++) {
+        for(y=1;y<MAP_SIZE_Y; y++) {
+            switch(map_value[x][y]) {
+                case TILE_RESIDENTIAL_1_ZONE:
+                    if(rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
+                    break;
+                case TILE_RESIDENTIAL_1_BUILDING:
+                    if(rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_1_B1;
+                    break;
+                case TILE_RESIDENTIAL_2_ZONE:
+                    if(rand()%build_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
+                    break;
+                case TILE_RESIDENTIAL_2_BUILDING:
+                    if(rand()%build_finish_prob==0) map_value[x][y] = TILE_RESIDENTIAL_2_B1;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 int main(int argc, char* argv[]) 
@@ -169,6 +211,7 @@ int main(int argc, char* argv[])
     while (!quit){
 
         SDL_Delay(FRAME_TIME_DELAY);
+        map_update();
 
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_KEYDOWN) {
@@ -207,7 +250,8 @@ int main(int argc, char* argv[])
             } else if(e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
-                if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_DESTROY)) {
+                if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
+                        || mode == MODE_BUILD_DESTROY)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -215,7 +259,6 @@ int main(int argc, char* argv[])
                     plan_down.x = d.x;
                     plan_down.y = d.y;
                 }
-                //
             } else if(e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT) {
                 up_point.x = e.button.x;
                 up_point.y = e.button.y;
@@ -231,7 +274,17 @@ int main(int argc, char* argv[])
                             if(u.x == d.x && u.y == d.y) {
                                 ready_to_place = false; //as we are placing it
                                 if(canBuildOn(map_value[u.x][u.y])) {
-                                    map_value[u.x][u.y] = TILE_BUILDING;
+                                    map_value[u.x][u.y] = TILE_RESIDENTIAL_1_ZONE;
+                                }
+                            } else {
+                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
+                            }
+                            break;
+                        case MODE_BUILD_RESIDENTIAL_2:
+                            if(u.x == d.x && u.y == d.y) {
+                                ready_to_place = false; //as we are placing it
+                                if(canBuildOn(map_value[u.x][u.y])) {
+                                    map_value[u.x][u.y] = TILE_RESIDENTIAL_2_ZONE;
                                 }
                             } else {
                                 planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME

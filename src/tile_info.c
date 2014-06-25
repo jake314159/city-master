@@ -38,6 +38,36 @@ void initClips()
     tileClips[TILE_BUILDING].w = 100;
     tileClips[TILE_BUILDING].h = 65*2;
 
+    tileClips[TILE_RESIDENTIAL_1_ZONE].x = 432;
+    tileClips[TILE_RESIDENTIAL_1_ZONE].y = 0;
+    tileClips[TILE_RESIDENTIAL_1_ZONE].w = 100;
+    tileClips[TILE_RESIDENTIAL_1_ZONE].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_1_BUILDING].x = 432;
+    tileClips[TILE_RESIDENTIAL_1_BUILDING].y = 65;
+    tileClips[TILE_RESIDENTIAL_1_BUILDING].w = 100;
+    tileClips[TILE_RESIDENTIAL_1_BUILDING].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_1_B1].x = 432;
+    tileClips[TILE_RESIDENTIAL_1_B1].y = 65*2;
+    tileClips[TILE_RESIDENTIAL_1_B1].w = 100;
+    tileClips[TILE_RESIDENTIAL_1_B1].h = 65*2;
+
+    tileClips[TILE_RESIDENTIAL_2_ZONE].x = 532;
+    tileClips[TILE_RESIDENTIAL_2_ZONE].y = 0;
+    tileClips[TILE_RESIDENTIAL_2_ZONE].w = 100;
+    tileClips[TILE_RESIDENTIAL_2_ZONE].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_2_BUILDING].x = 532;
+    tileClips[TILE_RESIDENTIAL_2_BUILDING].y = 65;
+    tileClips[TILE_RESIDENTIAL_2_BUILDING].w = 100;
+    tileClips[TILE_RESIDENTIAL_2_BUILDING].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_2_B1].x = 532;
+    tileClips[TILE_RESIDENTIAL_2_B1].y = 65*2;
+    tileClips[TILE_RESIDENTIAL_2_B1].w = 100;
+    tileClips[TILE_RESIDENTIAL_2_B1].h = 65;
+
 
     //Sprites
     spriteClips[SPRITE_BUILD_BACKGROUND].x = 400;
@@ -45,10 +75,10 @@ void initClips()
     spriteClips[SPRITE_BUILD_BACKGROUND].w = 32;
     spriteClips[SPRITE_BUILD_BACKGROUND].h = 32;
 
-    spriteClips[SPRITE_BUILD_ZONE].x = 400;
-    spriteClips[SPRITE_BUILD_ZONE].y = 32;
-    spriteClips[SPRITE_BUILD_ZONE].w = 32;
-    spriteClips[SPRITE_BUILD_ZONE].h = 32;
+    spriteClips[SPRITE_BUILD_ZONE_RES1].x = 400;
+    spriteClips[SPRITE_BUILD_ZONE_RES1].y = 32;
+    spriteClips[SPRITE_BUILD_ZONE_RES1].w = 32;
+    spriteClips[SPRITE_BUILD_ZONE_RES1].h = 32;
 
     spriteClips[SPRITE_BUILD_ROAD].x = 400;
     spriteClips[SPRITE_BUILD_ROAD].y = 32*2;
@@ -59,6 +89,11 @@ void initClips()
     spriteClips[SPRITE_BUILD_DESTROY].y = 32*3;
     spriteClips[SPRITE_BUILD_DESTROY].w = 32;
     spriteClips[SPRITE_BUILD_DESTROY].h = 32;
+
+    spriteClips[SPRITE_BUILD_ZONE_RES2].x = 400;
+    spriteClips[SPRITE_BUILD_ZONE_RES2].y = 32*4;
+    spriteClips[SPRITE_BUILD_ZONE_RES2].w = 32;
+    spriteClips[SPRITE_BUILD_ZONE_RES2].h = 32;
 
     TILE_TYPE road_i = TILE_ROAD_0;
     for(; road_i<=TILE_ROAD_14; road_i++) {
