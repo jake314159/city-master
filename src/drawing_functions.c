@@ -84,5 +84,7 @@ void draw_HUD(SDL_Renderer* ren)
     p.y += BUILDBAR_TILE_SPACING;
     drawTile(ren, &p, getClip(SPRITE_BUILD_ROAD));
     p.y += BUILDBAR_TILE_SPACING;
+    drawTile(ren, &p, getClip(SPRITE_BUILD_DESTROY));
+    p.y += BUILDBAR_TILE_SPACING;
 }
 

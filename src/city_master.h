@@ -8,7 +8,8 @@
 typedef enum {
     MODE_VIEW,
     MODE_BUILD_RESIDENTIAL_1,
-    MODE_BUILD_ROAD
+    MODE_BUILD_ROAD,
+    MODE_BUILD_DESTROY
 } MODE;
 
 void setMode(MODE mode);

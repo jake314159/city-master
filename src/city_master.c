@@ -144,6 +144,9 @@ int main(int argc, char* argv[])
                                     placeRoad(u);
                                 }
                                 break;
+                            case MODE_BUILD_DESTROY:
+                                map_value[u.x][u.y] = TILE_GRASS;
+                                break;
                             default:
                                 break;
                         }

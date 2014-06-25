@@ -40,6 +40,11 @@ void initClips()
     spriteClips[SPRITE_BUILD_ROAD].w = 32;
     spriteClips[SPRITE_BUILD_ROAD].h = 32;
 
+    spriteClips[SPRITE_BUILD_DESTROY].x = 400;
+    spriteClips[SPRITE_BUILD_DESTROY].y = 32*3;
+    spriteClips[SPRITE_BUILD_DESTROY].w = 32;
+    spriteClips[SPRITE_BUILD_DESTROY].h = 32;
+
     TILE_TYPE road_i = TILE_ROAD_0;
     for(; road_i<=TILE_ROAD_14; road_i++) {
         roadClips[road_i-200].x = 300;

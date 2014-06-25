@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <stdbool.h>
 
+//Number NOT including the road tiles!
 #define NUMBER_OF_TILES 3
 typedef enum {
     TILE_GRASS = 0,
@@ -26,11 +27,12 @@ typedef enum {
     TILE_ROAD_14= 214
 } TILE_TYPE;
 
-#define NUMBER_OF_SPRITES 3
+#define NUMBER_OF_SPRITES 4
 typedef enum {
     SPRITE_BUILD_BACKGROUND = 0,
     SPRITE_BUILD_ZONE = 1,
     SPRITE_BUILD_ROAD = 2,
+    SPRITE_BUILD_DESTROY = 3
 } SPRITE;
 
 

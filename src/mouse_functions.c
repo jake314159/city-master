@@ -24,6 +24,9 @@ bool touch_HUD(Point *down, Point *up)
                     setMode(MODE_BUILD_ROAD);
                     valid_item = true;
                     break;
+                case 2:
+                    setMode(MODE_BUILD_DESTROY);
+                    break;
                 default:
                     valid_item = false;
             }
