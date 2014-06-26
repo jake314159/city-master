@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "tile_info.h"
 
 //const int MAP_SIZE_X = 32;
 //const int MAP_SIZE_Y = 32;
@@ -16,3 +17,4 @@ typedef enum {
 
 void setMode(MODE mode);
 MODE getMode();
+bool build_tile(int x, int y, TILE_TYPE t);

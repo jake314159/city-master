@@ -1,3 +1,5 @@
+#ifndef ____CHECK_ALREADY_IMPORTED_TILE_INFO____
+#define ____CHECK_ALREADY_IMPORTED_TILE_INFO____ 1
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -60,3 +62,7 @@ bool isRoad(TILE_TYPE t);
 
 bool canBuildOn(TILE_TYPE t);
 int getPowerUsage(TILE_TYPE t);
+int getCost(TILE_TYPE t);
+int getIncome(TILE_TYPE t);
+
+#endif

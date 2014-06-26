@@ -1,5 +1,6 @@
 #include "drawing_functions.h"
 #include "city_master.h"
+#include "resource_manager.h"
 
 extern int map_value[MAP_SIZE_X][MAP_SIZE_Y];
 extern int screen_x, screen_y;
@@ -12,6 +13,7 @@ extern Point plan_down;
 
 extern int reqired_power;
 extern int power_avalible;
+extern int lastBalanceChange;
 
 const int fontSize = 12;
 const char* fontFile = "fonts/sample.ttf";
@@ -156,7 +158,8 @@ void draw_HUD(SDL_Renderer* ren)
 
     draw_int(ren, font, top_bar_text_color, 20, 0, reqired_power,  "Required: ", " MW");
     draw_int(ren, font, top_bar_text_color, 20, 20, power_avalible, "Avalible: ", " MW");
-
+    draw_int(ren, font, top_bar_text_color, 200, 00, getBalance(), "£", "000");
+    draw_int(ren, font, top_bar_text_color, 200, 20, lastBalanceChange, "£", "000");
 
     p.x = 0;
     p.y = BUILDBAR_TILE_START;

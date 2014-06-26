@@ -199,3 +199,51 @@ int getPowerProduction(TILE_TYPE t) {
     }
     return powerProduction;
 }
+
+int getCost(TILE_TYPE t)
+{
+    if(t >= TILE_ROAD_0 && t <= TILE_ROAD_14) return 1;
+
+    int cost;
+    switch(t) {
+        case TILE_POWER_GAS_P1:
+        case TILE_POWER_GAS_P2:
+        case TILE_POWER_GAS_P3:
+        case TILE_POWER_GAS_P4:
+            cost = 80; //total of £360,000
+            break;
+        case TILE_RESIDENTIAL_1_ZONE:
+        case TILE_RESIDENTIAL_2_ZONE:
+            cost = 1;
+            break;
+        default:
+            cost = 0;
+            break;
+    }
+    return cost;
+}
+
+int getIncome(TILE_TYPE t)
+{
+    if(t >= TILE_ROAD_0 && t <= TILE_ROAD_14) return -1;
+
+    int income;
+    switch(t) {
+        case TILE_POWER_GAS_P1:
+        case TILE_POWER_GAS_P2:
+        case TILE_POWER_GAS_P3:
+        case TILE_POWER_GAS_P4:
+            income = -10; //total of -£40,000
+            break;
+        case TILE_RESIDENTIAL_1_B1:
+            income = 4;
+        case TILE_RESIDENTIAL_2_B1:
+            income = 6;
+            break;
+        default:
+            income = 0;
+            break;
+    }
+    return income;
+}
+

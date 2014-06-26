@@ -100,7 +100,7 @@ void draw_int(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, 
     }
     int j = 0;
     while(after[j] != '\0') {
-        string_buffer[i] = after[i];
+        string_buffer[i] = after[j];
         i++; j++;
     }
     string_buffer[i] = '\0';

@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include "city_master.h"
 #include "SDL_functions.h"
-#include "tile_info.h"
 #include "draw_utils.h"
+#include "resource_manager.h"
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -16,7 +16,7 @@ const int SCREEN_WIDTH = 900;//640;
 const int SCREEN_HEIGHT = 620;//480;
 
 int screen_x, screen_y = 0;
-int map_value[MAP_SIZE_X][MAP_SIZE_Y] = {0};
+TILE_TYPE map_value[MAP_SIZE_X][MAP_SIZE_Y] = {0};
 
 MODE mode = MODE_VIEW;
 
@@ -31,8 +31,12 @@ Point plan_down;
 int build_prob = 1500;
 int build_finish_prob = 600;
 
-int reqired_power = 0;
-int power_avalible = 1000;
+extern int reqired_power;
+extern int power_avalible;
+
+int balanceChangeCounterStart = 100;
+int balanceChangeCounter = 100;
+int lastBalanceChange;
 
 void setMode(MODE m)
 {
@@ -47,8 +51,9 @@ MODE getMode()
 //sets the road to the correct type
 void typeRoad(Point u)
 {
-    map_value[u.x][u.y] = typeOfRoad(isRoad(map_value[u.x][u.y-1]), isRoad(map_value[u.x+1][u.y]), 
+    TILE_TYPE t = typeOfRoad(isRoad(map_value[u.x][u.y-1]), isRoad(map_value[u.x+1][u.y]), 
                                 isRoad(map_value[u.x][u.y+1]), isRoad(map_value[u.x-1][u.y]));
+    build_tile(u.x, u.y, t);
 }
 
 void placeRoad(Point u)
@@ -111,7 +116,7 @@ void placePlannedBuild()
                     p.x = x;
                     p.y = y;
                     if(canBuildOn(map_value[p.x][p.y])) {
-                        map_value[p.x][p.y] = TILE_RESIDENTIAL_1_ZONE;
+                        build_tile(p.x, p.y, TILE_RESIDENTIAL_1_ZONE);
                     }
                 }
             }
@@ -123,7 +128,7 @@ void placePlannedBuild()
                     p.x = x;
                     p.y = y;
                     if(canBuildOn(map_value[p.x][p.y])) {
-                        map_value[p.x][p.y] = TILE_RESIDENTIAL_2_ZONE;
+                        build_tile(p.x, p.y, TILE_RESIDENTIAL_2_ZONE);
                     }
                 }
             }
@@ -134,7 +139,7 @@ void placePlannedBuild()
                 for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
                     p.x = x;
                     p.y = y;
-                    map_value[p.x][p.y] = TILE_GRASS;
+                    build_tile(p.x, p.y, TILE_GRASS); //TODO Do a proper destroy function
                 }
             }
 
@@ -148,11 +153,23 @@ void placePlannedBuild()
     plan_down.y = 0;
 }
 
-bool grid_supplied(int x, int y)
+bool build_tile(int x, int y, TILE_TYPE t)
+{
+    if(canAfford(getCost(t))) {
+        map_value[x][y] = t;
+        changeBalance(-getCost(t));
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool grid_supplied(int x, int y, TILE_TYPE changeTo)
 {
     bool road = isRoad(map_value[x+1][y]) || isRoad(map_value[x+1][y+1]) || isRoad(map_value[x+1][y-1]) || 
                 isRoad(map_value[x-1][y]) || isRoad(map_value[x-1][y+1]) || isRoad(map_value[x-1][y-1]);
-    return road;
+    bool power = (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(changeTo));
+    return road && power;
 }
 
 void map_update()
@@ -162,29 +179,25 @@ void map_update()
         for(y=1;y<MAP_SIZE_Y; y++) {
             switch(map_value[x][y]) {
                 case TILE_RESIDENTIAL_1_ZONE:
-                    if(grid_supplied(x, y) && rand()%build_prob==0 && 
-                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_1_BUILDING))) {
+                    if(grid_supplied(x, y, TILE_RESIDENTIAL_1_BUILDING) && rand()%build_prob==0) {
                         map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_ZONE) + getPowerUsage(TILE_RESIDENTIAL_1_BUILDING);
                     }
                     break;
                 case TILE_RESIDENTIAL_1_BUILDING:
-                    if(grid_supplied(x, y) && rand()%build_finish_prob==0 && 
-                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_1_BUILDING))) {
+                    if(grid_supplied(x, y, TILE_RESIDENTIAL_1_B1) && rand()%build_finish_prob==0) {
                         map_value[x][y] = TILE_RESIDENTIAL_1_B1;
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_BUILDING) + getPowerUsage(TILE_RESIDENTIAL_1_B1);
                     }
                     break;
                 case TILE_RESIDENTIAL_2_ZONE:
-                    if(grid_supplied(x, y) && rand()%build_prob==0 && 
-                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_2_BUILDING))) { 
+                    if(grid_supplied(x, y, TILE_RESIDENTIAL_2_BUILDING) && rand()%build_prob==0) { 
                         map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_ZONE) + getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
                     }
                     break;
                 case TILE_RESIDENTIAL_2_BUILDING:
-                    if(grid_supplied(x, y) && rand()%build_finish_prob==0 && 
-                            (power_avalible >= reqired_power-getPowerUsage(map_value[x][y])+getPowerUsage(TILE_RESIDENTIAL_2_BUILDING))) {
+                    if(grid_supplied(x, y, TILE_RESIDENTIAL_2_B1) && rand()%build_finish_prob==0) {
                         map_value[x][y] = TILE_RESIDENTIAL_2_B1;
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING) + getPowerUsage(TILE_RESIDENTIAL_2_B1);
                     }
@@ -194,6 +207,19 @@ void map_update()
             }
         }
     }
+}
+
+void inc_balance()
+{
+    int x, y;
+    int balanceChange = 0;
+    for(x=1; x<MAP_SIZE_X; x++) {
+        for(y=1;y<MAP_SIZE_Y; y++) {
+            balanceChange += getIncome(map_value[x][y]);
+        }
+    }
+    lastBalanceChange = balanceChange;
+    changeBalance(balanceChange);
 }
 
 int main(int argc, char* argv[]) 
@@ -238,6 +264,10 @@ int main(int argc, char* argv[])
 
         SDL_Delay(FRAME_TIME_DELAY);
         map_update();
+        if(--balanceChangeCounter == 0) {
+            balanceChangeCounter = balanceChangeCounterStart;
+            inc_balance();
+        }
 
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_KEYDOWN) {
@@ -300,7 +330,7 @@ int main(int argc, char* argv[])
                             if(u.x == d.x && u.y == d.y) {
                                 ready_to_place = false; //as we are placing it
                                 if(canBuildOn(map_value[u.x][u.y])) {
-                                    map_value[u.x][u.y] = TILE_RESIDENTIAL_1_ZONE;
+                                    build_tile(u.x, u.y, TILE_RESIDENTIAL_1_ZONE);
                                 }
                             } else {
                                 planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
@@ -310,7 +340,7 @@ int main(int argc, char* argv[])
                             if(u.x == d.x && u.y == d.y) {
                                 ready_to_place = false; //as we are placing it
                                 if(canBuildOn(map_value[u.x][u.y])) {
-                                    map_value[u.x][u.y] = TILE_RESIDENTIAL_2_ZONE;
+                                    build_tile(u.x, u.y, TILE_RESIDENTIAL_2_ZONE);
                                 }
                             } else {
                                 planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
@@ -327,21 +357,24 @@ int main(int argc, char* argv[])
                             break;
                         case MODE_BUILD_DESTROY:
                             if(u.x == d.x && u.y == d.y) {
-                                map_value[u.x][u.y] = TILE_GRASS;
+                                build_tile(u.x, u.y, TILE_GRASS);
                             }
                             break;
                         case MODE_BUILD_POWER_GAS:
                             if(u.x == d.x && u.y == d.y) {
                                 if(canBuildOn(map_value[u.x][u.y]) && canBuildOn(map_value[u.x+1][u.y]) 
                                         && canBuildOn(map_value[u.x][u.y+1]) && canBuildOn(map_value[u.x+1][u.y+1])) {
-                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P1);
-                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P2);
-                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P3);
-                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P4);
-                                    map_value[u.x][u.y] = TILE_POWER_GAS_P1;
-                                    map_value[u.x+1][u.y] = TILE_POWER_GAS_P2;
-                                    map_value[u.x][u.y+1] = TILE_POWER_GAS_P3;
-                                    map_value[u.x+1][u.y+1] = TILE_POWER_GAS_P4;
+                                    if(canAfford(getCost(TILE_POWER_GAS_P1)+getCost(TILE_POWER_GAS_P2)+
+                                            getCost(TILE_POWER_GAS_P3)+getCost(TILE_POWER_GAS_P4))) {
+                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P1);
+                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P2);
+                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P3);
+                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P4);
+                                        build_tile(u.x, u.y, TILE_POWER_GAS_P1);
+                                        build_tile(u.x+1, u.y, TILE_POWER_GAS_P2);
+                                        build_tile(u.x, u.y+1, TILE_POWER_GAS_P3);
+                                        build_tile(u.x+1, u.y+1, TILE_POWER_GAS_P4);
+                                    }
                                 }
                             }
                             break;
