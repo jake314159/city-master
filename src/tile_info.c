@@ -131,6 +131,16 @@ void initClips()
     spriteClips[SPRITE_BUILD_ZONE_RES2].w = 32;
     spriteClips[SPRITE_BUILD_ZONE_RES2].h = 32;
 
+    spriteClips[SPRITE_BUILD_POWER_GENRAL].x = 400;
+    spriteClips[SPRITE_BUILD_POWER_GENRAL].y = 32*5;
+    spriteClips[SPRITE_BUILD_POWER_GENRAL].w = 32;
+    spriteClips[SPRITE_BUILD_POWER_GENRAL].h = 32;
+
+    spriteClips[SPRITE_BUILD_POWER_GAS].x = 400;
+    spriteClips[SPRITE_BUILD_POWER_GAS].y = 32*6;
+    spriteClips[SPRITE_BUILD_POWER_GAS].w = 32;
+    spriteClips[SPRITE_BUILD_POWER_GAS].h = 32;
+
     TILE_TYPE road_i = TILE_ROAD_0;
     for(; road_i<=TILE_ROAD_14; road_i++) {
         roadClips[road_i-200].x = 300;

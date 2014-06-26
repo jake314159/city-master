@@ -4,7 +4,7 @@
 int reqired_power = 0;
 int power_avalible = 1000;
 
-int money = 2000; //,000s
+int money = 100000; //,000s
 
 int getBalance()
 {

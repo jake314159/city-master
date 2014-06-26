@@ -1,6 +1,7 @@
 #include "drawing_functions.h"
 #include "city_master.h"
 #include "resource_manager.h"
+#include "menu_manager.h"
 
 extern int map_value[MAP_SIZE_X][MAP_SIZE_Y];
 extern int screen_x, screen_y;
@@ -161,21 +162,6 @@ void draw_HUD(SDL_Renderer* ren)
     draw_int(ren, font, top_bar_text_color, 200, 00, getBalance(), "£", "000");
     draw_int(ren, font, top_bar_text_color, 200, 20, lastBalanceChange, "£", "000");
 
-    p.x = 0;
-    p.y = BUILDBAR_TILE_START;
-    for(i=0; i<5; i++) {
-        drawTile(ren, &p, getClip(SPRITE_BUILD_BACKGROUND));
-        p.y += BUILDBAR_TILE_SPACING; //tile spacing
-    }
-    
-    p.y = BUILDBAR_TILE_START;
-    drawTile(ren, &p, getClip(SPRITE_BUILD_ZONE_RES1));
-    p.y += BUILDBAR_TILE_SPACING;
-    drawTile(ren, &p, getClip(SPRITE_BUILD_ZONE_RES2));
-    p.y += BUILDBAR_TILE_SPACING;
-    drawTile(ren, &p, getClip(SPRITE_BUILD_ROAD));
-    p.y += BUILDBAR_TILE_SPACING;
-    drawTile(ren, &p, getClip(SPRITE_BUILD_DESTROY));
-    p.y += BUILDBAR_TILE_SPACING;
+    draw_menu(ren);
 }
 

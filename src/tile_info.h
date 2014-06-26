@@ -43,13 +43,16 @@ typedef enum {
     TILE_ROAD_14= 214
 } TILE_TYPE;
 
-#define NUMBER_OF_SPRITES 5
+#define NUMBER_OF_SPRITES 7
 typedef enum {
+    NULL_SPRITE = -1, //IMPORTANT:: Don't try to use this as it will cause buffer overflows
     SPRITE_BUILD_BACKGROUND = 0,
     SPRITE_BUILD_ZONE_RES1 = 1,
     SPRITE_BUILD_ROAD = 2,
     SPRITE_BUILD_DESTROY = 3,
-    SPRITE_BUILD_ZONE_RES2 = 4
+    SPRITE_BUILD_ZONE_RES2 = 4,
+    SPRITE_BUILD_POWER_GENRAL = 5,
+    SPRITE_BUILD_POWER_GAS = 6
 } SPRITE;
 
 
