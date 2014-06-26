@@ -32,6 +32,10 @@ bool touch_HUD(Point *down, Point *up)
                     setMode(MODE_BUILD_DESTROY);
                     valid_item = true;
                     break;
+                case 4:
+                    setMode(MODE_BUILD_POWER_GAS);
+                    valid_item = true;
+                    break;
                 default:
                     valid_item = false;
             }

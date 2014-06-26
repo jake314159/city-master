@@ -4,7 +4,7 @@
 #include "tile_info.h"
 
 #define BUILDBAR_TILE_SPACING 36
-#define BUILDBAR_TILE_START 40
+#define BUILDBAR_TILE_START 70
 
 bool init_drawing(SDL_Renderer* ren);
 void destroy_drawing();

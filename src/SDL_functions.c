@@ -1,6 +1,8 @@
 
 #include "SDL_functions.h"
 
+char string_buffer[100];
+
 int logSDLError(char* error)
 {
 	printf("%s: %s\n", error, SDL_GetError());
@@ -83,4 +85,28 @@ SDL_Texture* renderText(char* message, TTF_Font* font,
 	SDL_FreeSurface(surf);
 	//TTF_CloseFont(font);
 	return texture;
+}
+
+void draw_int(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, int value, char* before, char* after)
+{
+    int i = 0;
+    while(before[i] != '\0') {
+        string_buffer[i] = before[i];
+        i++;
+    }
+    sprintf(string_buffer+i, "%d", value);
+    while(string_buffer[i] != '\0') {
+        i++;
+    }
+    int j = 0;
+    while(after[j] != '\0') {
+        string_buffer[i] = after[i];
+        i++; j++;
+    }
+    string_buffer[i] = '\0';
+    SDL_Texture *font_image = renderText(string_buffer, font, color, ren);
+    if (font_image == NULL){
+        exit(1);
+    }            
+    renderTexture(font_image, ren, x, y);
 }

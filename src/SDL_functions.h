@@ -9,3 +9,5 @@ SDL_Texture* loadTexture(const char* file, SDL_Renderer *ren);
 void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y);
 void renderTextureClip(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SDL_Rect *clip);
 SDL_Texture* renderText(char* message, TTF_Font* font, SDL_Color color, SDL_Renderer *renderer);
+
+void draw_int(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, int value, char* before, char* after);

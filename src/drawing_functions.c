@@ -10,11 +10,17 @@ extern bool ready_to_place;
 extern Point plan_up;
 extern Point plan_down;
 
-const int fontSize = 48;
+extern int reqired_power;
+extern int power_avalible;
+
+const int fontSize = 12;
 const char* fontFile = "fonts/sample.ttf";
 
 SDL_Texture *sheet;
 TTF_Font *font;
+
+SDL_Rect top_bar = {0,0,1000,30};
+SDL_Color top_bar_text_color = {0,0,0};
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -66,7 +72,8 @@ void draw_city(SDL_Renderer* ren)
             twoDToIso(&p);
             p.x += screen_x;
             p.y += screen_y;
-            drawTile(ren, &p, getTileClip(map_value[x][y]));
+            SDL_Rect *clip = getTileClip(map_value[x][y]);
+            drawTile(ren, &p, clip);
         }
     }
     p.x = down_point.x*GRID_TILE_SIZE;
@@ -141,6 +148,16 @@ void draw_HUD(SDL_Renderer* ren)
 {
     int i;
     Point p;
+
+    //Draw the top bar
+    SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
+    SDL_RenderFillRect(ren, &top_bar);
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+
+    draw_int(ren, font, top_bar_text_color, 20, 0, reqired_power,  "Required: ", " MW");
+    draw_int(ren, font, top_bar_text_color, 20, 20, power_avalible, "Avalible: ", " MW");
+
+
     p.x = 0;
     p.y = BUILDBAR_TILE_START;
     for(i=0; i<5; i++) {

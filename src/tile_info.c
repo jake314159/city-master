@@ -83,6 +83,27 @@ void initClips()
     tileClips[TILE_RESIDENTIAL_2_B1].w = 100;
     tileClips[TILE_RESIDENTIAL_2_B1].h = 65;
 
+    
+    tileClips[TILE_POWER_GAS_P1].x = 632;
+    tileClips[TILE_POWER_GAS_P1].y = 0;
+    tileClips[TILE_POWER_GAS_P1].w = 100;
+    tileClips[TILE_POWER_GAS_P1].h = 65*2;
+
+    tileClips[TILE_POWER_GAS_P2].x = 732;
+    tileClips[TILE_POWER_GAS_P2].y = 0;
+    tileClips[TILE_POWER_GAS_P2].w = 100;
+    tileClips[TILE_POWER_GAS_P2].h = 65*2;
+
+    tileClips[TILE_POWER_GAS_P3].x = 632;
+    tileClips[TILE_POWER_GAS_P3].y = 65*2;
+    tileClips[TILE_POWER_GAS_P3].w = 100;
+    tileClips[TILE_POWER_GAS_P3].h = 65;
+
+    tileClips[TILE_POWER_GAS_P4].x = 732;
+    tileClips[TILE_POWER_GAS_P4].y = 65*2;
+    tileClips[TILE_POWER_GAS_P4].w = 100;
+    tileClips[TILE_POWER_GAS_P4].h = 65;
+
 
     //Sprites
     spriteClips[SPRITE_BUILD_BACKGROUND].x = 400;
@@ -162,4 +183,19 @@ bool canBuildOn(TILE_TYPE t)
 int getPowerUsage(TILE_TYPE t) 
 {
     return tilePowerRequirements[t];
+}
+
+int getPowerProduction(TILE_TYPE t) {
+    int powerProduction;
+    switch(t) {
+        case TILE_POWER_GAS_P1:
+        case TILE_POWER_GAS_P2:
+        case TILE_POWER_GAS_P3:
+        case TILE_POWER_GAS_P4:
+            powerProduction = 1000;
+            break;
+        default:
+            powerProduction = 0;
+    }
+    return powerProduction;
 }

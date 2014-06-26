@@ -330,6 +330,21 @@ int main(int argc, char* argv[])
                                 map_value[u.x][u.y] = TILE_GRASS;
                             }
                             break;
+                        case MODE_BUILD_POWER_GAS:
+                            if(u.x == d.x && u.y == d.y) {
+                                if(canBuildOn(map_value[u.x][u.y]) && canBuildOn(map_value[u.x+1][u.y]) 
+                                        && canBuildOn(map_value[u.x][u.y+1]) && canBuildOn(map_value[u.x+1][u.y+1])) {
+                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P1);
+                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P2);
+                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P3);
+                                    power_avalible += getPowerProduction(TILE_POWER_GAS_P4);
+                                    map_value[u.x][u.y] = TILE_POWER_GAS_P1;
+                                    map_value[u.x+1][u.y] = TILE_POWER_GAS_P2;
+                                    map_value[u.x][u.y+1] = TILE_POWER_GAS_P3;
+                                    map_value[u.x+1][u.y+1] = TILE_POWER_GAS_P4;
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
