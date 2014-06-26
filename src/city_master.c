@@ -155,9 +155,10 @@ void placePlannedBuild()
 
 bool build_tile(int x, int y, TILE_TYPE t)
 {
-    if(canAfford(getCost(t))) {
+    if(canAfford(getCost(t)) && power_avalible >= reqired_power + getPowerUsage(t)) {
         map_value[x][y] = t;
         changeBalance(-getCost(t));
+        reqired_power += getPowerUsage(t);
         return true;
     } else {
         return false;
@@ -180,26 +181,30 @@ void map_update()
             switch(map_value[x][y]) {
                 case TILE_RESIDENTIAL_1_ZONE:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_1_BUILDING) && rand()%build_prob==0) {
-                        map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
-                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_ZONE) + getPowerUsage(TILE_RESIDENTIAL_1_BUILDING);
+                        //map_value[x][y] = TILE_RESIDENTIAL_1_BUILDING;
+                        build_tile(x, y, TILE_RESIDENTIAL_1_BUILDING);
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_ZONE);
                     }
                     break;
                 case TILE_RESIDENTIAL_1_BUILDING:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_1_B1) && rand()%build_finish_prob==0) {
-                        map_value[x][y] = TILE_RESIDENTIAL_1_B1;
-                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_BUILDING) + getPowerUsage(TILE_RESIDENTIAL_1_B1);
+                        //map_value[x][y] = TILE_RESIDENTIAL_1_B1;
+                        build_tile(x, y, TILE_RESIDENTIAL_1_B1);
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_BUILDING);
                     }
                     break;
                 case TILE_RESIDENTIAL_2_ZONE:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_2_BUILDING) && rand()%build_prob==0) { 
-                        map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
-                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_ZONE) + getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
+                        //map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
+                        build_tile(x, y, TILE_RESIDENTIAL_2_BUILDING);
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_ZONE);
                     }
                     break;
                 case TILE_RESIDENTIAL_2_BUILDING:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_2_B1) && rand()%build_finish_prob==0) {
-                        map_value[x][y] = TILE_RESIDENTIAL_2_B1;
-                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING) + getPowerUsage(TILE_RESIDENTIAL_2_B1);
+                        //map_value[x][y] = TILE_RESIDENTIAL_2_B1;
+                        build_tile(x, y, TILE_RESIDENTIAL_2_B1);
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
                     }
                     break;
                 default:
@@ -375,6 +380,13 @@ int main(int argc, char* argv[])
                                         build_tile(u.x, u.y+1, TILE_POWER_GAS_P3);
                                         build_tile(u.x+1, u.y+1, TILE_POWER_GAS_P4);
                                     }
+                                }
+                            }
+                            break;
+                        case MODE_BUILD_HOSPITAL:
+                            if(u.x == d.x && u.y == d.y) {
+                                if(canBuildOn(map_value[u.x][u.y])) {
+                                    build_tile(u.x, u.y, TILE_SERVICE_BUILDING_HOSPITAL);
                                 }
                             }
                             break;

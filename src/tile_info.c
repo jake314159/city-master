@@ -21,6 +21,7 @@ void initClips()
     tilePowerRequirements[TILE_RESIDENTIAL_2_ZONE] = 0;
     tilePowerRequirements[TILE_RESIDENTIAL_2_BUILDING] = 30;
     tilePowerRequirements[TILE_RESIDENTIAL_2_B1] = 60;
+    tilePowerRequirements[TILE_SERVICE_BUILDING_HOSPITAL] = 1000;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -52,6 +53,11 @@ void initClips()
     tileClips[TILE_BUILDING].y = 0;
     tileClips[TILE_BUILDING].w = 100;
     tileClips[TILE_BUILDING].h = 65*2;
+
+    tileClips[TILE_SERVICE_BUILDING_HOSPITAL].x = 200;
+    tileClips[TILE_SERVICE_BUILDING_HOSPITAL].y = 65*2;
+    tileClips[TILE_SERVICE_BUILDING_HOSPITAL].w = 100;
+    tileClips[TILE_SERVICE_BUILDING_HOSPITAL].h = 65*2;
 
     tileClips[TILE_RESIDENTIAL_1_ZONE].x = 432;
     tileClips[TILE_RESIDENTIAL_1_ZONE].y = 0;
@@ -141,6 +147,16 @@ void initClips()
     spriteClips[SPRITE_BUILD_POWER_GAS].w = 32;
     spriteClips[SPRITE_BUILD_POWER_GAS].h = 32;
 
+    spriteClips[SPRITE_SERVICES_GENRAL].x = 400;
+    spriteClips[SPRITE_SERVICES_GENRAL].y = 32*7;
+    spriteClips[SPRITE_SERVICES_GENRAL].w = 32;
+    spriteClips[SPRITE_SERVICES_GENRAL].h = 32;
+
+    spriteClips[SPRITE_SERVICES_HOSPITAL].x = 400;
+    spriteClips[SPRITE_SERVICES_HOSPITAL].y = 32*8;
+    spriteClips[SPRITE_SERVICES_HOSPITAL].w = 32;
+    spriteClips[SPRITE_SERVICES_HOSPITAL].h = 32;
+
     TILE_TYPE road_i = TILE_ROAD_0;
     for(; road_i<=TILE_ROAD_14; road_i++) {
         roadClips[road_i-200].x = 300;
@@ -222,6 +238,9 @@ int getCost(TILE_TYPE t)
         case TILE_POWER_GAS_P4:
             cost = 80; //total of £360,000
             break;
+        case TILE_SERVICE_BUILDING_HOSPITAL:
+            cost = 500;
+            break;
         case TILE_RESIDENTIAL_1_ZONE:
         case TILE_RESIDENTIAL_2_ZONE:
             cost = 1;
@@ -244,6 +263,9 @@ int getIncome(TILE_TYPE t)
         case TILE_POWER_GAS_P3:
         case TILE_POWER_GAS_P4:
             income = -10; //total of -£40,000
+            break;
+        case TILE_SERVICE_BUILDING_HOSPITAL:
+            income = -100;
             break;
         case TILE_RESIDENTIAL_1_B1:
             income = 4;

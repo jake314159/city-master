@@ -5,11 +5,12 @@
 #define ABS(X) (((X)>0) ? (X) : (-(X)))
 #define DRAG_SENSITIVITY 5
 
-#define MENU_LENGTH 4
+#define MENU_LENGTH 5
 #define MENU_LONGEST_SUBMENU 5
 SPRITE menu[MENU_LENGTH][MENU_LONGEST_SUBMENU] = {
     {SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES2, NULL_SPRITE},
     {SPRITE_BUILD_POWER_GENRAL, SPRITE_BUILD_POWER_GAS, NULL_SPRITE},
+    {SPRITE_SERVICES_GENRAL, SPRITE_SERVICES_HOSPITAL, NULL_SPRITE},
     {SPRITE_BUILD_ROAD, NULL_SPRITE},
     {SPRITE_BUILD_DESTROY, NULL_SPRITE}
 };
@@ -44,8 +45,6 @@ void draw_menu(SDL_Renderer* ren)
 
 void button_click(int menu_x, int menu_y, SPRITE sprite)
 {
-    printf("(%d,%d) sprite %d\n", menu_x, menu_y, sprite);
-
     if(menu_y > 0) {
         switch(sprite) {
             case SPRITE_BUILD_ZONE_RES1:
@@ -56,6 +55,9 @@ void button_click(int menu_x, int menu_y, SPRITE sprite)
                 break;
             case SPRITE_BUILD_POWER_GAS:
                 setMode(MODE_BUILD_POWER_GAS);
+                break;
+            case SPRITE_SERVICES_HOSPITAL:
+                setMode(MODE_BUILD_HOSPITAL);
                 break;
             default:
                 break;
