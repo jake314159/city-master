@@ -3,8 +3,8 @@
 
 //const int MAP_SIZE_X = 32;
 //const int MAP_SIZE_Y = 32;
-#define MAP_SIZE_X 32
-#define MAP_SIZE_Y 32
+#define MAP_SIZE_X 64
+#define MAP_SIZE_Y 64
 
 typedef enum {
     MODE_VIEW,

@@ -8,6 +8,8 @@ int money = 100000; //,000s
 
 int hospitals = 0; //number of hospitals
 
+int population = 0;
+
 int getBalance()
 {
     return money;
@@ -31,4 +33,14 @@ int addHospitalToCount()
 int getNumberOfHospitals()
 {
     return hospitals;
+}
+
+int getPopulation()
+{
+    return population;
+}
+
+void setPopulation(int pop)
+{
+    population = pop;
 }

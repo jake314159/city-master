@@ -162,6 +162,8 @@ void draw_HUD(SDL_Renderer* ren)
     draw_int(ren, font, top_bar_text_color, 200, 00, getBalance(), "£", "000");
     draw_int(ren, font, top_bar_text_color, 200, 20, lastBalanceChange, "£", "000");
 
+    draw_int(ren, font, top_bar_text_color, 400, 0, getPopulation(), "Pop: ", "");
+
     draw_menu(ren);
 }
 

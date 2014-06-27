@@ -6,6 +6,7 @@ SDL_Rect spriteClips[NUMBER_OF_SPRITES];
 SDL_Rect roadClips[16];
 
 int tilePowerRequirements[NUMBER_OF_TILES];
+int tilePopulation[NUMBER_OF_TILES];
 
 void initClips()
 {
@@ -22,6 +23,20 @@ void initClips()
     tilePowerRequirements[TILE_RESIDENTIAL_2_BUILDING] = 30;
     tilePowerRequirements[TILE_RESIDENTIAL_2_B1] = 60;
     tilePowerRequirements[TILE_SERVICE_BUILDING_HOSPITAL] = 1000;
+
+    tilePopulation[TILE_GRASS] = 0;
+    tilePopulation[TILE_BUILDING] = 0;
+    tilePopulation[TILE_HIGHLIGHT_BLUE] = 0;
+    tilePopulation[TILE_HIGHLIGHT_RED] = 0;
+    tilePopulation[TILE_HIGHLIGHT_YELLOW] = 0;
+    tilePopulation[TILE_HIGHLIGHT_GREEN] = 0;
+    tilePopulation[TILE_RESIDENTIAL_1_ZONE] = 0;
+    tilePopulation[TILE_RESIDENTIAL_1_BUILDING] = 0;
+    tilePopulation[TILE_RESIDENTIAL_1_B1] = 40;
+    tilePopulation[TILE_RESIDENTIAL_2_ZONE] = 0;
+    tilePopulation[TILE_RESIDENTIAL_2_BUILDING] = 0;
+    tilePopulation[TILE_RESIDENTIAL_2_B1] = 6;
+    tilePopulation[TILE_SERVICE_BUILDING_HOSPITAL] = 0;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -262,15 +277,15 @@ int getIncome(TILE_TYPE t)
         case TILE_POWER_GAS_P2:
         case TILE_POWER_GAS_P3:
         case TILE_POWER_GAS_P4:
-            income = -10; //total of -£40,000
+            income = -20; //total of -£80,000
             break;
         case TILE_SERVICE_BUILDING_HOSPITAL:
-            income = -100;
+            income = -500;
             break;
         case TILE_RESIDENTIAL_1_B1:
-            income = 4;
+            income = 15;
         case TILE_RESIDENTIAL_2_B1:
-            income = 6;
+            income = 10;
             break;
         default:
             income = 0;
@@ -279,3 +294,7 @@ int getIncome(TILE_TYPE t)
     return income;
 }
 
+int getTilePopulation(TILE_TYPE t)
+{
+    return tilePopulation[t];
+}

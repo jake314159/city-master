@@ -6,3 +6,6 @@ bool canAfford(int value);
 
 int addHospitalToCount();
 int getNumberOfHospitals();
+
+int getPopulation();
+void setPopulation(int pop);

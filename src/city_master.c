@@ -155,6 +155,8 @@ void placePlannedBuild()
 
 bool build_tile(int x, int y, TILE_TYPE t)
 {
+    if(x <= 0 || y <= 0 || x >= MAP_SIZE_X || y >= MAP_SIZE_Y) return false;
+
     if(t == TILE_SERVICE_BUILDING_HOSPITAL) addHospitalToCount();
 
 
@@ -199,9 +201,12 @@ bool build_prob_check(TILE_TYPE t)
 
 void map_update()
 {
-    int x, y;
+    int x, y, pop;
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
+
+            pop += getTilePopulation(map_value[x][y]);
+
             switch(map_value[x][y]) {
                 case TILE_RESIDENTIAL_1_ZONE:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_1_BUILDING) && build_prob_check(TILE_RESIDENTIAL_1_ZONE)) {
@@ -236,6 +241,7 @@ void map_update()
             }
         }
     }
+    setPopulation(pop);
 }
 
 void inc_balance()
