@@ -175,6 +175,26 @@ void placePlannedBuild()
             }
 
             break;
+        case MODE_BUILD_HOSPITAL:
+            build_tile(plan_up.x, plan_up.y, TILE_SERVICE_BUILDING_HOSPITAL);
+            setMode(MODE_VIEW);
+            break;
+        case MODE_BUILD_POWER_GAS:;
+            if(canBuildOn(map_value[plan_up.x][plan_up.y]) && canBuildOn(map_value[plan_up.x+1][plan_up.y]) 
+                    && canBuildOn(map_value[plan_up.x][plan_up.y+1]) && canBuildOn(map_value[plan_up.x+1][plan_up.y+1])) {
+                if(canAfford(getCost(TILE_POWER_GAS_P1)+getCost(TILE_POWER_GAS_P2)+
+                        getCost(TILE_POWER_GAS_P3)+getCost(TILE_POWER_GAS_P4))) {
+                    power_avalible += getPowerProduction(TILE_POWER_GAS_P1);
+                    power_avalible += getPowerProduction(TILE_POWER_GAS_P2);
+                    power_avalible += getPowerProduction(TILE_POWER_GAS_P3);
+                    power_avalible += getPowerProduction(TILE_POWER_GAS_P4);
+                    build_tile(plan_up.x, plan_up.y, TILE_POWER_GAS_P1);
+                    build_tile(plan_up.x+1, plan_up.y, TILE_POWER_GAS_P2);
+                    build_tile(plan_up.x, plan_up.y+1, TILE_POWER_GAS_P3);
+                    build_tile(plan_up.x+1, plan_up.y+1, TILE_POWER_GAS_P4);
+                }
+            }
+            break;
         default:
             break;
     }
@@ -400,7 +420,8 @@ int main(int argc, char* argv[])
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
-                        || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR)) {
+                        || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
+                        || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -420,82 +441,17 @@ int main(int argc, char* argv[])
                     
                     switch(mode) {
                         case MODE_BUILD_RESIDENTIAL_1:
-                            if(u.x == d.x && u.y == d.y) {
-                                ready_to_place = false; //as we are placing it
-                                if(canBuildOn(map_value[u.x][u.y])) {
-                                    build_tile(u.x, u.y, TILE_RESIDENTIAL_1_ZONE);
-                                }
-                            } else {
-                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
-                            }
-                            break;
                         case MODE_BUILD_RESIDENTIAL_2:
-                            if(u.x == d.x && u.y == d.y) {
-                                ready_to_place = false; //as we are placing it
-                                if(canBuildOn(map_value[u.x][u.y])) {
-                                    build_tile(u.x, u.y, TILE_RESIDENTIAL_2_ZONE);
-                                }
-                            } else {
-                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
-                            }
-                            break;
                         case MODE_BUILD_RETAIL:
-                            if(u.x == d.x && u.y == d.y) {
-                                ready_to_place = false; //as we are placing it
-                                if(canBuildOn(map_value[u.x][u.y])) {
-                                    build_tile(u.x, u.y, TILE_RETAIL_ZONE);
-                                }
-                            } else {
-                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
-                            }
-                            break;
+                        case MODE_BUILD_POWER_SOLAR:
                         case MODE_BUILD_ROAD:
-                            if(u.x == d.x && u.y == d.y) {
-                                if(canBuildOn(map_value[u.x][u.y])) {
-                                    placeRoad(u);
-                                }
-                            } else {
-                                planRoad(u, d);
-                            }
+                        case MODE_BUILD_HOSPITAL:
+                        case MODE_BUILD_POWER_GAS:
+                            planRoad(u, d);
                             break;
                         case MODE_BUILD_DESTROY:
                             if(u.x == d.x && u.y == d.y) {
                                 build_tile(u.x, u.y, TILE_GRASS);
-                            }
-                            break;
-                        case MODE_BUILD_POWER_GAS:
-                            if(u.x == d.x && u.y == d.y) {
-                                if(canBuildOn(map_value[u.x][u.y]) && canBuildOn(map_value[u.x+1][u.y]) 
-                                        && canBuildOn(map_value[u.x][u.y+1]) && canBuildOn(map_value[u.x+1][u.y+1])) {
-                                    if(canAfford(getCost(TILE_POWER_GAS_P1)+getCost(TILE_POWER_GAS_P2)+
-                                            getCost(TILE_POWER_GAS_P3)+getCost(TILE_POWER_GAS_P4))) {
-                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P1);
-                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P2);
-                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P3);
-                                        power_avalible += getPowerProduction(TILE_POWER_GAS_P4);
-                                        build_tile(u.x, u.y, TILE_POWER_GAS_P1);
-                                        build_tile(u.x+1, u.y, TILE_POWER_GAS_P2);
-                                        build_tile(u.x, u.y+1, TILE_POWER_GAS_P3);
-                                        build_tile(u.x+1, u.y+1, TILE_POWER_GAS_P4);
-                                    }
-                                }
-                            }
-                            break;
-                        case MODE_BUILD_POWER_SOLAR:
-                            /*if(u.x == d.x && u.y == d.y) {
-                                ready_to_place = false; //as we are placing it
-                                if(canBuildOn(map_value[u.x][u.y])) {
-                                    build_tile(u.x, u.y, TILE_POWER_SOLAR);
-                                }
-                            } else {*/
-                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
-                           // }
-                            break;
-                        case MODE_BUILD_HOSPITAL:
-                            if(u.x == d.x && u.y == d.y) {
-                                if(canBuildOn(map_value[u.x][u.y])) {
-                                    build_tile(u.x, u.y, TILE_SERVICE_BUILDING_HOSPITAL);
-                                }
                             }
                             break;
                         default:

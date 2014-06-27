@@ -149,6 +149,28 @@ void draw_city(SDL_Renderer* ren)
                     }
                 }
                 break;
+            case MODE_BUILD_HOSPITAL:
+            ;
+                p.x = plan_up.x;
+                p.y = plan_up.y;
+                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                break;
+            case MODE_BUILD_POWER_GAS:
+            ;
+                p.x = plan_up.x;
+                p.y = plan_up.y;
+                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                p.x = plan_up.x+1;
+                p.y = plan_up.y;
+                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                p.x = plan_up.x;
+                p.y = plan_up.y+1;
+                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                p.x = plan_up.x+1;
+                p.y = plan_up.y+1;
+                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                break;
+
         }
     }
 }
