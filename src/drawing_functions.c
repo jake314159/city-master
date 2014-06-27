@@ -8,6 +8,9 @@ extern int screen_x, screen_y;
 extern Point down_point;
 extern Point up_point;
 
+extern int window_size_x;
+extern int window_size_y;
+
 extern bool ready_to_place;
 extern Point plan_up;
 extern Point plan_down;
@@ -163,6 +166,34 @@ void draw_HUD(SDL_Renderer* ren)
     draw_int(ren, font, top_bar_text_color, 200, 20, lastBalanceChange, "£", "000");
 
     draw_int(ren, font, top_bar_text_color, 400, 0, getPopulation(), "Pop: ", "");
+
+    //printf("window size (%d,%d)\n", window_size_x, window_size_y);
+    char* modeText = NULL;
+    switch(getMode()) {
+        case MODE_BUILD_RESIDENTIAL_1:
+            modeText = "Build cheap housing";
+            break;
+        case MODE_BUILD_RESIDENTIAL_2:
+            modeText = "Build mid range housing";
+            break;
+        case MODE_BUILD_ROAD:
+            modeText = "Build roads";
+            break;
+        case MODE_BUILD_POWER_GAS:
+            modeText = "Build gas power stations";
+            break;
+        case MODE_BUILD_DESTROY:
+            modeText = "Demolish";
+            break;
+        case MODE_BUILD_HOSPITAL:
+            modeText = "Build hospital";
+            break;
+        default:
+            break;
+    }
+    if(modeText != NULL) {
+        draw_string(ren, font, top_bar_text_color, 5, window_size_y-15, modeText);
+    }
 
     draw_menu(ren);
 }

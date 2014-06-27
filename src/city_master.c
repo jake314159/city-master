@@ -38,6 +38,9 @@ int balanceChangeCounterStart = 100;
 int balanceChangeCounter = 100;
 int lastBalanceChange;
 
+int window_size_x;
+int window_size_y;
+
 void setMode(MODE m)
 {
     mode = m;
@@ -298,6 +301,8 @@ int main(int argc, char* argv[])
     while (!quit){
 
         SDL_Delay(FRAME_TIME_DELAY);
+        SDL_GetWindowSize(window, &window_size_x, &window_size_y);
+
         map_update();
         if(--balanceChangeCounter == 0) {
             balanceChangeCounter = balanceChangeCounterStart;
@@ -312,16 +317,16 @@ int main(int argc, char* argv[])
                         quit = true;
                         break;
                     case SDLK_LEFT:
-                        screen_x += 10;
+                        screen_x += 30;
                         break;
                     case SDLK_RIGHT:
-                        screen_x -= 10;
+                        screen_x -= 30;
                         break;
                     case SDLK_UP:
-                        screen_y += 10;
+                        screen_y += 30;
                         break;
                     case SDLK_DOWN:
-                        screen_y -= 10;
+                        screen_y -= 30;
                         break;
                     case SDLK_ESCAPE:
                         if(ready_to_place) {

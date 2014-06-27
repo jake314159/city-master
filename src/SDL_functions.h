@@ -11,3 +11,4 @@ void renderTextureClip(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SDL_Re
 SDL_Texture* renderText(char* message, TTF_Font* font, SDL_Color color, SDL_Renderer *renderer);
 
 void draw_int(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, int value, char* before, char* after);
+void draw_string(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, char* text);

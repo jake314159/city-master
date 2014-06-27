@@ -110,3 +110,12 @@ void draw_int(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, 
     }            
     renderTexture(font_image, ren, x, y);
 }
+
+void draw_string(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, char* text)
+{
+    SDL_Texture *font_image = renderText(text, font, color, ren);
+    if (font_image == NULL){
+        exit(1);
+    }            
+    renderTexture(font_image, ren, x, y);
+}
