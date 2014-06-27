@@ -14,7 +14,10 @@
    id="svg5949"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="002_hospital.svg">
+   sodipodi:docname="002_hospital.svg"
+   inkscape:export-filename="/home/jake/git/cityMaster/images/003_single_tile_buildings/002_hospital.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs5951">
     <inkscape:perspective
@@ -110,7 +113,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>

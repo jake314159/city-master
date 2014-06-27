@@ -152,6 +152,19 @@ void placePlannedBuild()
             }
 
             break;
+        case MODE_BUILD_POWER_SOLAR:;
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    if(canBuildOn(map_value[p.x][p.y])) {
+                        build_tile(p.x, p.y, TILE_POWER_SOLAR);
+                        power_avalible += getPowerProduction(TILE_POWER_SOLAR);
+                    }
+                }
+            }
+
+            break;
         case MODE_BUILD_DESTROY:
             for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
                 for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
@@ -387,7 +400,7 @@ int main(int argc, char* argv[])
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
-                        || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL)) {
+                        || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -467,6 +480,16 @@ int main(int argc, char* argv[])
                                     }
                                 }
                             }
+                            break;
+                        case MODE_BUILD_POWER_SOLAR:
+                            /*if(u.x == d.x && u.y == d.y) {
+                                ready_to_place = false; //as we are placing it
+                                if(canBuildOn(map_value[u.x][u.y])) {
+                                    build_tile(u.x, u.y, TILE_POWER_SOLAR);
+                                }
+                            } else {*/
+                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
+                           // }
                             break;
                         case MODE_BUILD_HOSPITAL:
                             if(u.x == d.x && u.y == d.y) {

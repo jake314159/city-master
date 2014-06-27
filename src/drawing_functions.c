@@ -134,6 +134,7 @@ void draw_city(SDL_Renderer* ren)
             case MODE_BUILD_RESIDENTIAL_2:
             case MODE_BUILD_DESTROY:
             case MODE_BUILD_RETAIL:
+            case MODE_BUILD_POWER_SOLAR:
             ;
                 //p = plan_down;
                 //p2 = plan_down;
@@ -192,6 +193,9 @@ void draw_HUD(SDL_Renderer* ren)
             break;
         case MODE_BUILD_HOSPITAL:
             modeText = "Build hospital";
+            break;
+        case MODE_BUILD_POWER_SOLAR:
+            modeText = "Build solar panels";
             break;
         default:
             break;

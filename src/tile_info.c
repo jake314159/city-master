@@ -26,6 +26,11 @@ void initClips()
     tilePowerRequirements[TILE_RETAIL_ZONE] = 0;
     tilePowerRequirements[TILE_RETAIL_BUILDING] = 30;
     tilePowerRequirements[TILE_RETAIL_B1] = 100;
+    tilePowerRequirements[TILE_POWER_GAS_P1] = 0;
+    tilePowerRequirements[TILE_POWER_GAS_P2] = 0;
+    tilePowerRequirements[TILE_POWER_GAS_P3] = 0;
+    tilePowerRequirements[TILE_POWER_GAS_P4] = 0;
+    tilePowerRequirements[TILE_POWER_SOLAR] = 0;
 
     tilePopulation[TILE_GRASS] = 0;
     tilePopulation[TILE_BUILDING] = 0;
@@ -47,6 +52,7 @@ void initClips()
     tilePopulation[TILE_POWER_GAS_P2] = 0;
     tilePopulation[TILE_POWER_GAS_P3] = 0;
     tilePopulation[TILE_POWER_GAS_P4] = 0;
+    tilePopulation[TILE_POWER_SOLAR] = 0;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -135,6 +141,11 @@ void initClips()
     tileClips[TILE_POWER_GAS_P4].w = 100;
     tileClips[TILE_POWER_GAS_P4].h = 65;
 
+    tileClips[TILE_POWER_SOLAR].x = 632;
+    tileClips[TILE_POWER_SOLAR].y = 65*3;
+    tileClips[TILE_POWER_SOLAR].w = 100;
+    tileClips[TILE_POWER_SOLAR].h = 65*2;
+
     tileClips[TILE_RETAIL_ZONE].x = 832;
     tileClips[TILE_RETAIL_ZONE].y = 0;
     tileClips[TILE_RETAIL_ZONE].w = 100;
@@ -202,6 +213,11 @@ void initClips()
     spriteClips[SPRITE_BUILD_ZONE_RETAIL].w = 32;
     spriteClips[SPRITE_BUILD_ZONE_RETAIL].h = 32;
 
+    spriteClips[SPRITE_BUILD_POWER_SOLAR].x = 400;
+    spriteClips[SPRITE_BUILD_POWER_SOLAR].y = 32*10;
+    spriteClips[SPRITE_BUILD_POWER_SOLAR].w = 32;
+    spriteClips[SPRITE_BUILD_POWER_SOLAR].h = 32;
+
     TILE_TYPE road_i = TILE_ROAD_0;
     for(; road_i<=TILE_ROAD_14; road_i++) {
         roadClips[road_i-200].x = 300;
@@ -265,6 +281,9 @@ int getPowerProduction(TILE_TYPE t) {
         case TILE_POWER_GAS_P4:
             powerProduction = 1000;
             break;
+        case TILE_POWER_SOLAR:
+            powerProduction = 100;
+            break;
         default:
             powerProduction = 0;
     }
@@ -282,6 +301,9 @@ int getCost(TILE_TYPE t)
         case TILE_POWER_GAS_P3:
         case TILE_POWER_GAS_P4:
             cost = 80; //total of £360,000
+            break;
+        case TILE_POWER_SOLAR:
+            cost = 60;
             break;
         case TILE_SERVICE_BUILDING_HOSPITAL:
             cost = 500;
@@ -316,6 +338,9 @@ int getIncome(TILE_TYPE t)
             income = 15;
         case TILE_RESIDENTIAL_2_B1:
             income = 10;
+            break;
+        case TILE_RETAIL_B1:
+            income = 30;
             break;
         default:
             income = 0;
