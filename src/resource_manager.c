@@ -1,6 +1,5 @@
 #include "resource_manager.h"
 
-
 int reqired_power = 0;
 int power_avalible = 1000;
 
@@ -9,6 +8,7 @@ int money = 100000; //,000s
 int hospitals = 0; //number of hospitals
 
 int population = 0;
+int number_of_shops = 0;
 
 int getBalance()
 {

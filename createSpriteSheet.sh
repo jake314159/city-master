@@ -12,6 +12,8 @@ python sprite_line_maker.py images/temp/005_build_icons.png v images/005_build_i
 python sprite_line_maker.py images/temp/006_zone_residential_1.png v images/006_zone_residential_1/*.png
 python sprite_line_maker.py images/temp/007_zone_residential_2.png v images/007_zone_residential_2/*.png
 python sprite_line_maker.py images/temp/008_power_stations.png v images/008_power_stations/*.png
+python sprite_line_maker.py images/temp/009_zone_retail.png v images/009_zone_retail/*.png
+
 
 python sprite_line_maker.py images/tile_sheet.png h images/temp/*.png
 

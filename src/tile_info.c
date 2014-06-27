@@ -23,6 +23,9 @@ void initClips()
     tilePowerRequirements[TILE_RESIDENTIAL_2_BUILDING] = 30;
     tilePowerRequirements[TILE_RESIDENTIAL_2_B1] = 60;
     tilePowerRequirements[TILE_SERVICE_BUILDING_HOSPITAL] = 1000;
+    tilePowerRequirements[TILE_RETAIL_ZONE] = 0;
+    tilePowerRequirements[TILE_RETAIL_BUILDING] = 30;
+    tilePowerRequirements[TILE_RETAIL_B1] = 100;
 
     tilePopulation[TILE_GRASS] = 0;
     tilePopulation[TILE_BUILDING] = 0;
@@ -37,6 +40,13 @@ void initClips()
     tilePopulation[TILE_RESIDENTIAL_2_BUILDING] = 0;
     tilePopulation[TILE_RESIDENTIAL_2_B1] = 6;
     tilePopulation[TILE_SERVICE_BUILDING_HOSPITAL] = 0;
+    tilePopulation[TILE_RETAIL_ZONE] = 0;
+    tilePopulation[TILE_RETAIL_BUILDING] = 0;
+    tilePopulation[TILE_RETAIL_B1] = 0;
+    tilePopulation[TILE_POWER_GAS_P1] = 0;
+    tilePopulation[TILE_POWER_GAS_P2] = 0;
+    tilePopulation[TILE_POWER_GAS_P3] = 0;
+    tilePopulation[TILE_POWER_GAS_P4] = 0;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -125,6 +135,21 @@ void initClips()
     tileClips[TILE_POWER_GAS_P4].w = 100;
     tileClips[TILE_POWER_GAS_P4].h = 65;
 
+    tileClips[TILE_RETAIL_ZONE].x = 832;
+    tileClips[TILE_RETAIL_ZONE].y = 0;
+    tileClips[TILE_RETAIL_ZONE].w = 100;
+    tileClips[TILE_RETAIL_ZONE].h = 65;
+
+    tileClips[TILE_RETAIL_BUILDING].x = 832;
+    tileClips[TILE_RETAIL_BUILDING].y = 65;
+    tileClips[TILE_RETAIL_BUILDING].w = 100;
+    tileClips[TILE_RETAIL_BUILDING].h = 65;
+
+    tileClips[TILE_RETAIL_B1].x = 832;
+    tileClips[TILE_RETAIL_B1].y = 65*2;
+    tileClips[TILE_RETAIL_B1].w = 100;
+    tileClips[TILE_RETAIL_B1].h = 65*2;
+
 
     //Sprites
     spriteClips[SPRITE_BUILD_BACKGROUND].x = 400;
@@ -171,6 +196,11 @@ void initClips()
     spriteClips[SPRITE_SERVICES_HOSPITAL].y = 32*8;
     spriteClips[SPRITE_SERVICES_HOSPITAL].w = 32;
     spriteClips[SPRITE_SERVICES_HOSPITAL].h = 32;
+
+    spriteClips[SPRITE_BUILD_ZONE_RETAIL].x = 400;
+    spriteClips[SPRITE_BUILD_ZONE_RETAIL].y = 32*9;
+    spriteClips[SPRITE_BUILD_ZONE_RETAIL].w = 32;
+    spriteClips[SPRITE_BUILD_ZONE_RETAIL].h = 32;
 
     TILE_TYPE road_i = TILE_ROAD_0;
     for(; road_i<=TILE_ROAD_14; road_i++) {
@@ -296,5 +326,6 @@ int getIncome(TILE_TYPE t)
 
 int getTilePopulation(TILE_TYPE t)
 {
+    if(t >= TILE_ROAD_0 && t <= TILE_ROAD_14) return 0;
     return tilePopulation[t];
 }

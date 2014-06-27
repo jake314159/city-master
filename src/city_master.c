@@ -34,6 +34,9 @@ int build_finish_prob = 600;
 extern int reqired_power;
 extern int power_avalible;
 
+extern int number_of_shops;
+const int target_population_per_shop = 250;
+
 int balanceChangeCounterStart = 100;
 int balanceChangeCounter = 100;
 int lastBalanceChange;
@@ -137,6 +140,18 @@ void placePlannedBuild()
             }
 
             break;
+        case MODE_BUILD_RETAIL:;
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    if(canBuildOn(map_value[p.x][p.y])) {
+                        build_tile(p.x, p.y, TILE_RETAIL_ZONE);
+                    }
+                }
+            }
+
+            break;
         case MODE_BUILD_DESTROY:
             for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
                 for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
@@ -192,7 +207,15 @@ bool build_prob_check(TILE_TYPE t)
             break;
         case TILE_RESIDENTIAL_1_BUILDING:
         case TILE_RESIDENTIAL_2_BUILDING:
+        case TILE_RETAIL_BUILDING:
             prob = build_finish_prob;
+            break;
+        case TILE_RETAIL_ZONE:;
+            // How many shops we need to get to the optimum number
+            float shops_short_by = ((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops;
+            if(shops_short_by > 0)  prob =  1500;
+            else                    prob = 15000;
+
             break;
         default:
             prob = build_finish_prob;
@@ -204,11 +227,13 @@ bool build_prob_check(TILE_TYPE t)
 
 void map_update()
 {
-    int x, y, pop;
+    int x, y, pop = 0, shopC = 0;
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
 
             pop += getTilePopulation(map_value[x][y]);
+
+            if(map_value[x][y] == TILE_RETAIL_B1) shopC += 1;
 
             switch(map_value[x][y]) {
                 case TILE_RESIDENTIAL_1_ZONE:
@@ -239,12 +264,27 @@ void map_update()
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
                     }
                     break;
+                case TILE_RETAIL_ZONE:
+                    if(grid_supplied(x, y, TILE_RETAIL_BUILDING) && build_prob_check(TILE_RETAIL_ZONE)) { 
+                        //map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
+                        build_tile(x, y, TILE_RETAIL_BUILDING);
+                        reqired_power = reqired_power - getPowerUsage(TILE_RETAIL_ZONE);
+                    }
+                    break;
+                case TILE_RETAIL_BUILDING:
+                    if(grid_supplied(x, y, TILE_RETAIL_B1) && build_prob_check(TILE_RETAIL_BUILDING)) {
+                        //map_value[x][y] = TILE_RESIDENTIAL_2_B1;
+                        build_tile(x, y, TILE_RETAIL_B1);
+                        reqired_power = reqired_power - getPowerUsage(TILE_RETAIL_BUILDING);
+                    }
+                    break;
                 default:
                     break;
             }
         }
     }
     setPopulation(pop);
+    number_of_shops = shopC;
 }
 
 void inc_balance()
@@ -347,7 +387,7 @@ int main(int argc, char* argv[])
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
-                        || mode == MODE_BUILD_DESTROY)) {
+                        || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -381,6 +421,16 @@ int main(int argc, char* argv[])
                                 ready_to_place = false; //as we are placing it
                                 if(canBuildOn(map_value[u.x][u.y])) {
                                     build_tile(u.x, u.y, TILE_RESIDENTIAL_2_ZONE);
+                                }
+                            } else {
+                                planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME
+                            }
+                            break;
+                        case MODE_BUILD_RETAIL:
+                            if(u.x == d.x && u.y == d.y) {
+                                ready_to_place = false; //as we are placing it
+                                if(canBuildOn(map_value[u.x][u.y])) {
+                                    build_tile(u.x, u.y, TILE_RETAIL_ZONE);
                                 }
                             } else {
                                 planRoad(u, d); //Plan to build a bilding is the same as planning a road -- //TODO RENAME

@@ -132,7 +132,9 @@ void draw_city(SDL_Renderer* ren)
                 break;
             case MODE_BUILD_RESIDENTIAL_1:
             case MODE_BUILD_RESIDENTIAL_2:
-            case MODE_BUILD_DESTROY:;
+            case MODE_BUILD_DESTROY:
+            case MODE_BUILD_RETAIL:
+            ;
                 //p = plan_down;
                 //p2 = plan_down;
                 //drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_GREEN));
@@ -184,6 +186,9 @@ void draw_HUD(SDL_Renderer* ren)
             break;
         case MODE_BUILD_DESTROY:
             modeText = "Demolish";
+            break;
+        case MODE_BUILD_RETAIL:
+            modeText = "Build retail units";
             break;
         case MODE_BUILD_HOSPITAL:
             modeText = "Build hospital";

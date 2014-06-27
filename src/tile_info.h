@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 //Number NOT including the road tiles!
-#define NUMBER_OF_TILES 17
+#define NUMBER_OF_TILES 20
 typedef enum {
     TILE_GRASS = 0,
     TILE_BUILDING = 1,
@@ -28,6 +28,10 @@ typedef enum {
 
     TILE_SERVICE_BUILDING_HOSPITAL = 16,
 
+    TILE_RETAIL_ZONE = 17,
+    TILE_RETAIL_BUILDING = 18,
+    TILE_RETAIL_B1 = 19,    
+
     TILE_ROAD_0 = 200,
     TILE_ROAD_1 = 201,
     TILE_ROAD_2 = 202,
@@ -45,7 +49,7 @@ typedef enum {
     TILE_ROAD_14= 214
 } TILE_TYPE;
 
-#define NUMBER_OF_SPRITES 9
+#define NUMBER_OF_SPRITES 10
 typedef enum {
     NULL_SPRITE = -1, //IMPORTANT:: Don't try to use this as it will cause buffer overflows
     SPRITE_BUILD_BACKGROUND = 0,
@@ -56,7 +60,8 @@ typedef enum {
     SPRITE_BUILD_POWER_GENRAL = 5,
     SPRITE_BUILD_POWER_GAS = 6,
     SPRITE_SERVICES_GENRAL = 7,
-    SPRITE_SERVICES_HOSPITAL = 8
+    SPRITE_SERVICES_HOSPITAL = 8,
+    SPRITE_BUILD_ZONE_RETAIL = 9
 } SPRITE;
 
 
