@@ -447,7 +447,7 @@ int main(int argc, char* argv[])
                         case MODE_BUILD_ROAD:
                         case MODE_BUILD_HOSPITAL:
                         case MODE_BUILD_POWER_GAS:
-                            planRoad(u, d);
+                            planRoad(u, plan_down);
                             break;
                         case MODE_BUILD_DESTROY:
                             if(u.x == d.x && u.y == d.y) {
