@@ -3,4 +3,5 @@
 #include "draw_utils.h"
 
 void draw_menu(SDL_Renderer* ren);
+bool check_touch_menu(Point *p);
 bool touch_menu(Point *down, Point *up);

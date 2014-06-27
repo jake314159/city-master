@@ -31,6 +31,8 @@ void initClips()
     tilePowerRequirements[TILE_POWER_GAS_P3] = 0;
     tilePowerRequirements[TILE_POWER_GAS_P4] = 0;
     tilePowerRequirements[TILE_POWER_SOLAR] = 0;
+    tilePowerRequirements[TILE_SERVICE_BUILDING_POLICE] = 400;
+    tilePowerRequirements[TILE_POWER_WIND] = 0;
 
     tilePopulation[TILE_GRASS] = 0;
     tilePopulation[TILE_BUILDING] = 0;
@@ -53,6 +55,8 @@ void initClips()
     tilePopulation[TILE_POWER_GAS_P3] = 0;
     tilePopulation[TILE_POWER_GAS_P4] = 0;
     tilePopulation[TILE_POWER_SOLAR] = 0;
+    tilePopulation[TILE_SERVICE_BUILDING_POLICE] = 0;
+    tilePopulation[TILE_POWER_WIND] = 0;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -89,6 +93,11 @@ void initClips()
     tileClips[TILE_SERVICE_BUILDING_HOSPITAL].y = 65*2;
     tileClips[TILE_SERVICE_BUILDING_HOSPITAL].w = 100;
     tileClips[TILE_SERVICE_BUILDING_HOSPITAL].h = 65*2;
+
+    tileClips[TILE_SERVICE_BUILDING_POLICE].x = 200;
+    tileClips[TILE_SERVICE_BUILDING_POLICE].y = 65*4;
+    tileClips[TILE_SERVICE_BUILDING_POLICE].w = 100;
+    tileClips[TILE_SERVICE_BUILDING_POLICE].h = 65*2;
 
     tileClips[TILE_RESIDENTIAL_1_ZONE].x = 432;
     tileClips[TILE_RESIDENTIAL_1_ZONE].y = 0;
@@ -145,6 +154,11 @@ void initClips()
     tileClips[TILE_POWER_SOLAR].y = 65*3;
     tileClips[TILE_POWER_SOLAR].w = 100;
     tileClips[TILE_POWER_SOLAR].h = 65*2;
+
+    tileClips[TILE_POWER_WIND].x = 632;
+    tileClips[TILE_POWER_WIND].y = 65*5;
+    tileClips[TILE_POWER_WIND].w = 100;
+    tileClips[TILE_POWER_WIND].h = 65*2;
 
     tileClips[TILE_RETAIL_ZONE].x = 832;
     tileClips[TILE_RETAIL_ZONE].y = 0;
@@ -218,6 +232,17 @@ void initClips()
     spriteClips[SPRITE_BUILD_POWER_SOLAR].w = 32;
     spriteClips[SPRITE_BUILD_POWER_SOLAR].h = 32;
 
+    spriteClips[SPRITE_BUILD_SERVICES_POLICE].x = 400;
+    spriteClips[SPRITE_BUILD_SERVICES_POLICE].y = 32*11;
+    spriteClips[SPRITE_BUILD_SERVICES_POLICE].w = 32;
+    spriteClips[SPRITE_BUILD_SERVICES_POLICE].h = 32;
+
+    spriteClips[SPRITE_BUILD_POWER_WIND].x = 400;
+    spriteClips[SPRITE_BUILD_POWER_WIND].y = 32*12;
+    spriteClips[SPRITE_BUILD_POWER_WIND].w = 32;
+    spriteClips[SPRITE_BUILD_POWER_WIND].h = 32;
+
+
     TILE_TYPE road_i = TILE_ROAD_0;
     for(; road_i<=TILE_ROAD_14; road_i++) {
         roadClips[road_i-200].x = 300;
@@ -284,6 +309,9 @@ int getPowerProduction(TILE_TYPE t) {
         case TILE_POWER_SOLAR:
             powerProduction = 100;
             break;
+        case TILE_POWER_WIND:
+            powerProduction = 120;
+            break;
         default:
             powerProduction = 0;
     }
@@ -305,9 +333,14 @@ int getCost(TILE_TYPE t)
         case TILE_POWER_SOLAR:
             cost = 60;
             break;
+        case TILE_POWER_WIND:
+            cost = 20;
+            break;
         case TILE_SERVICE_BUILDING_HOSPITAL:
             cost = 500;
             break;
+        case TILE_SERVICE_BUILDING_POLICE:
+            cost = 150;
         case TILE_RESIDENTIAL_1_ZONE:
         case TILE_RESIDENTIAL_2_ZONE:
             cost = 1;
@@ -331,8 +364,14 @@ int getIncome(TILE_TYPE t)
         case TILE_POWER_GAS_P4:
             income = -20; //total of -£80,000
             break;
+        case TILE_POWER_WIND:
+            income = -8; 
+            break;
         case TILE_SERVICE_BUILDING_HOSPITAL:
             income = -500;
+            break;
+        case TILE_SERVICE_BUILDING_POLICE:
+            income = -260;
             break;
         case TILE_RESIDENTIAL_1_B1:
             income = 15;

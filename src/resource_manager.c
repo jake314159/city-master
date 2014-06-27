@@ -6,6 +6,7 @@ int power_avalible = 1000;
 int money = 100000; //,000s
 
 int hospitals = 0; //number of hospitals
+int police = 0; //Number of police stations
 
 int population = 0;
 int number_of_shops = 0;
@@ -28,6 +29,21 @@ bool canAfford(int value)
 int addHospitalToCount()
 {
     hospitals++;
+}
+
+int getNumberOfPolice()
+{
+    return police;
+}
+
+float populationPerPolice()
+{
+    return (float)getPopulation()/(float)police;
+}
+
+int addPoliceToCount()
+{
+    police++;
 }
 
 int getNumberOfHospitals()

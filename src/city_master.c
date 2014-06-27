@@ -36,6 +36,7 @@ extern int power_avalible;
 
 extern int number_of_shops;
 const int target_population_per_shop = 250;
+const float target_population_per_police = 2000;
 
 int balanceChangeCounterStart = 100;
 int balanceChangeCounter = 100;
@@ -165,6 +166,19 @@ void placePlannedBuild()
             }
 
             break;
+        case MODE_BUILD_POWER_WIND:;
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    if(canBuildOn(map_value[p.x][p.y])) {
+                        build_tile(p.x, p.y, TILE_POWER_WIND);
+                        power_avalible += getPowerProduction(TILE_POWER_WIND);
+                    }
+                }
+            }
+
+            break;
         case MODE_BUILD_DESTROY:
             for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
                 for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
@@ -177,6 +191,10 @@ void placePlannedBuild()
             break;
         case MODE_BUILD_HOSPITAL:
             build_tile(plan_up.x, plan_up.y, TILE_SERVICE_BUILDING_HOSPITAL);
+            setMode(MODE_VIEW);
+            break;
+        case MODE_BUILD_POLICE:
+            build_tile(plan_up.x, plan_up.y, TILE_SERVICE_BUILDING_POLICE);
             setMode(MODE_VIEW);
             break;
         case MODE_BUILD_POWER_GAS:;
@@ -209,6 +227,7 @@ bool build_tile(int x, int y, TILE_TYPE t)
     if(x <= 0 || y <= 0 || x >= MAP_SIZE_X || y >= MAP_SIZE_Y) return false;
 
     if(t == TILE_SERVICE_BUILDING_HOSPITAL) addHospitalToCount();
+    if(t == TILE_SERVICE_BUILDING_POLICE) addPoliceToCount();
 
 
     if(canAfford(getCost(t)) && power_avalible >= reqired_power + getPowerUsage(t)) {
@@ -237,6 +256,7 @@ bool build_prob_check(TILE_TYPE t)
         case TILE_RESIDENTIAL_2_ZONE:
             prob = build_prob;
             if(getNumberOfHospitals() == 0) prob *= 10; //Who would move somewhere without a hospital?
+            if(populationPerPolice() > target_population_per_police) prob *= 10;
             break;
         case TILE_RESIDENTIAL_1_BUILDING:
         case TILE_RESIDENTIAL_2_BUILDING:
@@ -421,7 +441,8 @@ int main(int argc, char* argv[])
                 down_point.y = e.button.y;
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
                         || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
-                        || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS)) {
+                        || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS || mode == MODE_BUILD_POLICE
+                        || mode == MODE_BUILD_POWER_WIND)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -444,8 +465,10 @@ int main(int argc, char* argv[])
                         case MODE_BUILD_RESIDENTIAL_2:
                         case MODE_BUILD_RETAIL:
                         case MODE_BUILD_POWER_SOLAR:
+                        case MODE_BUILD_POWER_WIND:
                         case MODE_BUILD_ROAD:
                         case MODE_BUILD_HOSPITAL:
+                        case MODE_BUILD_POLICE:
                         case MODE_BUILD_POWER_GAS:
                             planRoad(u, plan_down);
                             break;

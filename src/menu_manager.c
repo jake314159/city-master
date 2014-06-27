@@ -9,8 +9,8 @@
 #define MENU_LONGEST_SUBMENU 6
 SPRITE menu[MENU_LENGTH][MENU_LONGEST_SUBMENU] = {
     {SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES2, SPRITE_BUILD_ZONE_RETAIL, NULL_SPRITE},
-    {SPRITE_BUILD_POWER_GENRAL, SPRITE_BUILD_POWER_GAS, SPRITE_BUILD_POWER_SOLAR, NULL_SPRITE},
-    {SPRITE_SERVICES_GENRAL, SPRITE_SERVICES_HOSPITAL, NULL_SPRITE},
+    {SPRITE_BUILD_POWER_GENRAL, SPRITE_BUILD_POWER_GAS, SPRITE_BUILD_POWER_SOLAR, SPRITE_BUILD_POWER_WIND, NULL_SPRITE},
+    {SPRITE_SERVICES_GENRAL, SPRITE_SERVICES_HOSPITAL, SPRITE_BUILD_SERVICES_POLICE, NULL_SPRITE},
     {SPRITE_BUILD_ROAD, NULL_SPRITE},
     {SPRITE_BUILD_DESTROY, NULL_SPRITE}
 };
@@ -65,6 +65,12 @@ void button_click(int menu_x, int menu_y, SPRITE sprite)
             case SPRITE_BUILD_POWER_SOLAR:
                 setMode(MODE_BUILD_POWER_SOLAR);
                 break;
+            case SPRITE_BUILD_POWER_WIND:
+                setMode(MODE_BUILD_POWER_WIND);
+                break;
+            case SPRITE_BUILD_SERVICES_POLICE:
+                setMode(MODE_BUILD_POLICE);
+                break;
             default:
                 break;
         }
@@ -80,6 +86,11 @@ void button_click(int menu_x, int menu_y, SPRITE sprite)
                 break;
         }
     }
+}
+
+bool check_touch_menu(Point *p)
+{
+    return p->x < 32;
 }
 
 bool touch_menu(Point *down, Point *up)

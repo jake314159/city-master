@@ -135,6 +135,7 @@ void draw_city(SDL_Renderer* ren)
             case MODE_BUILD_DESTROY:
             case MODE_BUILD_RETAIL:
             case MODE_BUILD_POWER_SOLAR:
+            case MODE_BUILD_POWER_WIND:
             ;
                 //p = plan_down;
                 //p2 = plan_down;
@@ -150,6 +151,7 @@ void draw_city(SDL_Renderer* ren)
                 }
                 break;
             case MODE_BUILD_HOSPITAL:
+            case MODE_BUILD_POLICE:
             ;
                 p.x = plan_up.x;
                 p.y = plan_up.y;
