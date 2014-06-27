@@ -64,6 +64,21 @@ void initClips()
     tileClips[TILE_GRASS].w = 100;
     tileClips[TILE_GRASS].h = 65;
 
+    tileClips[TILE_TREES_1].x = 0;
+    tileClips[TILE_TREES_1].y = 65;
+    tileClips[TILE_TREES_1].w = 100;
+    tileClips[TILE_TREES_1].h = 65;
+
+    tileClips[TILE_TREES_2].x = 0;
+    tileClips[TILE_TREES_2].y = 65*2;
+    tileClips[TILE_TREES_2].w = 100;
+    tileClips[TILE_TREES_2].h = 65;
+
+    tileClips[TILE_TREES_3].x = 0;
+    tileClips[TILE_TREES_3].y = 65*3;
+    tileClips[TILE_TREES_3].w = 100;
+    tileClips[TILE_TREES_3].h = 130;
+
     tileClips[TILE_HIGHLIGHT_BLUE].x = 100;
     tileClips[TILE_HIGHLIGHT_BLUE].y = 0;
     tileClips[TILE_HIGHLIGHT_BLUE].w = 100;
@@ -289,7 +304,7 @@ SDL_Rect* getClip(SPRITE s)
 
 bool canBuildOn(TILE_TYPE t)
 {
-    return t == TILE_GRASS;
+    return t == TILE_GRASS || t == TILE_TREES_1 || t == TILE_TREES_2 || t == TILE_TREES_3;
 }
 
 int getPowerUsage(TILE_TYPE t) 

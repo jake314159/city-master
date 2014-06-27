@@ -19,14 +19,24 @@ extern int reqired_power;
 extern int power_avalible;
 extern int lastBalanceChange;
 
+extern const int target_population_per_shop;
+extern const float target_population_per_police;
+extern int number_of_shops;
+
 const int fontSize = 12;
 const char* fontFile = "fonts/sample.ttf";
 
+const int fontSizeLarge = 22;
+
+bool show_sidebar = false;
+
 SDL_Texture *sheet;
 TTF_Font *font;
+TTF_Font *fontLarge;
 
 SDL_Rect top_bar = {0,0,1000,30};
 SDL_Color top_bar_text_color = {0,0,0};
+SDL_Rect side_bar = {0,40,200,400};
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -53,6 +63,12 @@ bool init_drawing(SDL_Renderer* ren)
 {
     font = TTF_OpenFont(fontFile, fontSize);
 	if (font == NULL){
+		logSDLError("TTF_OpenFont");
+        return false;
+	}
+
+    fontLarge = TTF_OpenFont(fontFile, fontSizeLarge);
+	if (fontLarge == NULL){
 		logSDLError("TTF_OpenFont");
         return false;
 	}
@@ -177,6 +193,14 @@ void draw_city(SDL_Renderer* ren)
     }
 }
 
+void setColorGoodBad(SDL_Renderer* ren, bool good)
+{
+    if(good)
+        SDL_SetRenderDrawColor(ren, 0, 255, 0, 0);
+    else //bad
+        SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
+}
+
 void draw_HUD(SDL_Renderer* ren)
 {
     int i;
@@ -184,8 +208,8 @@ void draw_HUD(SDL_Renderer* ren)
 
     //Draw the top bar
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
+    top_bar.w = window_size_x;
     SDL_RenderFillRect(ren, &top_bar);
-    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
 
     draw_int(ren, font, top_bar_text_color, 20, 0, reqired_power,  "Required: ", " MW");
     draw_int(ren, font, top_bar_text_color, 20, 20, power_avalible, "Avalible: ", " MW");
@@ -193,6 +217,45 @@ void draw_HUD(SDL_Renderer* ren)
     draw_int(ren, font, top_bar_text_color, 200, 20, lastBalanceChange, "£", "000");
 
     draw_int(ren, font, top_bar_text_color, 400, 0, getPopulation(), "Pop: ", "");
+
+    //Draw the side bar
+    if(show_sidebar) {
+        SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
+        side_bar.x = window_size_x - side_bar.w;
+        SDL_RenderFillRect(ren, &side_bar);
+        SDL_Rect scaleBox = {window_size_x-(fontSizeLarge+2)-5,0,fontSizeLarge+2,fontSizeLarge+2};
+        int item_y = side_bar.y+5;
+
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Police:");
+        setColorGoodBad(ren, populationPerPolice() < target_population_per_police);
+        scaleBox.y = item_y;
+        SDL_RenderFillRect(ren, &scaleBox);
+
+        item_y += fontSizeLarge+2;
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Hospitals:");
+        setColorGoodBad(ren, getNumberOfHospitals() > 0);
+        scaleBox.y = item_y;
+        SDL_RenderFillRect(ren, &scaleBox);
+
+        item_y += fontSizeLarge+2;
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Shopping:");
+        float shops_short_by = ((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops;
+        setColorGoodBad(ren, shops_short_by <= 0);
+        scaleBox.y = item_y;
+        SDL_RenderFillRect(ren, &scaleBox);
+
+        item_y += fontSizeLarge+2;
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Power:");
+        setColorGoodBad(ren, power_avalible > (float)reqired_power*1.2f);
+        scaleBox.y = item_y;
+        SDL_RenderFillRect(ren, &scaleBox);
+    }
+
+
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+
+    SDL_Rect open_menu_button = {window_size_x-30,0,30,30};
+    SDL_RenderFillRect(ren, &open_menu_button);
 
     //printf("window size (%d,%d)\n", window_size_x, window_size_y);
     char* modeText = NULL;

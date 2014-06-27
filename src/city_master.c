@@ -63,6 +63,23 @@ void typeRoad(Point u)
     build_tile(u.x, u.y, t);
 }
 
+void fill_map()
+{
+    int x, y;
+    for(x=1; x<MAP_SIZE_X; x++) {
+        for(y=1;y<MAP_SIZE_Y; y++) {
+            if(rand()%10 == 0) {
+                int r = (rand()%6);
+                if(r <3) {
+                    map_value[x][y] = TILE_TREES_1 + r;
+                } else {
+                    map_value[x][y] = TILE_TREES_1 + r%2;
+                }
+            }
+        }
+    }
+}
+
 void placeRoad(Point u)
 {
     if(u.x >1 && u.y>1 && u.x < MAP_SIZE_X-1 && u.y < MAP_SIZE_Y-1 && canBuildOn(map_value[u.x][u.y])) {
@@ -226,11 +243,11 @@ bool build_tile(int x, int y, TILE_TYPE t)
 {
     if(x <= 0 || y <= 0 || x >= MAP_SIZE_X || y >= MAP_SIZE_Y) return false;
 
-    if(t == TILE_SERVICE_BUILDING_HOSPITAL) addHospitalToCount();
-    if(t == TILE_SERVICE_BUILDING_POLICE) addPoliceToCount();
-
-
     if(canAfford(getCost(t)) && power_avalible >= reqired_power + getPowerUsage(t)) {
+
+        if(t == TILE_SERVICE_BUILDING_HOSPITAL) addHospitalToCount();
+        if(t == TILE_SERVICE_BUILDING_POLICE) addPoliceToCount();
+
         map_value[x][y] = t;
         changeBalance(-getCost(t));
         reqired_power += getPowerUsage(t);
@@ -388,6 +405,7 @@ int main(int argc, char* argv[])
     if(!init_drawing(ren)) exit(1);
 
     initClips();
+    fill_map();
     
     SDL_Event e;
     bool quit = false;
