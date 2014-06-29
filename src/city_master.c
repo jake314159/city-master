@@ -36,7 +36,8 @@ extern int power_avalible;
 
 extern int number_of_shops;
 const int target_population_per_shop = 250;
-const float target_population_per_police = 2000;
+const float target_population_per_police = 4000;
+const float target_population_per_school = 2800;
 
 int balanceChangeCounterStart = 100;
 int balanceChangeCounter = 100;
@@ -230,6 +231,18 @@ void placePlannedBuild()
                 }
             }
             break;
+        case MODE_BUILD_SCHOOL:;
+            if(canBuildOn(map_value[plan_up.x][plan_up.y]) && canBuildOn(map_value[plan_up.x+1][plan_up.y]) 
+                    && canBuildOn(map_value[plan_up.x][plan_up.y+1]) && canBuildOn(map_value[plan_up.x+1][plan_up.y+1])) {
+                if(canAfford(getCost(TILE_COMMUNITY_SCHOOL_P1)+getCost(TILE_COMMUNITY_SCHOOL_P2)+
+                        getCost(TILE_COMMUNITY_SCHOOL_P3)+getCost(TILE_COMMUNITY_SCHOOL_P4))) {
+                    build_tile(plan_up.x, plan_up.y, TILE_COMMUNITY_SCHOOL_P1);
+                    build_tile(plan_up.x+1, plan_up.y, TILE_COMMUNITY_SCHOOL_P2);
+                    build_tile(plan_up.x, plan_up.y+1, TILE_COMMUNITY_SCHOOL_P3);
+                    build_tile(plan_up.x+1, plan_up.y+1, TILE_COMMUNITY_SCHOOL_P4);
+                }
+            }
+            break;
         default:
             break;
     }
@@ -246,7 +259,8 @@ bool build_tile(int x, int y, TILE_TYPE t)
     if(canAfford(getCost(t)) && power_avalible >= reqired_power + getPowerUsage(t)) {
 
         if(t == TILE_SERVICE_BUILDING_HOSPITAL) addHospitalToCount();
-        if(t == TILE_SERVICE_BUILDING_POLICE) addPoliceToCount();
+        else if(t == TILE_SERVICE_BUILDING_POLICE) addPoliceToCount();
+        else if(t == TILE_COMMUNITY_SCHOOL_P1) addSchoolToCount();
 
         map_value[x][y] = t;
         changeBalance(-getCost(t));
@@ -274,6 +288,7 @@ bool build_prob_check(TILE_TYPE t)
             prob = build_prob;
             if(getNumberOfHospitals() == 0) prob *= 10; //Who would move somewhere without a hospital?
             if(populationPerPolice() > target_population_per_police) prob *= 10;
+            if(populationPerSchool() > target_population_per_school) prob *= 4;
             break;
         case TILE_RESIDENTIAL_1_BUILDING:
         case TILE_RESIDENTIAL_2_BUILDING:
@@ -460,7 +475,7 @@ int main(int argc, char* argv[])
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
                         || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
                         || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS || mode == MODE_BUILD_POLICE
-                        || mode == MODE_BUILD_POWER_WIND)) {
+                        || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -488,6 +503,7 @@ int main(int argc, char* argv[])
                         case MODE_BUILD_HOSPITAL:
                         case MODE_BUILD_POLICE:
                         case MODE_BUILD_POWER_GAS:
+                        case MODE_BUILD_SCHOOL:
                             planRoad(u, plan_down);
                             break;
                         case MODE_BUILD_DESTROY:

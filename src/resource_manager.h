@@ -11,5 +11,9 @@ int getNumberOfPolice();
 int addPoliceToCount();
 float populationPerPolice();
 
+int getNumberOfSchools();
+float populationPerSchool();
+int addSchoolToCount();
+
 int getPopulation();
 void setPopulation(int pop);

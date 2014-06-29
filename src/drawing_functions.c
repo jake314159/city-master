@@ -21,6 +21,7 @@ extern int lastBalanceChange;
 
 extern const int target_population_per_shop;
 extern const float target_population_per_police;
+extern const float target_population_per_school;
 extern int number_of_shops;
 
 const int fontSize = 12;
@@ -173,6 +174,7 @@ void draw_city(SDL_Renderer* ren)
                 drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
                 break;
             case MODE_BUILD_POWER_GAS:
+            case MODE_BUILD_SCHOOL:
             ;
                 p.x = plan_up.x;
                 p.y = plan_up.y;
@@ -233,6 +235,12 @@ void draw_HUD(SDL_Renderer* ren)
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Hospitals:");
         setColorGoodBad(ren, getNumberOfHospitals() > 0);
+        scaleBox.y = item_y;
+        SDL_RenderFillRect(ren, &scaleBox);
+
+        item_y += fontSizeLarge+2;
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Education:");
+        setColorGoodBad(ren, populationPerSchool() < target_population_per_school);
         scaleBox.y = item_y;
         SDL_RenderFillRect(ren, &scaleBox);
 

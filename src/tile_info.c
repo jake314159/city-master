@@ -33,6 +33,10 @@ void initClips()
     tilePowerRequirements[TILE_POWER_SOLAR] = 0;
     tilePowerRequirements[TILE_SERVICE_BUILDING_POLICE] = 400;
     tilePowerRequirements[TILE_POWER_WIND] = 0;
+    tilePowerRequirements[TILE_COMMUNITY_SCHOOL_P1] = 500;
+    tilePowerRequirements[TILE_COMMUNITY_SCHOOL_P2] = 0;
+    tilePowerRequirements[TILE_COMMUNITY_SCHOOL_P3] = 0;
+    tilePowerRequirements[TILE_COMMUNITY_SCHOOL_P4] = 0;
 
     tilePopulation[TILE_GRASS] = 0;
     tilePopulation[TILE_BUILDING] = 0;
@@ -57,6 +61,10 @@ void initClips()
     tilePopulation[TILE_POWER_SOLAR] = 0;
     tilePopulation[TILE_SERVICE_BUILDING_POLICE] = 0;
     tilePopulation[TILE_POWER_WIND] = 0;
+    tilePopulation[TILE_COMMUNITY_SCHOOL_P1] = 0;
+    tilePopulation[TILE_COMMUNITY_SCHOOL_P2] = 0;
+    tilePopulation[TILE_COMMUNITY_SCHOOL_P3] = 0;
+    tilePopulation[TILE_COMMUNITY_SCHOOL_P4] = 0;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -190,6 +198,31 @@ void initClips()
     tileClips[TILE_RETAIL_B1].w = 100;
     tileClips[TILE_RETAIL_B1].h = 65*2;
 
+    tileClips[TILE_COMMUNITY_SCHOOL_P1].x = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P1].y = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P1].w = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P1].h = 0;
+
+    tileClips[TILE_COMMUNITY_SCHOOL_P2].x = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P2].y = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P2].w = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P2].h = 0;
+
+    tileClips[TILE_COMMUNITY_SCHOOL_P3].x = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P3].y = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P3].w = 100; // Grass should be under here to fix the layers
+    tileClips[TILE_COMMUNITY_SCHOOL_P3].h = 65;
+
+    tileClips[TILE_COMMUNITY_SCHOOL_P4].x = 932;
+    tileClips[TILE_COMMUNITY_SCHOOL_P4].y = 0;
+    tileClips[TILE_COMMUNITY_SCHOOL_P4].w = 100*2;
+    tileClips[TILE_COMMUNITY_SCHOOL_P4].h = 65*3;
+
+    tileClips[TILE_POWER_SOLAR].x = 632;
+    tileClips[TILE_POWER_SOLAR].y = 65*3;
+    tileClips[TILE_POWER_SOLAR].w = 100;
+    tileClips[TILE_POWER_SOLAR].h = 65*2;
+
 
     //Sprites
     spriteClips[SPRITE_BUILD_BACKGROUND].x = 400;
@@ -256,6 +289,11 @@ void initClips()
     spriteClips[SPRITE_BUILD_POWER_WIND].y = 32*12;
     spriteClips[SPRITE_BUILD_POWER_WIND].w = 32;
     spriteClips[SPRITE_BUILD_POWER_WIND].h = 32;
+
+    spriteClips[SPRITE_BUILD_SCHOOL].x = 400;
+    spriteClips[SPRITE_BUILD_SCHOOL].y = 32*13;
+    spriteClips[SPRITE_BUILD_SCHOOL].w = 32;
+    spriteClips[SPRITE_BUILD_SCHOOL].h = 32;
 
 
     TILE_TYPE road_i = TILE_ROAD_0;
@@ -354,6 +392,9 @@ int getCost(TILE_TYPE t)
         case TILE_SERVICE_BUILDING_HOSPITAL:
             cost = 500;
             break;
+        case TILE_COMMUNITY_SCHOOL_P1:
+            cost = 150;
+            break;
         case TILE_SERVICE_BUILDING_POLICE:
             cost = 150;
         case TILE_RESIDENTIAL_1_ZONE:
@@ -374,10 +415,7 @@ int getIncome(TILE_TYPE t)
     int income;
     switch(t) {
         case TILE_POWER_GAS_P1:
-        case TILE_POWER_GAS_P2:
-        case TILE_POWER_GAS_P3:
-        case TILE_POWER_GAS_P4:
-            income = -20; //total of -£80,000
+            income = -80;
             break;
         case TILE_POWER_WIND:
             income = -8; 
@@ -387,6 +425,9 @@ int getIncome(TILE_TYPE t)
             break;
         case TILE_SERVICE_BUILDING_POLICE:
             income = -260;
+            break;
+        case TILE_COMMUNITY_SCHOOL_P1:
+            income = -280;
             break;
         case TILE_RESIDENTIAL_1_B1:
             income = 15;
