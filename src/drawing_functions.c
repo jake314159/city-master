@@ -87,15 +87,27 @@ void draw_city(SDL_Renderer* ren)
 {
     Point p;
     int x,y;
+    SDL_Rect *clip;
     for(x=1; x<MAP_SIZE_X; x++) {
+        bool drew_in_this_x = false;
         for(y=1;y<MAP_SIZE_Y; y++) {
             p.x = x*GRID_TILE_SIZE;
             p.y = y*GRID_TILE_SIZE;
             twoDToIso(&p);
             p.x += screen_x;
             p.y += screen_y;
-            SDL_Rect *clip = getTileClip(map_value[x][y]);
+            clip = getTileClip(map_value[x][y]);
+
+            if(p.x < -clip->w) {
+                break;
+            } else if( p.y > (window_size_y + clip->h) ) {
+                break;
+            }
+            drew_in_this_x = true;
             drawTile(ren, &p, clip);
+        }
+        if(!drew_in_this_x && p.y > (window_size_y + clip->h)) {
+            break;
         }
     }
     p.x = down_point.x*GRID_TILE_SIZE;

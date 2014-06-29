@@ -5,7 +5,7 @@
 #define ABS(X) (((X)>0) ? (X) : (-(X)))
 #define DRAG_SENSITIVITY 5
 
-#define MENU_LENGTH 6
+#define MENU_LENGTH 7
 #define MENU_LONGEST_SUBMENU 6
 SPRITE menu[MENU_LENGTH][MENU_LONGEST_SUBMENU] = {
     {SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES2, SPRITE_BUILD_ZONE_RETAIL, NULL_SPRITE},
@@ -13,6 +13,7 @@ SPRITE menu[MENU_LENGTH][MENU_LONGEST_SUBMENU] = {
     {SPRITE_SERVICES_GENRAL, SPRITE_SERVICES_HOSPITAL, SPRITE_BUILD_SERVICES_POLICE, NULL_SPRITE},
     {SPRITE_BUILD_SCHOOL, SPRITE_BUILD_SCHOOL, NULL_SPRITE},
     {SPRITE_BUILD_ROAD, NULL_SPRITE},
+    {SPRITE_BUILD_DESTROY, SPRITE_BUILD_DESTROY, NULL_SPRITE}, //Waste management
     {SPRITE_BUILD_DESTROY, NULL_SPRITE}
 };
 
@@ -74,6 +75,9 @@ void button_click(int menu_x, int menu_y, SPRITE sprite)
                 break;
             case SPRITE_BUILD_SCHOOL:
                 setMode(MODE_BUILD_SCHOOL);
+                break;
+            case SPRITE_BUILD_DESTROY: //Landfill
+                setMode(MODE_BUILD_LANDFILL);
                 break;
             default:
                 break;
