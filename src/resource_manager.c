@@ -12,6 +12,8 @@ int schools = 0;
 int population = 0;
 int number_of_shops = 0;
 
+int waste_disposal_capacity = 0;
+
 int getBalance()
 {
     return money;
@@ -75,4 +77,15 @@ float populationPerSchool()
 int addSchoolToCount()
 {
     schools++;
+}
+
+void setWasteDisposalCapacity(int wdc)
+{
+    waste_disposal_capacity = wdc;
+}
+
+bool enoughWasteDisposal()
+{
+    float amount_of_waste = population*(1.f/500.f) + schools*0.5f + police*0.5f + (float)hospitals;
+    return amount_of_waste <= waste_disposal_capacity;
 }

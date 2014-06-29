@@ -149,6 +149,7 @@ void draw_city(SDL_Renderer* ren)
             case MODE_BUILD_RESIDENTIAL_1:
             case MODE_BUILD_RESIDENTIAL_2:
             case MODE_BUILD_DESTROY:
+            case MODE_BUILD_LANDFILL:
             case MODE_BUILD_RETAIL:
             case MODE_BUILD_POWER_SOLAR:
             case MODE_BUILD_POWER_WIND:
@@ -254,6 +255,12 @@ void draw_HUD(SDL_Renderer* ren)
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Power:");
         setColorGoodBad(ren, power_avalible > (float)reqired_power*1.2f);
+        scaleBox.y = item_y;
+        SDL_RenderFillRect(ren, &scaleBox);
+
+        item_y += fontSizeLarge+2;
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Waste:");
+        setColorGoodBad(ren, enoughWasteDisposal());
         scaleBox.y = item_y;
         SDL_RenderFillRect(ren, &scaleBox);
     }

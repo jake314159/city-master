@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="014_school.svg"
-   inkscape:export-filename="/home/jake/git/cityMaster/images/005_build_icons/013_power_wind.png"
+   inkscape:export-filename="/home/jake/git/cityMaster/images/005_build_icons/014_school.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -337,7 +337,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>

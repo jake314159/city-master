@@ -17,3 +17,6 @@ int addSchoolToCount();
 
 int getPopulation();
 void setPopulation(int pop);
+
+void setWasteDisposalCapacity(int wdc);
+bool enoughWasteDisposal();

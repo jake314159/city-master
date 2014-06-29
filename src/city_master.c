@@ -30,6 +30,7 @@ Point plan_down;
 
 int build_prob = 1500;
 int build_finish_prob = 600;
+int landfill_fill_prob = 65536;
 
 extern int reqired_power;
 extern int power_avalible;
@@ -154,6 +155,18 @@ void placePlannedBuild()
                     p.y = y;
                     if(canBuildOn(map_value[p.x][p.y])) {
                         build_tile(p.x, p.y, TILE_RESIDENTIAL_2_ZONE);
+                    }
+                }
+            }
+
+            break;
+        case MODE_BUILD_LANDFILL:;
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    if(canBuildOn(map_value[p.x][p.y]) && map_value[p.x][p.y] != TILE_LANDFILL_3) {
+                        build_tile(p.x, p.y, TILE_LANDFILL_1);
                     }
                 }
             }
@@ -289,6 +302,7 @@ bool build_prob_check(TILE_TYPE t)
             if(getNumberOfHospitals() == 0) prob *= 10; //Who would move somewhere without a hospital?
             if(populationPerPolice() > target_population_per_police) prob *= 10;
             if(populationPerSchool() > target_population_per_school) prob *= 4;
+            if(!enoughWasteDisposal()) prob *= 10;
             break;
         case TILE_RESIDENTIAL_1_BUILDING:
         case TILE_RESIDENTIAL_2_BUILDING:
@@ -301,6 +315,8 @@ bool build_prob_check(TILE_TYPE t)
             if(shops_short_by > 0)  prob =  1500;
             else                    prob = 15000;
 
+            if(!enoughWasteDisposal())  prob *= 10;
+
             break;
         default:
             prob = build_finish_prob;
@@ -312,11 +328,15 @@ bool build_prob_check(TILE_TYPE t)
 
 void map_update()
 {
-    int x, y, pop = 0, shopC = 0;
+    int x, y, pop = 0, shopC = 0, waste_disposal_capacity=0;
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
 
             pop += getTilePopulation(map_value[x][y]);
+
+            if(map_value[x][y] == TILE_LANDFILL_1 || map_value[x][y] == TILE_LANDFILL_2) {
+                waste_disposal_capacity += 1;
+            }
 
             if(map_value[x][y] == TILE_RETAIL_B1) shopC += 1;
 
@@ -363,6 +383,16 @@ void map_update()
                         reqired_power = reqired_power - getPowerUsage(TILE_RETAIL_BUILDING);
                     }
                     break;
+                case TILE_LANDFILL_1:
+                    if(rand()%landfill_fill_prob==0) {
+                        build_tile(x, y, TILE_LANDFILL_2);
+                    }
+                    break;
+                case TILE_LANDFILL_2:
+                    if(rand()%landfill_fill_prob==0) {
+                        build_tile(x, y, TILE_LANDFILL_3);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -370,6 +400,7 @@ void map_update()
     }
     setPopulation(pop);
     number_of_shops = shopC;
+    setWasteDisposalCapacity(waste_disposal_capacity);
 }
 
 void inc_balance()
@@ -475,7 +506,7 @@ int main(int argc, char* argv[])
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
                         || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
                         || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS || mode == MODE_BUILD_POLICE
-                        || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL)) {
+                        || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL || mode == MODE_BUILD_LANDFILL)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -496,6 +527,7 @@ int main(int argc, char* argv[])
                     switch(mode) {
                         case MODE_BUILD_RESIDENTIAL_1:
                         case MODE_BUILD_RESIDENTIAL_2:
+                        case MODE_BUILD_LANDFILL:
                         case MODE_BUILD_RETAIL:
                         case MODE_BUILD_POWER_SOLAR:
                         case MODE_BUILD_POWER_WIND:

@@ -37,6 +37,9 @@ void initClips()
     tilePowerRequirements[TILE_COMMUNITY_SCHOOL_P2] = 0;
     tilePowerRequirements[TILE_COMMUNITY_SCHOOL_P3] = 0;
     tilePowerRequirements[TILE_COMMUNITY_SCHOOL_P4] = 0;
+    tilePowerRequirements[TILE_LANDFILL_1] = 0;
+    tilePowerRequirements[TILE_LANDFILL_2] = 0;
+    tilePowerRequirements[TILE_LANDFILL_3] = 0;
 
     tilePopulation[TILE_GRASS] = 0;
     tilePopulation[TILE_BUILDING] = 0;
@@ -65,6 +68,9 @@ void initClips()
     tilePopulation[TILE_COMMUNITY_SCHOOL_P2] = 0;
     tilePopulation[TILE_COMMUNITY_SCHOOL_P3] = 0;
     tilePopulation[TILE_COMMUNITY_SCHOOL_P4] = 0;
+    tilePopulation[TILE_LANDFILL_1] = 0;
+    tilePopulation[TILE_LANDFILL_2] = 0;
+    tilePopulation[TILE_LANDFILL_3] = 0;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -86,6 +92,21 @@ void initClips()
     tileClips[TILE_TREES_3].y = 65*3;
     tileClips[TILE_TREES_3].w = 100;
     tileClips[TILE_TREES_3].h = 130;
+
+    tileClips[TILE_LANDFILL_1].x = 0;
+    tileClips[TILE_LANDFILL_1].y = 65*5;
+    tileClips[TILE_LANDFILL_1].w = 100;
+    tileClips[TILE_LANDFILL_1].h = 65;
+
+    tileClips[TILE_LANDFILL_2].x = 0;
+    tileClips[TILE_LANDFILL_2].y = 65*6;
+    tileClips[TILE_LANDFILL_2].w = 100;
+    tileClips[TILE_LANDFILL_2].h = 65;
+
+    tileClips[TILE_LANDFILL_3].x = 0;
+    tileClips[TILE_LANDFILL_3].y = 65*7;
+    tileClips[TILE_LANDFILL_3].w = 100;
+    tileClips[TILE_LANDFILL_3].h = 65;
 
     tileClips[TILE_HIGHLIGHT_BLUE].x = 100;
     tileClips[TILE_HIGHLIGHT_BLUE].y = 0;
@@ -342,7 +363,7 @@ SDL_Rect* getClip(SPRITE s)
 
 bool canBuildOn(TILE_TYPE t)
 {
-    return t == TILE_GRASS || t == TILE_TREES_1 || t == TILE_TREES_2 || t == TILE_TREES_3;
+    return t == TILE_GRASS || t == TILE_TREES_1 || t == TILE_TREES_2 || t == TILE_TREES_3 || t == TILE_LANDFILL_3;
 }
 
 int getPowerUsage(TILE_TYPE t) 
@@ -400,6 +421,9 @@ int getCost(TILE_TYPE t)
         case TILE_RESIDENTIAL_1_ZONE:
         case TILE_RESIDENTIAL_2_ZONE:
             cost = 1;
+            break;
+        case TILE_LANDFILL_1:
+            cost = 5;
             break;
         default:
             cost = 0;
