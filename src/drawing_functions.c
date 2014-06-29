@@ -84,6 +84,15 @@ void destroy_drawing()
     TTF_CloseFont(font);
 }
 
+void draw_highlight(SDL_Renderer* ren, Point *p)
+{
+    if(p->x > 0 && p->y > 0 && p->x < MAP_SIZE_X && p->y < MAP_SIZE_Y && canBuildOn(map_value[p->x][p->y])) {
+        drawTileFromGridPoint(ren, p, getTileClip(TILE_HIGHLIGHT_GREEN));
+    } else {
+        drawTileFromGridPoint(ren, p, getTileClip(TILE_HIGHLIGHT_RED));
+    }
+}
+
 void draw_city(SDL_Renderer* ren)
 {
     Point p;
@@ -136,7 +145,7 @@ void draw_city(SDL_Renderer* ren)
                 p = plan_down;
 
                 p2 = plan_down;
-                drawTileFromGridPoint(ren, &plan_down, getTileClip(TILE_HIGHLIGHT_GREEN));
+                draw_highlight(ren, &plan_down);
                 plan_down = p2;
                 while(p.x != plan_up.x) {
                     if(p.x < plan_up.x) {
@@ -145,7 +154,7 @@ void draw_city(SDL_Renderer* ren)
                         p.x -=1;
                     }
                     p2 = p;
-                    drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                    draw_highlight(ren, &p);
                     p = p2;
                 }
                 while(p.y != plan_up.y) {
@@ -155,7 +164,7 @@ void draw_city(SDL_Renderer* ren)
                         p.y -=1;
                     }
                     p2 = p;
-                    drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                    draw_highlight(ren, &p);
                     p = p2;
                 }
                 break;
@@ -176,7 +185,7 @@ void draw_city(SDL_Renderer* ren)
                     for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
                         p.x = x;
                         p.y = y;
-                        drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                        draw_highlight(ren, &p);
                     }
                 }
                 break;
@@ -185,23 +194,23 @@ void draw_city(SDL_Renderer* ren)
             ;
                 p.x = plan_up.x;
                 p.y = plan_up.y;
-                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                draw_highlight(ren, &p);
                 break;
             case MODE_BUILD_POWER_GAS:
             case MODE_BUILD_SCHOOL:
             ;
                 p.x = plan_up.x;
                 p.y = plan_up.y;
-                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                draw_highlight(ren, &p);
                 p.x = plan_up.x+1;
                 p.y = plan_up.y;
-                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                draw_highlight(ren, &p);
                 p.x = plan_up.x;
                 p.y = plan_up.y+1;
-                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                draw_highlight(ren, &p);
                 p.x = plan_up.x+1;
                 p.y = plan_up.y+1;
-                drawTileFromGridPoint(ren, &p, getTileClip(TILE_HIGHLIGHT_GREEN));
+                draw_highlight(ren, &p);
                 break;
 
         }
