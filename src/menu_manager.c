@@ -20,7 +20,7 @@ int openMenu = -1; //-1 == not open
 void draw_menu(SDL_Renderer* ren)
 {
     Point p;
-    p.x = 0;
+    p.x = 16; //placed based on centre so x should be half the width
     p.y = BUILDBAR_TILE_START;
     int i;
     for(i=0; i<MENU_LENGTH; i++) {
@@ -29,7 +29,7 @@ void draw_menu(SDL_Renderer* ren)
         p.y += BUILDBAR_TILE_SPACING; //tile spacing
     }
 
-    p.x = BUILDBAR_TILE_SPACING;
+    p.x = BUILDBAR_TILE_SPACING + 16; //+16 as x is for the centre
     p.y = BUILDBAR_TILE_START + openMenu*BUILDBAR_TILE_SPACING;
     if(openMenu >=0) {
         i = 1;

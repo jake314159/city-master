@@ -50,13 +50,12 @@ void drawTileFromGridPoint(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
     //printf("(%d,%d)\n", p.x, p.y);
     p->x += screen_x;
     p->y += screen_y;
-    renderTextureClip(sheet, ren, p->x, (p->y - clip->h), clip);
+    renderTextureClip(sheet, ren, (p->x - ((clip->w)>>1)), (p->y - clip->h), clip);
 }
 
 void drawTile(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
 {
-    
-    renderTextureClip(sheet, ren, p->x, (p->y - clip->h), clip);
+    renderTextureClip(sheet, ren, (p->x - ((clip->w)>>1)), (p->y - clip->h), clip);
 }
 
 bool init_drawing(SDL_Renderer* ren)
