@@ -19,7 +19,7 @@ int getBalance()
     return money;
 }
 
-int changeBalance(int value)
+void changeBalance(int value)
 {
     money += value;
 }
@@ -29,7 +29,7 @@ bool canAfford(int value)
     return value <= money;
 }
 
-int addHospitalToCount()
+void addHospitalToCount()
 {
     hospitals++;
 }
@@ -44,7 +44,7 @@ float populationPerPolice()
     return (float)getPopulation()/(float)police;
 }
 
-int addPoliceToCount()
+void addPoliceToCount()
 {
     police++;
 }
@@ -74,7 +74,7 @@ float populationPerSchool()
     return (float)getPopulation()/(float)schools;
 }
 
-int addSchoolToCount()
+void addSchoolToCount()
 {
     schools++;
 }

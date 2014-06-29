@@ -1,19 +1,19 @@
 #include <stdbool.h>
 
 int getBalance();
-int changeBalance(int value);
+void changeBalance(int value);
 bool canAfford(int value);
 
-int addHospitalToCount();
+void addHospitalToCount();
 int getNumberOfHospitals();
 
 int getNumberOfPolice();
-int addPoliceToCount();
+void addPoliceToCount();
 float populationPerPolice();
 
 int getNumberOfSchools();
 float populationPerSchool();
-int addSchoolToCount();
+void addSchoolToCount();
 
 int getPopulation();
 void setPopulation(int pop);

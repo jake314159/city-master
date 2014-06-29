@@ -139,7 +139,7 @@ void draw_city(SDL_Renderer* ren)
     drawTile(ren, &p, getTileClip(TILE_HIGHLIGHT_BLUE));
 
     if(ready_to_place) {
-        Point p2, p3;
+        Point p2;
         switch(getMode()) {
             case MODE_BUILD_ROAD:
                 p = plan_down;
@@ -212,7 +212,8 @@ void draw_city(SDL_Renderer* ren)
                 p.y = plan_up.y+1;
                 draw_highlight(ren, &p);
                 break;
-
+			default:
+				break;
         }
     }
 }
@@ -227,9 +228,6 @@ void setColorGoodBad(SDL_Renderer* ren, bool good)
 
 void draw_HUD(SDL_Renderer* ren)
 {
-    int i;
-    Point p;
-
     //Draw the top bar
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
     top_bar.w = window_size_x;

@@ -2,7 +2,7 @@
 
 extern int screen_x, screen_y;
 
-Point isoTo2D(Point *p)
+void isoTo2D(Point *p)
 {
     int tempX, tempY;
     tempX = (2 * p->y + p->x) / 2;
@@ -11,7 +11,7 @@ Point isoTo2D(Point *p)
     p->y = tempY;
 }
 
-Point twoDToIso(Point *p)
+void twoDToIso(Point *p)
 {
     int tempX, tempY;
     tempX = p->x - p->y;

@@ -5,6 +5,8 @@
 #include "SDL_functions.h"
 #include "draw_utils.h"
 #include "resource_manager.h"
+#include "drawing_functions.h"
+#include "mouse_functions.h"
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -16,7 +18,7 @@ const int SCREEN_WIDTH = 900;//640;
 const int SCREEN_HEIGHT = 620;//480;
 
 int screen_x, screen_y = 0;
-TILE_TYPE map_value[MAP_SIZE_X][MAP_SIZE_Y] = {0};
+TILE_TYPE map_value[MAP_SIZE_X][MAP_SIZE_Y] = {{0}};
 
 MODE mode = MODE_VIEW;
 
@@ -112,7 +114,7 @@ void planRoad(Point u, Point d)
 void placePlannedBuild()
 {
     if(!ready_to_place) return;
-    Point p, p2;
+    Point p;
     int x, y;
     switch(mode) {
         case MODE_BUILD_ROAD:
@@ -572,4 +574,6 @@ int main(int argc, char* argv[])
     destroy_drawing();
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(window);
+
+	return 0;
 }

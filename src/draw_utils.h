@@ -10,8 +10,8 @@ typedef struct {
   int x, y;
 } Point;
 
-Point isoTo2D(Point *p);
-Point twoDToIso(Point *p);
+void isoTo2D(Point *p);
+void twoDToIso(Point *p);
 void mouseToGrid(int mouseX, int mouseY, Point* p);
 
 #endif
