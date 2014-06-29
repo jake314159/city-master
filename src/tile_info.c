@@ -145,25 +145,25 @@ void initClips()
     tileClips[TILE_RESIDENTIAL_2_B1].h = 65;
 
     
-    tileClips[TILE_POWER_GAS_P1].x = 632;
+    tileClips[TILE_POWER_GAS_P1].x = 0;
     tileClips[TILE_POWER_GAS_P1].y = 0;
-    tileClips[TILE_POWER_GAS_P1].w = 100;
-    tileClips[TILE_POWER_GAS_P1].h = 65*2;
+    tileClips[TILE_POWER_GAS_P1].w = 0;
+    tileClips[TILE_POWER_GAS_P1].h = 0;
 
-    tileClips[TILE_POWER_GAS_P2].x = 732;
+    tileClips[TILE_POWER_GAS_P2].x = 0;
     tileClips[TILE_POWER_GAS_P2].y = 0;
-    tileClips[TILE_POWER_GAS_P2].w = 100;
-    tileClips[TILE_POWER_GAS_P2].h = 65*2;
+    tileClips[TILE_POWER_GAS_P2].w = 0;
+    tileClips[TILE_POWER_GAS_P2].h = 0;
 
-    tileClips[TILE_POWER_GAS_P3].x = 632;
-    tileClips[TILE_POWER_GAS_P3].y = 65*2;
-    tileClips[TILE_POWER_GAS_P3].w = 100;
+    tileClips[TILE_POWER_GAS_P3].x = 0;
+    tileClips[TILE_POWER_GAS_P3].y = 0;
+    tileClips[TILE_POWER_GAS_P3].w = 100; // Grass should be under here to fix the layers
     tileClips[TILE_POWER_GAS_P3].h = 65;
 
-    tileClips[TILE_POWER_GAS_P4].x = 732;
-    tileClips[TILE_POWER_GAS_P4].y = 65*2;
-    tileClips[TILE_POWER_GAS_P4].w = 100;
-    tileClips[TILE_POWER_GAS_P4].h = 65;
+    tileClips[TILE_POWER_GAS_P4].x = 632;
+    tileClips[TILE_POWER_GAS_P4].y = 0;
+    tileClips[TILE_POWER_GAS_P4].w = 100*2;
+    tileClips[TILE_POWER_GAS_P4].h = 65*3;
 
     tileClips[TILE_POWER_SOLAR].x = 632;
     tileClips[TILE_POWER_SOLAR].y = 65*3;
