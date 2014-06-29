@@ -56,6 +56,7 @@ void drawTileFromGridPoint(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
 
 void drawTile(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
 {
+    if( (p->x+clip->w) < 0 || p->y < (-clip->w) || (p->y-clip->h) > window_size_y || (p->x - clip->h) > window_size_x) return;
     renderTextureClip(sheet, ren, (p->x - ((clip->w)>>1)), (p->y - clip->h), clip);
 }
 
