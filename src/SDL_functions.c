@@ -109,6 +109,7 @@ void draw_int(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, 
         exit(1);
     }            
     renderTexture(font_image, ren, x, y);
+    SDL_DestroyTexture(font_image);
 }
 
 void draw_string(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int y, char* text)
@@ -118,4 +119,5 @@ void draw_string(SDL_Renderer* ren, TTF_Font *font, SDL_Color color, int x, int 
         exit(1);
     }            
     renderTexture(font_image, ren, x, y);
+    SDL_DestroyTexture(font_image);
 }
