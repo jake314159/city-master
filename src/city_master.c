@@ -10,6 +10,7 @@
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
+#define ABS(X) (((X)>0) ? (X) : (-(X)))
 
 #define FRAME_TIME_DELAY 20
 
@@ -109,6 +110,75 @@ void planRoad(Point u, Point d)
     plan_up.y = u.y;
     plan_down.x = d.x;
     plan_down.y = d.y;
+}
+
+int costOfPlannedBuild()
+{
+    if(!ready_to_place) return 0;
+
+    int cost = 0, x, y;
+    Point p;
+
+    switch(mode) {
+        case MODE_BUILD_ROAD:
+            cost = getCost(TILE_ROAD_0)*(ABS(plan_down.y-plan_up.y)+ABS(plan_down.x-plan_up.x));
+            break;
+        case MODE_BUILD_RESIDENTIAL_1:;
+            cost = getCost(TILE_RESIDENTIAL_1_ZONE)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            break;
+        case MODE_BUILD_RESIDENTIAL_2:;
+            cost = getCost(TILE_RESIDENTIAL_2_ZONE)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            break;
+        case MODE_BUILD_LANDFILL:;
+            cost = getCost(TILE_LANDFILL_1)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            break;
+        case MODE_BUILD_RETAIL:;
+            cost = getCost(TILE_RETAIL_ZONE)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            break;
+        case MODE_BUILD_POWER_SOLAR:;
+            cost = getCost(TILE_POWER_SOLAR)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            break;
+        case MODE_BUILD_POWER_WIND:;
+            cost = getCost(TILE_POWER_WIND)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            break;
+        case MODE_BUILD_DESTROY:
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    build_tile(p.x, p.y, TILE_GRASS); //TODO Do a proper destroy function
+                }
+            }
+
+            break;
+        case MODE_BUILD_HOSPITAL:
+            cost = getCost(TILE_SERVICE_BUILDING_HOSPITAL);
+            break;
+        case MODE_BUILD_POLICE:
+            cost = getCost(TILE_SERVICE_BUILDING_POLICE);
+            break;
+        case MODE_BUILD_POWER_GAS:;
+            cost += getCost(TILE_POWER_GAS_P1);
+            cost += getCost(TILE_POWER_GAS_P2);
+            cost += getCost(TILE_POWER_GAS_P3);
+            cost += getCost(TILE_POWER_GAS_P4);
+            break;
+        case MODE_BUILD_POWER_NUCLEAR:;
+            cost = getCost(TILE_POWER_NUCLEAR_P1);
+            break;
+        case MODE_BUILD_SCHOOL:;
+            cost = getCost(TILE_COMMUNITY_SCHOOL_P1);
+            break;
+        case MODE_BUILD_STADIUM:;
+            cost = getCost(TILE_CULTURE_STADIUM_P1);
+            break;
+        case MODE_BUILD_PARK:;
+            cost = getCost(TILE_CULTURE_PARK_P1);
+            break;
+        default:
+            break;
+    }
+    return cost;
 }
 
 void placePlannedBuild()

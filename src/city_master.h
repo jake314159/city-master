@@ -28,3 +28,4 @@ typedef enum {
 void setMode(MODE mode);
 MODE getMode();
 bool build_tile(int x, int y, TILE_TYPE t);
+int costOfPlannedBuild();

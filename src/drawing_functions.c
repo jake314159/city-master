@@ -38,6 +38,7 @@ TTF_Font *fontLarge;
 SDL_Rect top_bar = {0,0,1000,30};
 SDL_Color top_bar_text_color = {0,0,0};
 SDL_Rect side_bar = {0,40,200,400};
+SDL_Rect planned_cost_box = {180, 30,100,20};
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -298,7 +299,6 @@ void draw_HUD(SDL_Renderer* ren)
         SDL_RenderFillRect(ren, &scaleBox);
     }
 
-
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
 
     SDL_Rect open_menu_button = {window_size_x-30,0,30,30};
@@ -337,7 +337,13 @@ void draw_HUD(SDL_Renderer* ren)
     if(modeText != NULL) {
         draw_string(ren, font, top_bar_text_color, 5, window_size_y-15, modeText);
     }
+    if(ready_to_place) {
+        SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
+        SDL_RenderFillRect(ren, &planned_cost_box);
+        draw_int(ren, font, top_bar_text_color, 200, 35, costOfPlannedBuild(),  "(-£", "000)");
+    }
 
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
     draw_menu(ren);
 }
 
