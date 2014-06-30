@@ -433,8 +433,10 @@ int getCost(TILE_TYPE t)
             break;
         case TILE_SERVICE_BUILDING_POLICE:
             cost = 150;
+            break;
         case TILE_RESIDENTIAL_1_ZONE:
         case TILE_RESIDENTIAL_2_ZONE:
+        case TILE_RETAIL_ZONE:
             cost = 1;
             break;
         case TILE_LANDFILL_1:

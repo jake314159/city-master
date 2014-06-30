@@ -124,22 +124,22 @@ int costOfPlannedBuild()
             cost = getCost(TILE_ROAD_0)*(ABS(plan_down.y-plan_up.y)+ABS(plan_down.x-plan_up.x));
             break;
         case MODE_BUILD_RESIDENTIAL_1:;
-            cost = getCost(TILE_RESIDENTIAL_1_ZONE)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            cost = getCost(TILE_RESIDENTIAL_1_ZONE)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
         case MODE_BUILD_RESIDENTIAL_2:;
-            cost = getCost(TILE_RESIDENTIAL_2_ZONE)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            cost = getCost(TILE_RESIDENTIAL_2_ZONE)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
         case MODE_BUILD_LANDFILL:;
-            cost = getCost(TILE_LANDFILL_1)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            cost = getCost(TILE_LANDFILL_1)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
         case MODE_BUILD_RETAIL:;
-            cost = getCost(TILE_RETAIL_ZONE)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            cost = getCost(TILE_RETAIL_ZONE)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
         case MODE_BUILD_POWER_SOLAR:;
-            cost = getCost(TILE_POWER_SOLAR)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            cost = getCost(TILE_POWER_SOLAR)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
         case MODE_BUILD_POWER_WIND:;
-            cost = getCost(TILE_POWER_WIND)*(ABS(plan_down.y-plan_up.y)*ABS(plan_down.x-plan_up.x));
+            cost = getCost(TILE_POWER_WIND)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
         case MODE_BUILD_DESTROY:
             for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
