@@ -44,6 +44,8 @@ void initClips()
     tilePowerRequirements[TILE_LANDFILL_1] = 0;
     tilePowerRequirements[TILE_LANDFILL_2] = 0;
     tilePowerRequirements[TILE_LANDFILL_3] = 0;
+    tilePowerRequirements[TILE_CULTURE_STADIUM_P1] = 500;
+    tilePowerRequirements[TILE_CULTURE_PARK_P1] = 0;
 
     tilePopulation[TILE_GRASS] = 0;
     tilePopulation[TILE_BUILDING] = 0;
@@ -263,6 +265,51 @@ void initClips()
     tileClips[TILE_COMMUNITY_SCHOOL_P4].w = 100*2;
     tileClips[TILE_COMMUNITY_SCHOOL_P4].h = 65*3;
 
+    tileClips[TILE_CULTURE_PARK_P1].x = 0;
+    tileClips[TILE_CULTURE_PARK_P1].y = 0;
+    tileClips[TILE_CULTURE_PARK_P1].w = 0;
+    tileClips[TILE_CULTURE_PARK_P1].h = 0;
+
+    tileClips[TILE_CULTURE_PARK_P2].x = 0;
+    tileClips[TILE_CULTURE_PARK_P2].y = 0;
+    tileClips[TILE_CULTURE_PARK_P2].w = 0;
+    tileClips[TILE_CULTURE_PARK_P2].h = 0;
+
+    tileClips[TILE_CULTURE_PARK_P3].x = 0;
+    tileClips[TILE_CULTURE_PARK_P3].y = 0;
+    tileClips[TILE_CULTURE_PARK_P3].w = 100; // Grass should be under here to fix the layers
+    tileClips[TILE_CULTURE_PARK_P3].h = 65;
+
+    tileClips[TILE_CULTURE_PARK_P4].x = 932;
+    tileClips[TILE_CULTURE_PARK_P4].y = 65*3;
+    tileClips[TILE_CULTURE_PARK_P4].w = 100*2;
+    tileClips[TILE_CULTURE_PARK_P4].h = 65*2;
+
+    tileClips[TILE_CULTURE_STADIUM_P1].x = 0;
+    tileClips[TILE_CULTURE_STADIUM_P1].y = 0;
+    tileClips[TILE_CULTURE_STADIUM_P1].w = 0;
+    tileClips[TILE_CULTURE_STADIUM_P1].h = 0;
+
+    tileClips[TILE_CULTURE_STADIUM_P2].x = 0;
+    tileClips[TILE_CULTURE_STADIUM_P2].y = 0;
+    tileClips[TILE_CULTURE_STADIUM_P2].w = 100;
+    tileClips[TILE_CULTURE_STADIUM_P2].h = 65;
+
+    tileClips[TILE_CULTURE_STADIUM_P3].x = 1132;
+    tileClips[TILE_CULTURE_STADIUM_P3].y = 0;
+    tileClips[TILE_CULTURE_STADIUM_P3].w = 400;
+    tileClips[TILE_CULTURE_STADIUM_P3].h = 300;
+
+    /*tileClips[TILE_CULTURE_STADIUM_P3].x = 0;
+    tileClips[TILE_CULTURE_STADIUM_P3].y = 0;
+    tileClips[TILE_CULTURE_STADIUM_P3].w = 100; // Grass should be under here to fix the layers
+    tileClips[TILE_CULTURE_STADIUM_P3].h = 65;
+
+    tileClips[TILE_CULTURE_STADIUM_P4].x = 932;
+    tileClips[TILE_CULTURE_STADIUM_P4].y = 65*5;
+    tileClips[TILE_CULTURE_STADIUM_P4].w = 100*2;
+    tileClips[TILE_CULTURE_STADIUM_P4].h = 65*3;
+*/
     tileClips[TILE_POWER_SOLAR].x = 632;
     tileClips[TILE_POWER_SOLAR].y = 65*3;
     tileClips[TILE_POWER_SOLAR].w = 100;
@@ -392,6 +439,12 @@ int getCost(TILE_TYPE t)
             break;
         case TILE_LANDFILL_1:
             cost = 5;
+            break;
+        case TILE_CULTURE_STADIUM_P1:
+            cost = 600;
+            break;
+        case TILE_CULTURE_PARK_P1:
+            cost = 50;
             break;
         default:
             cost = 0;

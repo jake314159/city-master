@@ -199,6 +199,7 @@ void draw_city(SDL_Renderer* ren)
             case MODE_BUILD_POWER_GAS:
             case MODE_BUILD_POWER_NUCLEAR:
             case MODE_BUILD_SCHOOL:
+            case MODE_BUILD_PARK:
             ;
                 p.x = plan_up.x;
                 p.y = plan_up.y;
@@ -212,6 +213,17 @@ void draw_city(SDL_Renderer* ren)
                 p.x = plan_up.x+1;
                 p.y = plan_up.y+1;
                 draw_highlight(ren, &p);
+                break;
+            case MODE_BUILD_STADIUM:
+            ;
+                int x1, y1;
+                for(x1 = 0; x1<4; x1++) {
+                    for(y1 = 0; y1<4; y1++) {
+                        p.x = plan_up.x+x1;
+                        p.y = plan_up.y+y1;
+                        draw_highlight(ren, &p);
+                    }
+                }
                 break;
 			default:
 				break;

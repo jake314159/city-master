@@ -272,6 +272,44 @@ void placePlannedBuild()
                 }
             }
             break;
+        case MODE_BUILD_STADIUM:;
+            bool canBuildOn_test = plan_up.x > 0 && plan_up.y > 0 && plan_up.x+4 < MAP_SIZE_X && plan_down.y+4 < MAP_SIZE_Y;
+            int x1, y1;
+            for(x1 = 0; x1<4; x1++) {
+                for(y1 = 0; y1<4; y1++) {
+                    if(!canBuildOn(map_value[plan_up.x+x1][plan_up.y+y1])) {
+                        canBuildOn_test = false;
+                        break;
+                    }
+                }
+            }
+            if(canBuildOn_test) {
+                if(canAfford(getCost(TILE_CULTURE_STADIUM_P1))) {
+                    for(x1 = 0; x1<4; x1++) {
+                        for(y1 = 0; y1<4; y1++) {
+                            build_tile(plan_up.x+x1, plan_up.y+y1, TILE_CULTURE_STADIUM_P1);
+                        }
+                    }
+                    build_tile(plan_up.x+3, plan_up.y+0, TILE_CULTURE_STADIUM_P2);
+                    build_tile(plan_up.x+3, plan_up.y+1, TILE_CULTURE_STADIUM_P2);
+                    build_tile(plan_up.x+3, plan_up.y+2, TILE_CULTURE_STADIUM_P2);
+                    build_tile(plan_up.x+3, plan_up.y+3, TILE_CULTURE_STADIUM_P3);
+                    setMode(MODE_VIEW);
+                }
+            }
+            break;
+        case MODE_BUILD_PARK:;
+            if(canBuildOn(map_value[plan_up.x][plan_up.y]) && canBuildOn(map_value[plan_up.x+1][plan_up.y]) 
+                    && canBuildOn(map_value[plan_up.x][plan_up.y+1]) && canBuildOn(map_value[plan_up.x+1][plan_up.y+1])) {
+                if(canAfford(getCost(TILE_CULTURE_PARK_P1)+getCost(TILE_CULTURE_PARK_P2)+
+                        getCost(TILE_CULTURE_PARK_P3)+getCost(TILE_CULTURE_PARK_P4))) {
+                    build_tile(plan_up.x, plan_up.y, TILE_CULTURE_PARK_P1);
+                    build_tile(plan_up.x+1, plan_up.y, TILE_CULTURE_PARK_P2);
+                    build_tile(plan_up.x, plan_up.y+1, TILE_CULTURE_PARK_P3);
+                    build_tile(plan_up.x+1, plan_up.y+1, TILE_CULTURE_PARK_P4);
+                }
+            }
+            break;
         default:
             break;
     }
@@ -523,7 +561,7 @@ int main(int argc, char* argv[])
                         || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
                         || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS || mode == MODE_BUILD_POLICE
                         || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL || mode == MODE_BUILD_LANDFILL
-                        || mode == MODE_BUILD_POWER_NUCLEAR)) {
+                        || mode == MODE_BUILD_POWER_NUCLEAR || mode == MODE_BUILD_STADIUM || mode == MODE_BUILD_PARK)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -554,6 +592,8 @@ int main(int argc, char* argv[])
                         case MODE_BUILD_POWER_GAS:
                         case MODE_BUILD_POWER_NUCLEAR:
                         case MODE_BUILD_SCHOOL:
+                        case MODE_BUILD_STADIUM:
+                        case MODE_BUILD_PARK:
                             planRoad(u, plan_down);
                             break;
                         case MODE_BUILD_DESTROY:
