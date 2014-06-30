@@ -15,9 +15,11 @@ IMG_F = $(addprefix images/parts/,$(IMAGE_FILES:=.png))
 main: $(OBJ_F)
 	$(CC) $^ -o $(OUTPUT) $(LIBS) $(CCFLAGS)
 
-bin/%.o: src/%.c
-	$(CC) -c $(LIBS) $(CCFLAGS) $^ -o $@
+bin/%.o: src/%.c 
+	$(CC) -c -MD $(LIBS) $(CCFLAGS) $< -o $@
 
+# pull in dependency info for *existing* .o files
+-include $(OBJ_F:.o=.d)
 
 sprite-sheet: $(IMG_F)
 	python sprite_line_maker.py images/tile_sheet.png h images/parts/*.png
