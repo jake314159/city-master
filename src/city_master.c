@@ -246,6 +246,20 @@ void placePlannedBuild()
                 }
             }
             break;
+        case MODE_BUILD_POWER_NUCLEAR:;
+            if(canBuildOn(map_value[plan_up.x][plan_up.y]) && canBuildOn(map_value[plan_up.x+1][plan_up.y]) 
+                    && canBuildOn(map_value[plan_up.x][plan_up.y+1]) && canBuildOn(map_value[plan_up.x+1][plan_up.y+1])) {
+                if(canAfford(getCost(TILE_POWER_NUCLEAR_P1)+getCost(TILE_POWER_NUCLEAR_P2)+
+                        getCost(TILE_POWER_NUCLEAR_P3)+getCost(TILE_POWER_NUCLEAR_P4))) {
+                    power_avalible += getPowerProduction(TILE_POWER_NUCLEAR_P1);
+                    build_tile(plan_up.x, plan_up.y, TILE_POWER_NUCLEAR_P1);
+                    build_tile(plan_up.x+1, plan_up.y, TILE_POWER_NUCLEAR_P2);
+                    build_tile(plan_up.x, plan_up.y+1, TILE_POWER_NUCLEAR_P3);
+                    build_tile(plan_up.x+1, plan_up.y+1, TILE_POWER_NUCLEAR_P4);
+                    setMode(MODE_VIEW);
+                }
+            }
+            break;
         case MODE_BUILD_SCHOOL:;
             if(canBuildOn(map_value[plan_up.x][plan_up.y]) && canBuildOn(map_value[plan_up.x+1][plan_up.y]) 
                     && canBuildOn(map_value[plan_up.x][plan_up.y+1]) && canBuildOn(map_value[plan_up.x+1][plan_up.y+1])) {
@@ -508,7 +522,8 @@ int main(int argc, char* argv[])
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
                         || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
                         || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS || mode == MODE_BUILD_POLICE
-                        || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL || mode == MODE_BUILD_LANDFILL)) {
+                        || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL || mode == MODE_BUILD_LANDFILL
+                        || mode == MODE_BUILD_POWER_NUCLEAR)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -537,6 +552,7 @@ int main(int argc, char* argv[])
                         case MODE_BUILD_HOSPITAL:
                         case MODE_BUILD_POLICE:
                         case MODE_BUILD_POWER_GAS:
+                        case MODE_BUILD_POWER_NUCLEAR:
                         case MODE_BUILD_SCHOOL:
                             planRoad(u, plan_down);
                             break;

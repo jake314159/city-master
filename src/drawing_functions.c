@@ -197,6 +197,7 @@ void draw_city(SDL_Renderer* ren)
                 draw_highlight(ren, &p);
                 break;
             case MODE_BUILD_POWER_GAS:
+            case MODE_BUILD_POWER_NUCLEAR:
             case MODE_BUILD_SCHOOL:
             ;
                 p.x = plan_up.x;
