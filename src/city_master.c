@@ -7,6 +7,7 @@
 #include "resource_manager.h"
 #include "drawing_functions.h"
 #include "mouse_functions.h"
+#include "animation_functions.h"
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -576,6 +577,7 @@ int main(int argc, char* argv[])
 
     initClips();
     fill_map();
+    init_animation();
     
     SDL_Event e;
     bool quit = false;
@@ -693,6 +695,7 @@ int main(int argc, char* argv[])
 
         SDL_RenderClear(ren);
         draw_city(ren);
+        draw_animation_overlay(ren);
         draw_HUD(ren);
         SDL_RenderPresent(ren);
     }

@@ -11,3 +11,5 @@ void destroy_drawing();
 void drawTile(SDL_Renderer* ren, Point *p, SDL_Rect *clip);
 void draw_city(SDL_Renderer* ren);
 void draw_HUD(SDL_Renderer* ren);
+void drawTileFromGridPointWithOfset(SDL_Renderer* ren, Point *p, int ofsetX, int ofsetY, SDL_Rect *clip);
+void draw_highlight(SDL_Renderer* ren, Point *p);

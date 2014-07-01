@@ -2,6 +2,7 @@
 #include "city_master.h"
 #include "resource_manager.h"
 #include "menu_manager.h"
+#include "animation_functions.h"
 
 extern int map_value[MAP_SIZE_X][MAP_SIZE_Y];
 extern int screen_x, screen_y;
@@ -52,6 +53,20 @@ void drawTileFromGridPoint(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
     //printf("(%d,%d)\n", p.x, p.y);
     p->x += screen_x;
     p->y += screen_y;
+    renderTextureClip(sheet, ren, (p->x - ((clip->w)>>1)), (p->y - clip->h), clip);
+}
+
+void drawTileFromGridPointWithOfset(SDL_Renderer* ren, Point *p, int ofset_x, int ofset_y, SDL_Rect *clip)
+{
+    p->x *= GRID_TILE_SIZE;
+    p->y *= GRID_TILE_SIZE;
+    //printf("(%d,%d) -> ", p.x, p.y);
+    twoDToIso(p);
+    //printf("(%d,%d)\n", p.x, p.y);
+    p->x += screen_x;
+    p->y += screen_y;
+    p->x += ofset_x;
+    p->y += ofset_y;
     renderTextureClip(sheet, ren, (p->x - ((clip->w)>>1)), (p->y - clip->h), clip);
 }
 
@@ -116,6 +131,7 @@ void draw_city(SDL_Renderer* ren)
             }
             drew_in_this_x = true;
             drawTile(ren, &p, clip);
+            draw_animation_tile(ren, x, y);
         }
         if(!drew_in_this_x && p.y > (window_size_y + clip->h)) {
             break;
