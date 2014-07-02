@@ -8,10 +8,20 @@
 #define EVEN_MASK 1
 #define _BV(X) (1 << (X))
 
-//y
+
+/*
+ * What is the significance of SIN(26.5) and SIN(63.5) ?
+ *     With isometric 3d each plain is normaly separated by 120 degrees
+ *     which will mean when you work it out that to work out movement
+ *     accross the flat plain you will need to be using SIN(30) and 
+ *     SIN(60) to sort out the angles. The tiles used however use a 
+ *     slightly different definition of isometric which means you should
+ *     substitute SIN(30) for SIN(26.5) and SIN(60) for SIN(63.5)
+ */
 #define SIN_30 0.5f
-//x
+#define SIN_26_5 0.4461978131f
 #define SIN_60 0.8660254f
+#define SIN_63_5 0.8949343616f
 
 typedef enum {
     NORTH=0, EAST=1, SOUTH=2, WEST=3
@@ -108,20 +118,20 @@ void getOfset(int car_number, OFSET *ofset)
     //TODO Calculate the values better
     switch(cars[car_number].dir) {
         case NORTH:
-            ofset->ofset_x = -20+10-SIN_60*25 + (SIN_60*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40+10+SIN_30*25 - (SIN_30*cars[car_number].frame*2.5f);
+            ofset->ofset_x = -20+10-SIN_63_5*25 + (SIN_63_5*cars[car_number].frame*2.5f);
+            ofset->ofset_y = -40+10+SIN_26_5*25 - (SIN_26_5*cars[car_number].frame*2.5f);
             break;
         case SOUTH:
-            ofset->ofset_x = -20+10+17+43-SIN_60*10 - (SIN_60*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40+10+10-25+SIN_30*10 + (SIN_30*cars[car_number].frame*2.5f);
+            ofset->ofset_x = -20+10+17+43-SIN_63_5*10 - (SIN_63_5*cars[car_number].frame*2.5f);
+            ofset->ofset_y = -40+10+10-25+SIN_26_5*10 + (SIN_26_5*cars[car_number].frame*2.5f);
             break;
         case EAST:
-            ofset->ofset_x = -20-10+17-SIN_60*10-SIN_60*10+SIN_60*25 + (SIN_60*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40-10-10-SIN_30*10+SIN_30*10+SIN_30*25 + (SIN_30*cars[car_number].frame*2.5f);
+            ofset->ofset_x = -20-10+17-SIN_63_5*10-SIN_63_5*10+SIN_63_5*25 + (SIN_63_5*cars[car_number].frame*2.5f);
+            ofset->ofset_y = -40-10-10-SIN_26_5*10+SIN_26_5*10+SIN_26_5*25 + (SIN_26_5*cars[car_number].frame*2.5f);
             break;
         case WEST:
-            ofset->ofset_x = -20+43+SIN_60*0 - (SIN_60*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40+25+SIN_30*0 - (SIN_30*cars[car_number].frame*2.5f);
+            ofset->ofset_x = -20+43+SIN_63_5*0 - (SIN_63_5*cars[car_number].frame*2.5f);
+            ofset->ofset_y = -40+25+SIN_26_5*0 - (SIN_26_5*cars[car_number].frame*2.5f);
             break;
     }
 
@@ -162,7 +172,7 @@ void draw_animation_tile(SDL_Renderer* ren, int x, int y)
     for(i=0; i<number_of_cars; i++) {
         if(cars[i].x == x && cars[i].y ==y) {
             Point p = {cars[i].x, cars[i].y};
-            Point p2 = p;
+            //Point p2 = p;
             OFSET ofset;
             getOfset(i, &ofset);
             drawTileFromGridPointWithOfset(ren, &p, ofset.ofset_x, ofset.ofset_y, &car_clips[cars[i].img*4+cars[i].dir]);
