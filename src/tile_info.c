@@ -19,9 +19,13 @@ void initClips()
     tilePowerRequirements[TILE_RESIDENTIAL_1_ZONE] = 0;
     tilePowerRequirements[TILE_RESIDENTIAL_1_BUILDING] = 50;
     tilePowerRequirements[TILE_RESIDENTIAL_1_B1] = 100;
+    tilePowerRequirements[TILE_RESIDENTIAL_1_B2] = 0;
+    tilePowerRequirements[TILE_RESIDENTIAL_1_B3] = 50;
     tilePowerRequirements[TILE_RESIDENTIAL_2_ZONE] = 0;
     tilePowerRequirements[TILE_RESIDENTIAL_2_BUILDING] = 30;
     tilePowerRequirements[TILE_RESIDENTIAL_2_B1] = 60;
+    tilePowerRequirements[TILE_RESIDENTIAL_2_B2] = 60;
+    tilePowerRequirements[TILE_RESIDENTIAL_2_B3] = 60;
     tilePowerRequirements[TILE_SERVICE_BUILDING_HOSPITAL] = 1000;
     tilePowerRequirements[TILE_RETAIL_ZONE] = 0;
     tilePowerRequirements[TILE_RETAIL_BUILDING] = 30;
@@ -56,9 +60,13 @@ void initClips()
     tilePopulation[TILE_RESIDENTIAL_1_ZONE] = 0;
     tilePopulation[TILE_RESIDENTIAL_1_BUILDING] = 0;
     tilePopulation[TILE_RESIDENTIAL_1_B1] = 40;
+    tilePopulation[TILE_RESIDENTIAL_1_B2] = 0;
+    tilePopulation[TILE_RESIDENTIAL_1_B3] = 6;
     tilePopulation[TILE_RESIDENTIAL_2_ZONE] = 0;
     tilePopulation[TILE_RESIDENTIAL_2_BUILDING] = 0;
     tilePopulation[TILE_RESIDENTIAL_2_B1] = 6;
+    tilePopulation[TILE_RESIDENTIAL_2_B2] = 10;
+    tilePopulation[TILE_RESIDENTIAL_2_B3] = 6;
     tilePopulation[TILE_SERVICE_BUILDING_HOSPITAL] = 0;
     tilePopulation[TILE_RETAIL_ZONE] = 0;
     tilePopulation[TILE_RETAIL_BUILDING] = 0;
@@ -164,6 +172,16 @@ void initClips()
     tileClips[TILE_RESIDENTIAL_1_B1].w = 100;
     tileClips[TILE_RESIDENTIAL_1_B1].h = 65*2;
 
+    tileClips[TILE_RESIDENTIAL_1_B2].x = 432;
+    tileClips[TILE_RESIDENTIAL_1_B2].y = 65*4;
+    tileClips[TILE_RESIDENTIAL_1_B2].w = 100;
+    tileClips[TILE_RESIDENTIAL_1_B2].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_1_B3].x = 432;
+    tileClips[TILE_RESIDENTIAL_1_B3].y = 65*5;
+    tileClips[TILE_RESIDENTIAL_1_B3].w = 100;
+    tileClips[TILE_RESIDENTIAL_1_B3].h = 65;
+
     tileClips[TILE_RESIDENTIAL_2_ZONE].x = 532;
     tileClips[TILE_RESIDENTIAL_2_ZONE].y = 0;
     tileClips[TILE_RESIDENTIAL_2_ZONE].w = 100;
@@ -178,6 +196,16 @@ void initClips()
     tileClips[TILE_RESIDENTIAL_2_B1].y = 65*2;
     tileClips[TILE_RESIDENTIAL_2_B1].w = 100;
     tileClips[TILE_RESIDENTIAL_2_B1].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_2_B2].x = 532;
+    tileClips[TILE_RESIDENTIAL_2_B2].y = 65*3;
+    tileClips[TILE_RESIDENTIAL_2_B2].w = 100;
+    tileClips[TILE_RESIDENTIAL_2_B2].h = 130;
+
+    tileClips[TILE_RESIDENTIAL_2_B3].x = 532;
+    tileClips[TILE_RESIDENTIAL_2_B3].y = 65*5;
+    tileClips[TILE_RESIDENTIAL_2_B3].w = 100;
+    tileClips[TILE_RESIDENTIAL_2_B3].h = 130;
 
     
     tileClips[TILE_POWER_GAS_P1].x = 0;
@@ -480,8 +508,12 @@ int getIncome(TILE_TYPE t)
             income = -280;
             break;
         case TILE_RESIDENTIAL_1_B1:
+        case TILE_RESIDENTIAL_1_B2:
+        case TILE_RESIDENTIAL_1_B3:
             income = 15;
         case TILE_RESIDENTIAL_2_B1:
+        case TILE_RESIDENTIAL_2_B2:
+        case TILE_RESIDENTIAL_2_B3:
             income = 10;
             break;
         case TILE_RETAIL_B1:

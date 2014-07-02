@@ -465,6 +465,7 @@ void map_update()
 
             if(map_value[x][y] == TILE_RETAIL_B1) shopC += 1;
 
+            int buildingOption;
             switch(map_value[x][y]) {
                 case TILE_RESIDENTIAL_1_ZONE:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_1_BUILDING) && build_prob_check(TILE_RESIDENTIAL_1_ZONE)) {
@@ -476,7 +477,18 @@ void map_update()
                 case TILE_RESIDENTIAL_1_BUILDING:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_1_B1) && build_prob_check(TILE_RESIDENTIAL_1_BUILDING)) {
                         //map_value[x][y] = TILE_RESIDENTIAL_1_B1;
-                        build_tile(x, y, TILE_RESIDENTIAL_1_B1);
+                        buildingOption = rand()%3;
+                        switch(buildingOption) {
+                            case 0:
+                                build_tile(x, y, TILE_RESIDENTIAL_1_B1);
+                                break;
+                            case 1:
+                                build_tile(x, y, TILE_RESIDENTIAL_1_B2);
+                                break;
+                            case 2:
+                                build_tile(x, y, TILE_RESIDENTIAL_1_B3);
+                                break;
+                        }
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_BUILDING);
                     }
                     break;
@@ -490,7 +502,18 @@ void map_update()
                 case TILE_RESIDENTIAL_2_BUILDING:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_2_B1) && build_prob_check(TILE_RESIDENTIAL_2_BUILDING)) {
                         //map_value[x][y] = TILE_RESIDENTIAL_2_B1;
-                        build_tile(x, y, TILE_RESIDENTIAL_2_B1);
+                        buildingOption = rand()%3;
+                        switch(buildingOption) {
+                            case 0:
+                                build_tile(x, y, TILE_RESIDENTIAL_2_B1);
+                                break;
+                            case 1:
+                                build_tile(x, y, TILE_RESIDENTIAL_2_B2);
+                                break;
+                            case 2:
+                                build_tile(x, y, TILE_RESIDENTIAL_2_B3);
+                                break;
+                        }
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
                     }
                     break;

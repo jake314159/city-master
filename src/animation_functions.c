@@ -2,9 +2,10 @@
 #include "city_master.h"
 #include "tile_info.h"
 #include "drawing_functions.h"
+#include "resource_manager.h"
 
 
-#define MAX_NUMBER_OF_CARS 50
+#define MAX_NUMBER_OF_CARS 100
 #define EVEN_MASK 1
 #define _BV(X) (1 << (X))
 
@@ -75,8 +76,15 @@ DIR pick_car_direction(ANIMATION_CAR *car)
     return SOUTH;
 }
 
+void remove_car()
+{
+    number_of_cars--;
+}
+
 void add_car()
 {
+    if(number_of_cars == MAX_NUMBER_OF_CARS) return; //
+
     int x, y, i;
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
@@ -174,7 +182,9 @@ void draw_animation_tile(SDL_Renderer* ren, int x, int y)
 
 void draw_animation_overlay(SDL_Renderer* ren)
 {
-    if(number_of_cars < 20) add_car();
+    //1 car per 500 people (on the road)
+    if(number_of_cars*500 < getPopulation()) add_car();
+    else if(number_of_cars*550 < getPopulation()) remove_car();
 
     int i;
     for(i=0; i<number_of_cars; i++) {
