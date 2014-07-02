@@ -118,20 +118,20 @@ void getOfset(int car_number, OFSET *ofset)
     //TODO Calculate the values better
     switch(cars[car_number].dir) {
         case NORTH:
-            ofset->ofset_x = -20+10-SIN_63_5*25 + (SIN_63_5*(cars[car_number].frame+4)*2.5f);
-            ofset->ofset_y = -40+10+SIN_26_5*25 - (SIN_26_5*(cars[car_number].frame+4)*2.5f);
+            ofset->ofset_x = -10-SIN_63_5*25 + (SIN_63_5*(cars[car_number].frame+4)*2.5f);
+            ofset->ofset_y = -30+SIN_26_5*25 - (SIN_26_5*(cars[car_number].frame+4)*2.5f);
             break;
         case SOUTH:
-            ofset->ofset_x = -20+10+17+43-SIN_63_5*10 - (SIN_63_5*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40+10+10-25+SIN_26_5*10 + (SIN_26_5*cars[car_number].frame*2.5f);
+            ofset->ofset_x = 50-SIN_63_5*10 - (SIN_63_5*cars[car_number].frame*2.5f);
+            ofset->ofset_y = -45+SIN_26_5*10 + (SIN_26_5*cars[car_number].frame*2.5f);
             break;
         case EAST:
-            ofset->ofset_x = -20-10+17-SIN_63_5*10-SIN_63_5*10+SIN_63_5*25 + (SIN_63_5*(cars[car_number].frame-2)*2.5f);
-            ofset->ofset_y = -40-10-10-SIN_26_5*10+SIN_26_5*10+SIN_26_5*25 + (SIN_26_5*(cars[car_number].frame-2)*2.5f);
+            ofset->ofset_x = -13+SIN_63_5*5 + (SIN_63_5*(cars[car_number].frame-2)*2.5f);
+            ofset->ofset_y = -60+SIN_26_5*25 + (SIN_26_5*(cars[car_number].frame-2)*2.5f);
             break;
         case WEST:
-            ofset->ofset_x = -20+43+SIN_63_5*0 - (SIN_63_5*(cars[car_number].frame+2)*2.5f);
-            ofset->ofset_y = -40+25+SIN_26_5*0 - (SIN_26_5*(cars[car_number].frame+2)*2.5f);
+            ofset->ofset_x = 23 - (SIN_63_5*(cars[car_number].frame+2)*2.5f);
+            ofset->ofset_y = -15 - (SIN_26_5*(cars[car_number].frame+2)*2.5f);
             break;
     }
 
