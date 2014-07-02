@@ -141,12 +141,12 @@ void move_car_to_next_pos(ANIMATION_CAR *car)
 {
     car->frame = 0;
     bool doGridChange = true;
-    if( (_BV(car->dir) & (map_value[car->x][car->y]-199)) == 0) {
+    /*if( (_BV(car->dir) & (map_value[car->x][car->y]-199)) == 0) {
         // We can't continue moving in this direction
         car->dir = pick_car_direction(car);
         //if(!(car->dir==SOUTH || car->dir==NORTH)) 
             doGridChange = false;
-    } 
+    } */
 
     if (doGridChange){
         switch(car->dir) {
@@ -190,6 +190,12 @@ void draw_animation_overlay(SDL_Renderer* ren)
         if(cars[i].frame == 22) {
             move_car_to_next_pos(&cars[i]);
         } else {
+            if(cars[i].frame == 11) {//half way through
+                if( (_BV(cars[i].dir) & (map_value[cars[i].x][cars[i].y]-199)) == 0) {
+                    // We can't continue moving in this direction
+                    cars[i].dir = pick_car_direction(&cars[i]);
+                }
+            } 
             cars[i].frame = (cars[i].frame+1);
         }
     }
