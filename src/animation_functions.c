@@ -118,20 +118,20 @@ void getOfset(int car_number, OFSET *ofset)
     //TODO Calculate the values better
     switch(cars[car_number].dir) {
         case NORTH:
-            ofset->ofset_x = -20+10-SIN_63_5*25 + (SIN_63_5*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40+10+SIN_26_5*25 - (SIN_26_5*cars[car_number].frame*2.5f);
+            ofset->ofset_x = -20+10-SIN_63_5*25 + (SIN_63_5*(cars[car_number].frame+4)*2.5f);
+            ofset->ofset_y = -40+10+SIN_26_5*25 - (SIN_26_5*(cars[car_number].frame+4)*2.5f);
             break;
         case SOUTH:
             ofset->ofset_x = -20+10+17+43-SIN_63_5*10 - (SIN_63_5*cars[car_number].frame*2.5f);
             ofset->ofset_y = -40+10+10-25+SIN_26_5*10 + (SIN_26_5*cars[car_number].frame*2.5f);
             break;
         case EAST:
-            ofset->ofset_x = -20-10+17-SIN_63_5*10-SIN_63_5*10+SIN_63_5*25 + (SIN_63_5*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40-10-10-SIN_26_5*10+SIN_26_5*10+SIN_26_5*25 + (SIN_26_5*cars[car_number].frame*2.5f);
+            ofset->ofset_x = -20-10+17-SIN_63_5*10-SIN_63_5*10+SIN_63_5*25 + (SIN_63_5*(cars[car_number].frame-2)*2.5f);
+            ofset->ofset_y = -40-10-10-SIN_26_5*10+SIN_26_5*10+SIN_26_5*25 + (SIN_26_5*(cars[car_number].frame-2)*2.5f);
             break;
         case WEST:
-            ofset->ofset_x = -20+43+SIN_63_5*0 - (SIN_63_5*cars[car_number].frame*2.5f);
-            ofset->ofset_y = -40+25+SIN_26_5*0 - (SIN_26_5*cars[car_number].frame*2.5f);
+            ofset->ofset_x = -20+43+SIN_63_5*0 - (SIN_63_5*(cars[car_number].frame+2)*2.5f);
+            ofset->ofset_y = -40+25+SIN_26_5*0 - (SIN_26_5*(cars[car_number].frame+2)*2.5f);
             break;
     }
 
@@ -140,30 +140,21 @@ void getOfset(int car_number, OFSET *ofset)
 void move_car_to_next_pos(ANIMATION_CAR *car)
 {
     car->frame = 0;
-    bool doGridChange = true;
-    /*if( (_BV(car->dir) & (map_value[car->x][car->y]-199)) == 0) {
-        // We can't continue moving in this direction
-        car->dir = pick_car_direction(car);
-        //if(!(car->dir==SOUTH || car->dir==NORTH)) 
-            doGridChange = false;
-    } */
 
-    if (doGridChange){
-        switch(car->dir) {
-            case NORTH:
-                car->y -= 1;
-                break;
-            case SOUTH:
-                car->y += 1;
-                break;
-            case EAST:
-                car->x += 1;
-                break;
-            case WEST:
-                car->x -= 1;
-                break;
-        }  
-    }
+    switch(car->dir) {
+        case NORTH:
+            car->y -= 1;
+            break;
+        case SOUTH:
+            car->y += 1;
+            break;
+        case EAST:
+            car->x += 1;
+            break;
+        case WEST:
+            car->x -= 1;
+            break;
+    }  
 }
 
 void draw_animation_tile(SDL_Renderer* ren, int x, int y)
@@ -190,9 +181,9 @@ void draw_animation_overlay(SDL_Renderer* ren)
         if(cars[i].frame == 22) {
             move_car_to_next_pos(&cars[i]);
         } else {
-            if(cars[i].frame == 11) {//half way through
+            if(cars[i].frame == 11) { //half way through
                 if( (_BV(cars[i].dir) & (map_value[cars[i].x][cars[i].y]-199)) == 0) {
-                    // We can't continue moving in this direction
+                    // We are on a corner we should turn
                     cars[i].dir = pick_car_direction(&cars[i]);
                 }
             } 
