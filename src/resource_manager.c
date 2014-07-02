@@ -89,3 +89,9 @@ bool enoughWasteDisposal()
     float amount_of_waste = population*(1.f/500.f) + schools*0.5f + police*0.5f + (float)hospitals;
     return amount_of_waste <= waste_disposal_capacity;
 }
+
+float wasteDisposalUtilisation()
+{
+    float amount_of_waste = population*(1.f/500.f) + schools*0.5f + police*0.5f + (float)hospitals;
+    return 1.f-(amount_of_waste)/((float)waste_disposal_capacity);
+}

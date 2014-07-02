@@ -256,6 +256,18 @@ void setColorGoodBad(SDL_Renderer* ren, bool good)
         SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
 }
 
+void draw_scale(SDL_Renderer* ren, SDL_Rect* scale_box, float value) {
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+    SDL_RenderFillRect(ren, scale_box);
+    setColorGoodBad(ren, value >=0.5f);
+    int old_width = scale_box->w;
+    if(value >=0 && value <=1) {
+        scale_box->w = old_width*value;
+    }
+    SDL_RenderFillRect(ren, scale_box);
+    scale_box->w = old_width;
+}
+
 void draw_HUD(SDL_Renderer* ren)
 {
     //Draw the top bar
@@ -275,13 +287,12 @@ void draw_HUD(SDL_Renderer* ren)
         SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
         side_bar.x = window_size_x - side_bar.w;
         SDL_RenderFillRect(ren, &side_bar);
-        SDL_Rect scaleBox = {window_size_x-(fontSizeLarge+2)-5,0,fontSizeLarge+2,fontSizeLarge+2};
+        SDL_Rect scaleBox = {window_size_x-100-5,0,100,fontSizeLarge+2};
         int item_y = side_bar.y+5;
 
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Police:");
-        setColorGoodBad(ren, populationPerPolice() < target_population_per_police);
         scaleBox.y = item_y;
-        SDL_RenderFillRect(ren, &scaleBox);
+        draw_scale(ren, &scaleBox, (target_population_per_police/populationPerPolice())-0.49f);
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Hospitals:");
@@ -293,7 +304,7 @@ void draw_HUD(SDL_Renderer* ren)
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Education:");
         setColorGoodBad(ren, populationPerSchool() < target_population_per_school);
         scaleBox.y = item_y;
-        SDL_RenderFillRect(ren, &scaleBox);
+        draw_scale(ren, &scaleBox, (target_population_per_school/populationPerSchool())-0.49f);
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Shopping:");
@@ -304,15 +315,13 @@ void draw_HUD(SDL_Renderer* ren)
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Power:");
-        setColorGoodBad(ren, power_avalible > (float)reqired_power*1.2f);
         scaleBox.y = item_y;
-        SDL_RenderFillRect(ren, &scaleBox);
+        draw_scale(ren, &scaleBox, 1-(reqired_power)/((float)power_avalible));
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Waste:");
-        setColorGoodBad(ren, enoughWasteDisposal());
         scaleBox.y = item_y;
-        SDL_RenderFillRect(ren, &scaleBox);
+        draw_scale(ren, &scaleBox, wasteDisposalUtilisation());
     }
 
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
@@ -361,5 +370,10 @@ void draw_HUD(SDL_Renderer* ren)
 
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
     draw_menu(ren);
+}
+
+void draw_string_default(SDL_Renderer* ren, int x, int y, char* string)
+{
+    draw_string(ren, fontLarge, top_bar_text_color, x, y, string);
 }
 

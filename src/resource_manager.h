@@ -20,5 +20,6 @@ void setPopulation(int pop);
 
 void setWasteDisposalCapacity(int wdc);
 bool enoughWasteDisposal();
+float wasteDisposalUtilisation();
 
 
