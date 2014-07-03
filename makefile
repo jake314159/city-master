@@ -12,7 +12,7 @@ IMAGE_FILES = 001_ground 002_highlight 003_single_tile_buildings 004_road 005_bu
 OBJ_F = $(addprefix bin/,$(FILES:=.o))
 IMG_F = $(addprefix images/parts/,$(IMAGE_FILES:=.png))
 
-main: $(OBJ_F)
+main: $(OBJ_F) bin/res/strings/*
 	$(CC) $^ -o $(OUTPUT) $(LIBS) $(CCFLAGS)
 
 bin/%.o: src/%.c 
@@ -26,3 +26,4 @@ sprite-sheet: $(IMG_F)
 
 images/parts/%.png: images/%/*.png
 	python sprite_line_maker.py $@ v $^
+

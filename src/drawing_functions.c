@@ -3,6 +3,7 @@
 #include "resource_manager.h"
 #include "menu_manager.h"
 #include "animation_functions.h"
+#include "extern_strings.h"
 
 extern int map_value[MAP_SIZE_X][MAP_SIZE_Y];
 extern int screen_x, screen_y;
@@ -290,36 +291,36 @@ void draw_HUD(SDL_Renderer* ren)
         SDL_Rect scaleBox = {window_size_x-100-5,0,100,fontSizeLarge+2};
         int item_y = side_bar.y+5;
 
-        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Police:");
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_POLICE_start);
         scaleBox.y = item_y;
         draw_scale(ren, &scaleBox, (target_population_per_police/populationPerPolice())-0.49f);
 
         item_y += fontSizeLarge+2;
-        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Hospitals:");
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_HEALTH_start);
         setColorGoodBad(ren, getNumberOfHospitals() > 0);
         scaleBox.y = item_y;
         SDL_RenderFillRect(ren, &scaleBox);
 
         item_y += fontSizeLarge+2;
-        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Education:");
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_EDUCATION_start);
         setColorGoodBad(ren, populationPerSchool() < target_population_per_school);
         scaleBox.y = item_y;
         draw_scale(ren, &scaleBox, (target_population_per_school/populationPerSchool())-0.49f);
 
         item_y += fontSizeLarge+2;
-        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Shopping:");
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_SHOPPING_start);
         float shops_short_by = ((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops;
         setColorGoodBad(ren, shops_short_by <= 0);
         scaleBox.y = item_y;
         SDL_RenderFillRect(ren, &scaleBox);
 
         item_y += fontSizeLarge+2;
-        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Power:");
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_POWER_start);
         scaleBox.y = item_y;
         draw_scale(ren, &scaleBox, 1-(reqired_power)/((float)power_avalible));
 
         item_y += fontSizeLarge+2;
-        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, "Waste:");
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_WASTE_start);
         scaleBox.y = item_y;
         draw_scale(ren, &scaleBox, wasteDisposalUtilisation());
     }
@@ -329,32 +330,31 @@ void draw_HUD(SDL_Renderer* ren)
     SDL_Rect open_menu_button = {window_size_x-30,0,30,30};
     SDL_RenderFillRect(ren, &open_menu_button);
 
-    //printf("window size (%d,%d)\n", window_size_x, window_size_y);
     char* modeText = NULL;
     switch(getMode()) {
         case MODE_BUILD_RESIDENTIAL_1:
-            modeText = "Build cheap housing";
+            modeText = &_binary_MODE_TEXT_RESIDENTIAL_1_start;
             break;
         case MODE_BUILD_RESIDENTIAL_2:
-            modeText = "Build mid range housing";
+            modeText = &_binary_MODE_TEXT_RESIDENTIAL_2_start;
             break;
         case MODE_BUILD_ROAD:
-            modeText = "Build roads";
+            modeText = &_binary_MODE_TEXT_BUILD_ROAD_start;
             break;
         case MODE_BUILD_POWER_GAS:
-            modeText = "Build gas power stations";
+            modeText = &_binary_MODE_TEXT_BUILD_POWER_GAS_start;
             break;
         case MODE_BUILD_DESTROY:
-            modeText = "Demolish";
+            modeText = &_binary_MODE_TEXT_DESTROY_start;
             break;
         case MODE_BUILD_RETAIL:
-            modeText = "Build retail units";
+            modeText = &_binary_MODE_TEXT_BUILD_RETAIL_start;
             break;
         case MODE_BUILD_HOSPITAL:
-            modeText = "Build hospital";
+            modeText = &_binary_MODE_TEXT_BUILD_HOSPITAL_start;
             break;
         case MODE_BUILD_POWER_SOLAR:
-            modeText = "Build solar panels";
+            modeText = &_binary_MODE_TEXT_BUILD_POWER_SOLAR_start;
             break;
         default:
             break;

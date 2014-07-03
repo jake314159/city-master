@@ -8,6 +8,7 @@
 
 #Bugs
 - buildings wider than 1 tile has a layer problem when tall buildings are placed south of the south west tile
+- If large buildings are only just visible at the bottom of the screen sometimes they are not shown and leave a whole in the ground
 
 #Enhancements
 - Take into account culture in prob of people moving to the city

@@ -1,5 +1,9 @@
-
 #include "tile_info.h"
+
+#define SIN_30 0.5f
+#define SIN_26_5 0.4461978131f
+#define SIN_60 0.8660254f
+#define SIN_63_5 0.8949343616f
 
 SDL_Rect tileClips[NUMBER_OF_TILES];
 SDL_Rect spriteClips[NUMBER_OF_SPRITES];
