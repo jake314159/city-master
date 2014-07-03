@@ -2,6 +2,7 @@
 
 int getBalance();
 void changeBalance(int value);
+void setBalance(int value);
 bool canAfford(int value);
 
 void addHospitalToCount();

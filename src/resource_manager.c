@@ -24,6 +24,11 @@ void changeBalance(int value)
     money += value;
 }
 
+void setBalance(int value)
+{
+    money = value;
+}
+
 bool canAfford(int value)
 {
     return value <= money;

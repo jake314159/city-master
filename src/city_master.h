@@ -1,10 +1,13 @@
+#ifndef ____CHECK_ALREADY_IMPORTED_CITY_MASTER____
+#define ____CHECK_ALREADY_IMPORTED_CITY_MASTER____ 1
+
 #include <stdbool.h>
 #include "tile_info.h"
 
 //const int MAP_SIZE_X = 32;
 //const int MAP_SIZE_Y = 32;
-#define MAP_SIZE_X 64
-#define MAP_SIZE_Y 64
+#define MAP_SIZE_X 128
+#define MAP_SIZE_Y 128
 
 typedef enum {
     MODE_VIEW,
@@ -29,3 +32,5 @@ void setMode(MODE mode);
 MODE getMode();
 bool build_tile(int x, int y, TILE_TYPE t);
 int costOfPlannedBuild();
+
+#endif

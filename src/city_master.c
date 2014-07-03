@@ -9,6 +9,7 @@
 #include "mouse_functions.h"
 #include "animation_functions.h"
 #include "menu_manager.h"
+#include "game_file_io.h"
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -616,6 +617,47 @@ void inc_balance()
     changeBalance(balanceChange);
 }
 
+void save_current_game(char *fileName)
+{
+    GAME_SAVE save;
+    save.map_size_x = MAP_SIZE_X;
+    save.map_size_y = MAP_SIZE_Y;
+    save.screen_x = screen_x;
+    save.screen_y = screen_y;
+    save.money = getBalance();
+    save.save_time = time(NULL);
+    int x, y;
+    for(x=1; x<MAP_SIZE_X; x++) {
+        for(y=1;y<MAP_SIZE_Y; y++) {
+            save.map_value[x][y] = map_value[x][y];
+        }
+    }
+    save_game(fileName, &save);
+}
+
+void load_into_current_game(char *fileName)
+{
+    GAME_SAVE save;
+    if(!read_game(fileName, &save)) {
+        printf("Error loading game file\n");
+    }
+
+    if(save.map_size_x != MAP_SIZE_X || save.map_size_y != MAP_SIZE_Y) {
+        printf("Error loading game. Map size of (%d,%d) is not supported and must be (%d,%d)\n", 
+            save.map_size_x, save.map_size_y, MAP_SIZE_X, MAP_SIZE_Y);
+        return;
+    }
+    screen_x = save.screen_x;
+    screen_y = save.screen_y;
+    setBalance(save.money);
+    int x, y;
+    for(x=1; x<MAP_SIZE_X; x++) {
+        for(y=1;y<MAP_SIZE_Y; y++) {
+            map_value[x][y] = save.map_value[x][y];
+        }
+    }
+}
+
 int main(int argc, char* argv[]) 
 {
     SDL_Window *window;                    // Declare a pointer
@@ -697,6 +739,12 @@ int main(int argc, char* argv[])
                         break;
                     case SDLK_RETURN:
                         if(ready_to_place) placePlannedBuild();
+                        break;
+                    case SDLK_l:
+                        load_into_current_game("test_game_save");
+                        break;
+                    case SDLK_s:
+                        save_current_game("test_game_save");
                         break;
                     default:
                         break;
