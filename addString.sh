@@ -7,4 +7,5 @@
 
 # Write the text into a file with the correct name with an extra null
 # character on the end
-echo -en "$2\0" > game_resorces/strings/$1
+echo -en "$2\0" > game_resources/strings/$1
+

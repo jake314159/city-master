@@ -535,3 +535,21 @@ int getTilePopulation(TILE_TYPE t)
     if(t >= TILE_ROAD_0 && t <= TILE_ROAD_14) return 0;
     return tilePopulation[t];
 }
+
+int getAmountOfPolution(TILE_TYPE t)
+{
+    int polutionAmount = 0;
+    switch(t) {
+        case TILE_POWER_GAS_P1:
+            polutionAmount = 300;
+            break;
+        case TILE_LANDFILL_1:
+            polutionAmount = 10;
+            break;
+        default:
+            polutionAmount = 0;
+            break;
+    }
+    return polutionAmount;
+}
+

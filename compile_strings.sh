@@ -8,7 +8,7 @@ OUTPUT_ARCHITECTURE=elf64-x86-64
 BINARY_ARCHITECTURE=i386
 
 
-cd game_resorces/strings
+cd game_resources/strings
 FILES=$(ls -1 *[^o~] | sed 's#^.*/##g')
 
 for f in $FILES
@@ -19,3 +19,4 @@ do
 done
 
 #objcopy --input binary --output $(OUTPUT_ARCHITECTURE) --binary-architecture $(BINARY_ARCHITECTURE) * *.o
+

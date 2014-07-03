@@ -8,6 +8,7 @@
 #include "drawing_functions.h"
 #include "mouse_functions.h"
 #include "animation_functions.h"
+#include "menu_manager.h"
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -764,6 +765,8 @@ int main(int argc, char* argv[])
                     mouseToGrid(e.button.x, e.button.y, &u);
                     plan_up = u;
                 }
+                Point p = {e.button.x, e.button.y};
+                hover_menu(&p);
             }
         }
 

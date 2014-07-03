@@ -125,5 +125,6 @@ int getPowerProduction(TILE_TYPE t);
 int getCost(TILE_TYPE t);
 int getIncome(TILE_TYPE t);
 int getTilePopulation(TILE_TYPE t);
+int getAmountOfPolution(TILE_TYPE t);
 
 #endif
