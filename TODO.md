@@ -10,8 +10,6 @@
 - buildings wider than 1 tile has a layer problem when tall buildings are placed south of the south west tile
 
 #Enhancements
-- People don't want to build houses near cheaper houses
-- People don't want to build houses near power stations/stadium/airport
 - Take into account culture in prob of people moving to the city
 - People can move out if they don't like the city (abandon a building?)
 - Menu needs text detailing what each button does
