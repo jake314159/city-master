@@ -7,21 +7,29 @@
 #include "resource_manager.h"
 #include "drawing_functions.h"
 #include "mouse_functions.h"
-#include "animation_functions.h"
-#include "menu_manager.h"
 #include "game_file_io.h"
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 #define ABS(X) (((X)>0) ? (X) : (-(X)))
 
+// More efficent than % so try to use these
+// Note %2 would be optimised to &1 if using a -O flag
+// BUT this makes clear that this modulo was picked over
+// another one where we had a choice of the value
+#define MOD_2(X) ((X)&1)
+#define MOD_4(X) ((X)&3)
+#define MOD_8(X) ((X)&7)
+#define MOD_16(X) ((X)&15)
+
 #define FRAME_TIME_DELAY 20
 
 const char* WINDOW_NAME = "City Master";
-const int SCREEN_WIDTH = 900;//640;
-const int SCREEN_HEIGHT = 620;//480;
+const static int SCREEN_WIDTH = 900;
+const static int SCREEN_HEIGHT = 620;
 
 int screen_x, screen_y = 0;
+
 TILE_TYPE map_value[MAP_SIZE_X][MAP_SIZE_Y] = {{0}};
 
 MODE mode = MODE_VIEW;
@@ -34,9 +42,9 @@ bool updating_plan = false;
 Point plan_up;
 Point plan_down;
 
-int build_prob = 1500;
-int build_finish_prob = 600;
-int landfill_fill_prob = 65536;
+const static int build_prob = 1500;
+const static int build_finish_prob = 600;
+const static int landfill_fill_prob = 65536;
 
 extern int reqired_power;
 extern int power_avalible;
@@ -52,6 +60,9 @@ int lastBalanceChange;
 
 int window_size_x;
 int window_size_y;
+
+int game_speed = 1; // >0 == forwards; <0 == backwards; 0 == paused
+int speed_counter = 0;
 
 void setMode(MODE m)
 {
@@ -81,7 +92,7 @@ void fill_map()
                 if(r <3) {
                     map_value[x][y] = TILE_TREES_1 + r;
                 } else {
-                    map_value[x][y] = TILE_TREES_1 + r%2;
+                    map_value[x][y] = TILE_TREES_1 + MOD_2(r);
                 }
             }
         }
@@ -530,12 +541,15 @@ bool build_prob_check(TILE_TYPE t, int x, int y)
 
 void map_update()
 {
-    int x, y, pop = 0, shopC = 0, waste_disposal_capacity=0, n_police=0, n_hospitals=0, n_schools = 0, polution = 0;
+    int x, y, pop = 0, shopC = 0, waste_disposal_capacity=0, n_police=0, n_hospitals=0, n_schools = 0, polution = 0, new_req_power = 0, new_avli_power = 0;
+
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
 
             pop += getTilePopulation(map_value[x][y]);
             polution += getAmountOfPolution(map_value[x][y]);
+            new_req_power += getPowerUsage(map_value[x][y]);
+            new_avli_power += getPowerProduction(map_value[x][y]);
 
             if(map_value[x][y] == TILE_LANDFILL_1 || map_value[x][y] == TILE_LANDFILL_2) {
                 waste_disposal_capacity += 1;
@@ -573,6 +587,13 @@ void map_update()
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_1_BUILDING);
                     }
                     break;
+                case TILE_RESIDENTIAL_1_B1:
+                case TILE_RESIDENTIAL_1_B2:
+                case TILE_RESIDENTIAL_1_B3:
+                    if(rand()%8000 == 0) {
+                        build_tile(x, y, TILE_RESIDENTIAL_1_ZONE);
+                    }
+                    break;
                 case TILE_RESIDENTIAL_2_ZONE:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_2_BUILDING) && build_prob_check(TILE_RESIDENTIAL_2_ZONE, x, y)) { 
                         //map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
@@ -598,6 +619,13 @@ void map_update()
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
                     }
                     break;
+                case TILE_RESIDENTIAL_2_B1:
+                case TILE_RESIDENTIAL_2_B2:
+                case TILE_RESIDENTIAL_2_B3:
+                    if(rand()%((int)(15000.f*(1.f-negitive_reputation(x, y, 3)))) == 0) {
+                        build_tile(x, y, TILE_RESIDENTIAL_2_ZONE);
+                    }
+                    break;
                 case TILE_RESIDENTIAL_3_ZONE:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_3_BUILDING) && build_prob_check(TILE_RESIDENTIAL_3_ZONE, x, y)) { 
                         build_tile(x, y, TILE_RESIDENTIAL_3_BUILDING);
@@ -606,7 +634,7 @@ void map_update()
                     break;
                 case TILE_RESIDENTIAL_3_BUILDING:
                     if(grid_supplied(x, y, TILE_RESIDENTIAL_3_B1) && build_prob_check(TILE_RESIDENTIAL_3_BUILDING, x, y)) {
-                        buildingOption = rand()%2;
+                        buildingOption = MOD_2(rand());
                         switch(buildingOption) {
                             case 0:
                                 build_tile(x, y, TILE_RESIDENTIAL_3_B1);
@@ -616,6 +644,12 @@ void map_update()
                                 break;
                         }
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_3_BUILDING);
+                    }
+                    break;
+                case TILE_RESIDENTIAL_3_B1:
+                case TILE_RESIDENTIAL_3_B2:
+                    if(rand()%((int)(15000.f*(1.f-negitive_reputation(x, y, 10)))) == 0) {
+                        build_tile(x, y, TILE_RESIDENTIAL_3_ZONE);
                     }
                     break;
                 case TILE_RETAIL_ZONE:
@@ -652,6 +686,8 @@ void map_update()
     setHospitalCount(n_hospitals);
     setNumberOfSchools(n_schools);
     setPolution(polution);
+    reqired_power = new_req_power; //Recalculate the new power values
+    power_avalible = new_avli_power;
 }
 
 void inc_balance()
@@ -718,12 +754,12 @@ int main(int argc, char* argv[])
 
     // Create an application window with the following settings:
     window = SDL_CreateWindow(
-        WINDOW_NAME,                       // window title
-        SDL_WINDOWPOS_UNDEFINED,           // initial x position
-        SDL_WINDOWPOS_UNDEFINED,           // initial y position
-        SCREEN_WIDTH,                      // width, in pixels
-        SCREEN_HEIGHT,                     // height, in pixels
-        SDL_WINDOW_OPENGL  | SDL_WINDOW_RESIZABLE                  // flags - see below
+        WINDOW_NAME,                                // window title
+        SDL_WINDOWPOS_UNDEFINED,                    // initial x position
+        SDL_WINDOWPOS_UNDEFINED,                    // initial y position
+        SCREEN_WIDTH,                               // width, in pixels
+        SCREEN_HEIGHT,                              // height, in pixels
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE    // flags
     );
 
     if (window == NULL) {
@@ -744,7 +780,6 @@ int main(int argc, char* argv[])
 
     initClips();
     fill_map();
-    init_animation();
     
     SDL_Event e;
     bool quit = false;
@@ -753,10 +788,31 @@ int main(int argc, char* argv[])
         SDL_Delay(FRAME_TIME_DELAY);
         SDL_GetWindowSize(window, &window_size_x, &window_size_y);
 
-        map_update();
-        if(--balanceChangeCounter == 0) {
-            balanceChangeCounter = balanceChangeCounterStart;
-            inc_balance();
+        //Update the map differently depending on the game_speed
+        if(game_speed == 1) {
+            map_update();
+            if(--balanceChangeCounter == 0) {
+                balanceChangeCounter = balanceChangeCounterStart;
+                inc_balance();
+            }
+        } else if (game_speed >1) {
+            int i;
+            for(i=game_speed; i>0; i--) {
+                map_update();
+                if(--balanceChangeCounter == 0) {
+                    balanceChangeCounter = balanceChangeCounterStart;
+                    inc_balance();
+                }
+            }
+        } else if (game_speed <0) {
+            if(--speed_counter<=0) {
+                speed_counter = -(game_speed);
+                map_update();
+                if(--balanceChangeCounter == 0) {
+                    balanceChangeCounter = balanceChangeCounterStart;
+                    inc_balance();
+                }
+            }
         }
 
         while (SDL_PollEvent(&e)) {
@@ -866,13 +922,12 @@ int main(int argc, char* argv[])
                     plan_up = u;
                 }
                 Point p = {e.button.x, e.button.y};
-                hover_menu(&p);
+                check_hover(&p);
             }
         }
 
         SDL_RenderClear(ren);
         draw_city(ren);
-        draw_animation_overlay(ren);
         draw_HUD(ren);
         SDL_RenderPresent(ren);
     }
@@ -883,3 +938,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+

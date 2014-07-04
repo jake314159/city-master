@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="001_unbuilt.svg"
-   inkscape:export-filename="/home/jake/git/cityMaster/images/006_zone_residential_1/001_unbuilt.png"
+   inkscape:export-filename="/home/jake/git/cityMaster/images/013_residential_3/001_unbuilt.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>

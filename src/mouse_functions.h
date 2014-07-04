@@ -3,3 +3,4 @@
 
 bool touch_HUD(Point *down, Point *up);
 bool check_touch_HUD(Point *p);
+void check_hover(Point *p);

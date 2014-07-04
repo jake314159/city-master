@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdbool.h>
 #include "mouse_functions.h"
 #include "city_master.h"
@@ -25,6 +24,9 @@ bool touch_HUD(Point *down, Point *up)
         return true;
     }
     return touch_menu(down, up);
+}
 
-    //return false; //Didn't click on anything in the HUD
+void check_hover(Point *p)
+{
+    hover_menu(p);
 }

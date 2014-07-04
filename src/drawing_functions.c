@@ -129,6 +129,9 @@ bool init_drawing(SDL_Renderer* ren)
 	}
 
     sheet = loadTexture("images/tile_sheet.png", ren);
+
+    init_animation();
+
     return true;
 }
 
@@ -285,6 +288,8 @@ void draw_city(SDL_Renderer* ren)
 				break;
         }
     }
+
+    draw_animation_overlay(ren);
 }
 
 void setColorGoodBad(SDL_Renderer* ren, bool good)

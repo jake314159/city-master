@@ -34,4 +34,7 @@ MODE getMode();
 bool build_tile(int x, int y, TILE_TYPE t);
 int costOfPlannedBuild();
 
+void load_into_current_game(char *fileName);
+void save_current_game(char *fileName);
+
 #endif
