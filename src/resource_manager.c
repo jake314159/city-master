@@ -39,6 +39,11 @@ void addHospitalToCount()
     hospitals++;
 }
 
+void setHospitalCount(int value)
+{
+    hospitals = value;
+}
+
 int getNumberOfPolice()
 {
     return police;
@@ -52,6 +57,11 @@ float populationPerPolice()
 void addPoliceToCount()
 {
     police++;
+}
+
+void setNumberOfPolice(int newValue)
+{
+    police = newValue;
 }
 
 int getNumberOfHospitals()
@@ -82,6 +92,11 @@ float populationPerSchool()
 void addSchoolToCount()
 {
     schools++;
+}
+
+void setNumberOfSchools(int value)
+{
+    schools = value;
 }
 
 void setWasteDisposalCapacity(int wdc)

@@ -63,7 +63,7 @@ void fill_scale_values()
     scale_values.police = (target_population_per_police/populationPerPolice())-0.49f;
     scale_values.health = getNumberOfHospitals() > 0 ? 1.f : 0.f;
     scale_values.education = (target_population_per_school/populationPerSchool())-0.49f;
-    scale_values.shopping = ((((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops) <= 0) ? 0.f : 1.f;
+    scale_values.shopping = ((((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops) <= 0) ? 1.f : 0.f;
     scale_values.power = 1-(reqired_power)/((float)power_avalible);
     scale_values.waste = wasteDisposalUtilisation();
 

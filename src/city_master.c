@@ -506,7 +506,7 @@ bool build_prob_check(TILE_TYPE t, int x, int y)
 
 void map_update()
 {
-    int x, y, pop = 0, shopC = 0, waste_disposal_capacity=0;
+    int x, y, pop = 0, shopC = 0, waste_disposal_capacity=0, n_police=0, n_hospitals=0, n_schools = 0;
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
 
@@ -517,6 +517,9 @@ void map_update()
             }
 
             if(map_value[x][y] == TILE_RETAIL_B1) shopC += 1;
+            else if(map_value[x][y] == TILE_SERVICE_BUILDING_POLICE) n_police += 1;
+            else if(map_value[x][y] == TILE_SERVICE_BUILDING_HOSPITAL) n_hospitals += 1;
+            else if(map_value[x][y] == TILE_COMMUNITY_SCHOOL_P1) n_schools += 1;
 
             int buildingOption;
             switch(map_value[x][y]) {
@@ -602,6 +605,9 @@ void map_update()
     setPopulation(pop);
     number_of_shops = shopC;
     setWasteDisposalCapacity(waste_disposal_capacity);
+    setNumberOfPolice(n_police);
+    setHospitalCount(n_hospitals);
+    setNumberOfSchools(n_schools);
 }
 
 void inc_balance()
