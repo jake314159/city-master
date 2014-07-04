@@ -132,6 +132,9 @@ int costOfPlannedBuild()
         case MODE_BUILD_RESIDENTIAL_2:;
             cost = getCost(TILE_RESIDENTIAL_2_ZONE)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
+        case MODE_BUILD_RESIDENTIAL_3:;
+            cost = getCost(TILE_RESIDENTIAL_3_ZONE)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
+            break;
         case MODE_BUILD_LANDFILL:;
             cost = getCost(TILE_LANDFILL_1)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
@@ -230,6 +233,18 @@ void placePlannedBuild()
                     p.y = y;
                     if(canBuildOn(map_value[p.x][p.y])) {
                         build_tile(p.x, p.y, TILE_RESIDENTIAL_2_ZONE);
+                    }
+                }
+            }
+
+            break;
+        case MODE_BUILD_RESIDENTIAL_3:;
+            for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
+                for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
+                    p.x = x;
+                    p.y = y;
+                    if(canBuildOn(map_value[p.x][p.y])) {
+                        build_tile(p.x, p.y, TILE_RESIDENTIAL_3_ZONE);
                     }
                 }
             }
@@ -421,17 +436,19 @@ bool grid_supplied(int x, int y, TILE_TYPE changeTo)
 
 // Returns 0-1 based on how bad the reputation is of the grid place
 // 1 = very bad  0 = very good
-float negitive_reputation(int x, int y) {
+float negitive_reputation(int x, int y, int distance) {
     int cheapHousing = 0;
     int polutingPowerStation = 0;
     int nuclearPowerStation = 0;
     int stadium = 0;
 
     int xL, yL; //x,y local
-    for(xL = x-3; xL<x+3; xL++) {
-        for(yL = y-3; yL < y+3; yL++) {
+    float checked_cells = 0;
+    for(xL = x-distance; xL<x+distance; xL++) {
+        for(yL = y-distance; yL < y+distance; yL++) {
             if(xL <= 0 || xL >= MAP_SIZE_X || yL <= 0 || yL >= MAP_SIZE_Y) continue;
             else {
+                checked_cells += 1.f;
                 TILE_TYPE mv = map_value[xL][yL];
                 if(mv == TILE_RESIDENTIAL_1_ZONE || mv == TILE_RESIDENTIAL_1_BUILDING || 
                         mv == TILE_RESIDENTIAL_1_B1 || mv == TILE_RESIDENTIAL_1_B2 || 
@@ -456,7 +473,7 @@ float negitive_reputation(int x, int y) {
     } else if(nuclearPowerStation >0) {
         return 0.8f;
     } else if (cheapHousing > 0){
-        return (float)cheapHousing/49.f; //The % of spaces around which are cheap housing
+        return (float)cheapHousing/checked_cells; //The % of spaces around which are cheap housing
     } else {
         return 0.f;
     }
@@ -468,6 +485,7 @@ bool build_prob_check(TILE_TYPE t, int x, int y)
     switch(t) {
         case TILE_RESIDENTIAL_1_ZONE:
         case TILE_RESIDENTIAL_2_ZONE:
+        case TILE_RESIDENTIAL_3_ZONE:
             prob = build_prob;
             if(getNumberOfHospitals() == 0) prob *= 10; //Who would move somewhere without a hospital?
             if(populationPerPolice() > target_population_per_police) prob *= 10;
@@ -475,15 +493,21 @@ bool build_prob_check(TILE_TYPE t, int x, int y)
             if(!enoughWasteDisposal()) prob *= 10;
 
             if(t == TILE_RESIDENTIAL_2_ZONE) {
-                float ngv_reputation = negitive_reputation(x, y);
+                float ngv_reputation = negitive_reputation(x, y, 3);
                 if(ngv_reputation > 0) {
                     prob *= (int)(600.f*ngv_reputation);
+                }
+            } else if(t == TILE_RESIDENTIAL_3_ZONE) {
+                float ngv_reputation = negitive_reputation(x, y, 10);
+                if(ngv_reputation > 0) {
+                    prob *= (int)(800.f*ngv_reputation);
                 }
             }
 
             break;
         case TILE_RESIDENTIAL_1_BUILDING:
         case TILE_RESIDENTIAL_2_BUILDING:
+        case TILE_RESIDENTIAL_3_BUILDING:
         case TILE_RETAIL_BUILDING:
             prob = build_finish_prob;
             break;
@@ -574,16 +598,34 @@ void map_update()
                         reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_2_BUILDING);
                     }
                     break;
+                case TILE_RESIDENTIAL_3_ZONE:
+                    if(grid_supplied(x, y, TILE_RESIDENTIAL_3_BUILDING) && build_prob_check(TILE_RESIDENTIAL_3_ZONE, x, y)) { 
+                        build_tile(x, y, TILE_RESIDENTIAL_3_BUILDING);
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_3_ZONE);
+                    }
+                    break;
+                case TILE_RESIDENTIAL_3_BUILDING:
+                    if(grid_supplied(x, y, TILE_RESIDENTIAL_3_B1) && build_prob_check(TILE_RESIDENTIAL_3_BUILDING, x, y)) {
+                        buildingOption = rand()%2;
+                        switch(buildingOption) {
+                            case 0:
+                                build_tile(x, y, TILE_RESIDENTIAL_3_B1);
+                                break;
+                            case 1:
+                                build_tile(x, y, TILE_RESIDENTIAL_3_B2);
+                                break;
+                        }
+                        reqired_power = reqired_power - getPowerUsage(TILE_RESIDENTIAL_3_BUILDING);
+                    }
+                    break;
                 case TILE_RETAIL_ZONE:
                     if(grid_supplied(x, y, TILE_RETAIL_BUILDING) && build_prob_check(TILE_RETAIL_ZONE, x, y)) { 
-                        //map_value[x][y] = TILE_RESIDENTIAL_2_BUILDING;
                         build_tile(x, y, TILE_RETAIL_BUILDING);
                         reqired_power = reqired_power - getPowerUsage(TILE_RETAIL_ZONE);
                     }
                     break;
                 case TILE_RETAIL_BUILDING:
                     if(grid_supplied(x, y, TILE_RETAIL_B1) && build_prob_check(TILE_RETAIL_BUILDING, x, y)) {
-                        //map_value[x][y] = TILE_RESIDENTIAL_2_B1;
                         build_tile(x, y, TILE_RETAIL_B1);
                         reqired_power = reqired_power - getPowerUsage(TILE_RETAIL_BUILDING);
                     }
@@ -764,7 +806,8 @@ int main(int argc, char* argv[])
                         || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
                         || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS || mode == MODE_BUILD_POLICE
                         || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL || mode == MODE_BUILD_LANDFILL
-                        || mode == MODE_BUILD_POWER_NUCLEAR || mode == MODE_BUILD_STADIUM || mode == MODE_BUILD_PARK)) {
+                        || mode == MODE_BUILD_POWER_NUCLEAR || mode == MODE_BUILD_STADIUM || mode == MODE_BUILD_PARK
+                        || mode == MODE_BUILD_RESIDENTIAL_3)) {
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -785,6 +828,7 @@ int main(int argc, char* argv[])
                     switch(mode) {
                         case MODE_BUILD_RESIDENTIAL_1:
                         case MODE_BUILD_RESIDENTIAL_2:
+                        case MODE_BUILD_RESIDENTIAL_3:
                         case MODE_BUILD_LANDFILL:
                         case MODE_BUILD_RETAIL:
                         case MODE_BUILD_POWER_SOLAR:

@@ -54,6 +54,10 @@ void initClips()
     tilePowerRequirements[TILE_LANDFILL_3] = 0;
     tilePowerRequirements[TILE_CULTURE_STADIUM_P1] = 500;
     tilePowerRequirements[TILE_CULTURE_PARK_P1] = 0;
+    tilePowerRequirements[TILE_RESIDENTIAL_3_ZONE] = 0;
+    tilePowerRequirements[TILE_RESIDENTIAL_3_BUILDING] = 60;
+    tilePowerRequirements[TILE_RESIDENTIAL_3_B1] = 90;
+    tilePowerRequirements[TILE_RESIDENTIAL_3_B2] = 90;
 
     tilePopulation[TILE_GRASS] = 0;
     tilePopulation[TILE_BUILDING] = 0;
@@ -89,6 +93,10 @@ void initClips()
     tilePopulation[TILE_LANDFILL_1] = 0;
     tilePopulation[TILE_LANDFILL_2] = 0;
     tilePopulation[TILE_LANDFILL_3] = 0;
+    tilePopulation[TILE_RESIDENTIAL_3_ZONE] = 0;
+    tilePopulation[TILE_RESIDENTIAL_3_BUILDING] = 0;
+    tilePopulation[TILE_RESIDENTIAL_3_B1] = 2;
+    tilePopulation[TILE_RESIDENTIAL_3_B2] = 4;
 
     // Tiles
     tileClips[TILE_GRASS].x = 0;
@@ -347,6 +355,26 @@ void initClips()
     tileClips[TILE_POWER_SOLAR].w = 100;
     tileClips[TILE_POWER_SOLAR].h = 65*2;
 
+    tileClips[TILE_RESIDENTIAL_3_ZONE].x = 1552;
+    tileClips[TILE_RESIDENTIAL_3_ZONE].y = 0;
+    tileClips[TILE_RESIDENTIAL_3_ZONE].w = 100;
+    tileClips[TILE_RESIDENTIAL_3_ZONE].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_3_BUILDING].x = 1552;
+    tileClips[TILE_RESIDENTIAL_3_BUILDING].y = 65;
+    tileClips[TILE_RESIDENTIAL_3_BUILDING].w = 100;
+    tileClips[TILE_RESIDENTIAL_3_BUILDING].h = 65;
+
+    tileClips[TILE_RESIDENTIAL_3_B1].x = 1552;
+    tileClips[TILE_RESIDENTIAL_3_B1].y = 65*2;
+    tileClips[TILE_RESIDENTIAL_3_B1].w = 100;
+    tileClips[TILE_RESIDENTIAL_3_B1].h = 65*2;
+
+    tileClips[TILE_RESIDENTIAL_3_B2].x = 1552;
+    tileClips[TILE_RESIDENTIAL_3_B2].y = 65*4;
+    tileClips[TILE_RESIDENTIAL_3_B2].w = 100;
+    tileClips[TILE_RESIDENTIAL_3_B2].h = 65*2;
+
 
     //Sprites
 	int i;
@@ -468,6 +496,7 @@ int getCost(TILE_TYPE t)
             break;
         case TILE_RESIDENTIAL_1_ZONE:
         case TILE_RESIDENTIAL_2_ZONE:
+        case TILE_RESIDENTIAL_3_ZONE:
         case TILE_RETAIL_ZONE:
             cost = 1;
             break;
@@ -519,6 +548,10 @@ int getIncome(TILE_TYPE t)
         case TILE_RESIDENTIAL_2_B2:
         case TILE_RESIDENTIAL_2_B3:
             income = 10;
+            break;
+        case TILE_RESIDENTIAL_3_B1:
+        case TILE_RESIDENTIAL_3_B2:
+            income = 22;
             break;
         case TILE_RETAIL_B1:
             income = 30;

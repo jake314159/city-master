@@ -9,7 +9,7 @@
 #define MENU_LENGTH 8
 #define MENU_LONGEST_SUBMENU 6
 SPRITE menu[MENU_LENGTH][MENU_LONGEST_SUBMENU] = {
-    {SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES2, SPRITE_BUILD_ZONE_RETAIL, NULL_SPRITE},
+    {SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES1, SPRITE_BUILD_ZONE_RES2, SPRITE_BUILD_ZONE_RES3, SPRITE_BUILD_ZONE_RETAIL, NULL_SPRITE},
     {SPRITE_BUILD_POWER_GENRAL, SPRITE_BUILD_POWER_GAS, SPRITE_BUILD_POWER_SOLAR, SPRITE_BUILD_POWER_WIND, SPRITE_BUILD_POWER_NUCLEAR, NULL_SPRITE},
     {SPRITE_SERVICES_GENRAL, SPRITE_SERVICES_HOSPITAL, SPRITE_BUILD_SERVICES_POLICE, NULL_SPRITE},
     {SPRITE_BUILD_SCHOOL, SPRITE_BUILD_SCHOOL, NULL_SPRITE},
@@ -57,6 +57,9 @@ void draw_menu(SDL_Renderer* ren)
                 break;
             case SPRITE_BUILD_ZONE_RES2:
                 menuText = &_binary_MODE_TEXT_RESIDENTIAL_2_start;
+                break;
+            case SPRITE_BUILD_ZONE_RES3:
+                menuText = &_binary_MODE_TEXT_RESIDENTIAL_3_start;
                 break;
             case SPRITE_BUILD_SCHOOL:
                 if(hoverMenuX == 0) menuText = &_binary_VALUE_TEXT_EDUCATION_start;
@@ -126,6 +129,9 @@ void button_click(int menu_x, int menu_y, SPRITE sprite)
                 break;
             case SPRITE_BUILD_ZONE_RES2:
                 setMode(MODE_BUILD_RESIDENTIAL_2);
+                break;
+            case SPRITE_BUILD_ZONE_RES3:
+                setMode(MODE_BUILD_RESIDENTIAL_3);
                 break;
             case SPRITE_BUILD_ZONE_RETAIL:
                 setMode(MODE_BUILD_RETAIL);

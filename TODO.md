@@ -36,7 +36,6 @@
 - Internet exchange
 
 ##Zones
-- High value residential
 - Industrial
 - Farming
 

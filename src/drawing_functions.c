@@ -68,7 +68,7 @@ void fill_scale_values()
     scale_values.power = 1-(reqired_power)/((float)power_avalible);
     scale_values.waste = wasteDisposalUtilisation();
     if(getPolution() == 0)      scale_values.polution = 1.f;
-    else if(getPopulation == 0) scale_values.polution = 1.f-((float)getPolution()/500.f);
+    else if(getPopulation() == 0) scale_values.polution = 1.f-((float)getPolution()/500.f);
     else                        scale_values.polution = 1.f-getPolutionPerPerson();
 
     float total = 0;
@@ -225,6 +225,7 @@ void draw_city(SDL_Renderer* ren)
                 break;
             case MODE_BUILD_RESIDENTIAL_1:
             case MODE_BUILD_RESIDENTIAL_2:
+            case MODE_BUILD_RESIDENTIAL_3:
             case MODE_BUILD_DESTROY:
             case MODE_BUILD_LANDFILL:
             case MODE_BUILD_RETAIL:
