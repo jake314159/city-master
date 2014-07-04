@@ -5,6 +5,16 @@
 #include "animation_functions.h"
 #include "extern_strings.h"
 
+typedef struct {
+    float average;
+    float police;
+    float health;
+    float education;
+    float shopping;
+    float power;
+    float waste;
+} SCALE_VALUES;
+
 extern int map_value[MAP_SIZE_X][MAP_SIZE_Y];
 extern int screen_x, screen_y;
 extern Point down_point;
@@ -41,9 +51,31 @@ SDL_Rect top_bar = {0,0,1000,30};
 SDL_Color top_bar_text_color = {0,0,0};
 SDL_Rect side_bar = {0,40,200,400};
 SDL_Rect planned_cost_box = {180, 30,100,20};
+SDL_Rect public_happiness_scale = {500, 5, 100, 20};
+
+SCALE_VALUES scale_values;
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
+
+void fill_scale_values()
+{
+    scale_values.police = (target_population_per_police/populationPerPolice())-0.49f;
+    scale_values.health = getNumberOfHospitals() > 0 ? 1.f : 0.f;
+    scale_values.education = (target_population_per_school/populationPerSchool())-0.49f;
+    scale_values.shopping = ((((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops) <= 0) ? 0.f : 1.f;
+    scale_values.power = 1-(reqired_power)/((float)power_avalible);
+    scale_values.waste = wasteDisposalUtilisation();
+
+    float total = 0;
+    total += scale_values.police > 0.f ? scale_values.police > 1.f ? 1.f : scale_values.police : 0.f;
+    total += scale_values.health > 0.f ? scale_values.health > 1.f ? 1.f : scale_values.health : 0.f;
+    total += scale_values.education > 0.f ? scale_values.education > 1.f ? 1.f : scale_values.education : 0.f;
+    total += scale_values.shopping > 0.f ? scale_values.shopping > 1.f ? 1.f : scale_values.shopping : 0.f;
+    total += scale_values.power > 0.f ? scale_values.power > 1.f ? 1.f : scale_values.power : 0.f;
+    total += scale_values.waste > 0.f ? scale_values.waste > 1.f ? 1.f : scale_values.waste : 0.f;
+    scale_values.average = total/6.f;
+}
 
 void drawTileFromGridPoint(SDL_Renderer* ren, Point *p, SDL_Rect *clip)
 {
@@ -283,6 +315,10 @@ void draw_HUD(SDL_Renderer* ren)
 
     draw_int(ren, font, top_bar_text_color, 400, 0, getPopulation(), "Pop: ", "");
 
+    fill_scale_values();
+    public_happiness_scale.x = window_size_x-100-80;
+    draw_scale(ren, &public_happiness_scale, scale_values.average);
+
     //Draw the side bar
     if(show_sidebar) {
         SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
@@ -293,11 +329,11 @@ void draw_HUD(SDL_Renderer* ren)
 
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_POLICE_start);
         scaleBox.y = item_y;
-        draw_scale(ren, &scaleBox, (target_population_per_police/populationPerPolice())-0.49f);
+        draw_scale(ren, &scaleBox, scale_values.police);
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_HEALTH_start);
-        setColorGoodBad(ren, getNumberOfHospitals() > 0);
+        setColorGoodBad(ren, scale_values.health);
         scaleBox.y = item_y;
         SDL_RenderFillRect(ren, &scaleBox);
 
@@ -305,24 +341,23 @@ void draw_HUD(SDL_Renderer* ren)
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_EDUCATION_start);
         setColorGoodBad(ren, populationPerSchool() < target_population_per_school);
         scaleBox.y = item_y;
-        draw_scale(ren, &scaleBox, (target_population_per_school/populationPerSchool())-0.49f);
+        draw_scale(ren, &scaleBox, scale_values.education);
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_SHOPPING_start);
-        float shops_short_by = ((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops;
-        setColorGoodBad(ren, shops_short_by <= 0);
+        setColorGoodBad(ren, scale_values.shopping);
         scaleBox.y = item_y;
         SDL_RenderFillRect(ren, &scaleBox);
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_POWER_start);
         scaleBox.y = item_y;
-        draw_scale(ren, &scaleBox, 1-(reqired_power)/((float)power_avalible));
+        draw_scale(ren, &scaleBox, scale_values.power);
 
         item_y += fontSizeLarge+2;
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_WASTE_start);
         scaleBox.y = item_y;
-        draw_scale(ren, &scaleBox, wasteDisposalUtilisation());
+        draw_scale(ren, &scaleBox, scale_values.waste);
     }
 
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);

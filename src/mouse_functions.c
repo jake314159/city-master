@@ -20,7 +20,7 @@ bool check_touch_HUD(Point *p)
 
 bool touch_HUD(Point *down, Point *up)
 {
-    if(up->x > window_size_x-30 && up->y < 30) {
+    if(up->x > window_size_x-100-80 && up->y < 30 && up->x < window_size_x-80) {
         show_sidebar = !show_sidebar;
         return true;
     }
