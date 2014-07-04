@@ -25,5 +25,6 @@ extern char _binary_VALUE_TEXT_POLICE_start;
 extern char _binary_VALUE_TEXT_POWER_start;
 extern char _binary_VALUE_TEXT_SHOPPING_start;
 extern char _binary_VALUE_TEXT_WASTE_start;
+extern char _binary_VALUE_TEXT_POLUTION_start;
 
 //extern char _binary__start;

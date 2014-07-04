@@ -13,6 +13,7 @@ typedef struct {
     float shopping;
     float power;
     float waste;
+    float polution;
 } SCALE_VALUES;
 
 extern int map_value[MAP_SIZE_X][MAP_SIZE_Y];
@@ -66,6 +67,9 @@ void fill_scale_values()
     scale_values.shopping = ((((float)getPopulation()/(float)target_population_per_shop) - (float)number_of_shops) <= 0) ? 1.f : 0.f;
     scale_values.power = 1-(reqired_power)/((float)power_avalible);
     scale_values.waste = wasteDisposalUtilisation();
+    if(getPolution() == 0)      scale_values.polution = 1.f;
+    else if(getPopulation == 0) scale_values.polution = 1.f-((float)getPolution()/500.f);
+    else                        scale_values.polution = 1.f-getPolutionPerPerson();
 
     float total = 0;
     total += scale_values.police > 0.f ? scale_values.police > 1.f ? 1.f : scale_values.police : 0.f;
@@ -74,6 +78,7 @@ void fill_scale_values()
     total += scale_values.shopping > 0.f ? scale_values.shopping > 1.f ? 1.f : scale_values.shopping : 0.f;
     total += scale_values.power > 0.f ? scale_values.power > 1.f ? 1.f : scale_values.power : 0.f;
     total += scale_values.waste > 0.f ? scale_values.waste > 1.f ? 1.f : scale_values.waste : 0.f;
+    total += scale_values.polution > 0.f ? scale_values.polution > 1.f ? 1.f : scale_values.polution : 0.f;
     scale_values.average = total/6.f;
 }
 
@@ -358,6 +363,11 @@ void draw_HUD(SDL_Renderer* ren)
         draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_WASTE_start);
         scaleBox.y = item_y;
         draw_scale(ren, &scaleBox, scale_values.waste);
+
+        item_y += fontSizeLarge+2;
+        draw_string(ren, fontLarge, top_bar_text_color, side_bar.x+5, item_y, &_binary_VALUE_TEXT_POLUTION_start);
+        scaleBox.y = item_y;
+        draw_scale(ren, &scaleBox, scale_values.polution);
     }
 
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);

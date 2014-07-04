@@ -8,6 +8,7 @@ int money = 100000; //,000s
 int hospitals = 0; //number of hospitals
 int police = 0; //Number of police stations
 int schools = 0;
+int polution = 0;
 
 int population = 0;
 int number_of_shops = 0;
@@ -114,4 +115,19 @@ float wasteDisposalUtilisation()
 {
     float amount_of_waste = population*(1.f/500.f) + schools*0.5f + police*0.5f + (float)hospitals;
     return 1.f-(amount_of_waste)/((float)waste_disposal_capacity);
+}
+
+void setPolution(int value)
+{
+    polution = value;
+}
+
+int getPolution()
+{
+    return polution;
+}
+
+float getPolutionPerPerson()
+{
+    return (float)polution/(float)population;
 }

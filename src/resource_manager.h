@@ -26,4 +26,8 @@ void setWasteDisposalCapacity(int wdc);
 bool enoughWasteDisposal();
 float wasteDisposalUtilisation();
 
+void setPolution(int value);
+int getPolution();
+float getPolutionPerPerson();
+
 

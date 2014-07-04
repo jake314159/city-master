@@ -544,6 +544,8 @@ int getAmountOfPolution(TILE_TYPE t)
             polutionAmount = 300;
             break;
         case TILE_LANDFILL_1:
+        case TILE_LANDFILL_2:
+        case TILE_LANDFILL_3:
             polutionAmount = 10;
             break;
         default:
