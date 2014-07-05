@@ -1,4 +1,5 @@
 #include "tile_info.h"
+#include "resource_manager.h"
 
 #define SIN_30 0.5f
 #define SIN_26_5 0.4461978131f
@@ -532,7 +533,7 @@ int getIncome(TILE_TYPE t)
             income = -8; 
             break;
         case TILE_SERVICE_BUILDING_HOSPITAL:
-            income = -500;
+            income = -500 - (int)((getPolutionPerPerson()>0.f ? getPolutionPerPerson()<1.f ? getPolutionPerPerson() : 1.f : 0.f)*500.f);
             break;
         case TILE_SERVICE_BUILDING_POLICE:
             income = -260;

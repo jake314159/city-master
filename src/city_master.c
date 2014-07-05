@@ -502,6 +502,7 @@ bool build_prob_check(TILE_TYPE t, int x, int y)
             if(populationPerPolice() > target_population_per_police) prob *= 10;
             if(populationPerSchool() > target_population_per_school) prob *= 4;
             if(!enoughWasteDisposal()) prob *= 10;
+            if(getPopulation() > 500 && getPolutionPerPerson() > 0.5f) prob *= 2;
 
             if(t == TILE_RESIDENTIAL_2_ZONE) {
                 float ngv_reputation = negitive_reputation(x, y, 3);

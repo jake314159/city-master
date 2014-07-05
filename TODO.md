@@ -12,7 +12,7 @@
 
 #Enhancements
 - Take into account culture in prob of people moving to the city
-- Pollution taken into account. Leading to people not wanting to move to the city, higher hospital costs & fines.
+- Pollution leads to fines?
 - Some tiles need animations (smoke from power stations, wind turbine spinning, ...)
 
 
