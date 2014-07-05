@@ -85,25 +85,18 @@ void add_car()
 {
     if(number_of_cars == MAX_NUMBER_OF_CARS) return; //
 
+    bool filled = false;
     int x, y, i;
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
-            if(isRoad(map_value[x][y])) {
-                bool valid = true;
-                for(i=0; i<number_of_cars; i++) {
-                    if(cars[i].x == x && cars[i].y == y) {
-                        valid = false;
-                    }
-                }
-                if(valid) {
-                    cars[number_of_cars].x = x;
-                    cars[number_of_cars].y = y;
-                    cars[number_of_cars].dir = pick_car_direction(&cars[number_of_cars]); //TODO
-                    cars[number_of_cars].img = 0;
-                    cars[number_of_cars].frame = 0;
-                    number_of_cars++;
-                    return;
-                }
+            if(isRoad(map_value[x][y]) && (!filled || (rand()&63)==0)) {
+                cars[number_of_cars].x = x;
+                cars[number_of_cars].y = y;
+                cars[number_of_cars].dir = pick_car_direction(&cars[number_of_cars]); //TODO
+                cars[number_of_cars].img = 0;
+                cars[number_of_cars].frame = 0;
+                number_of_cars++;
+                filled = true;;
             }
         }
     }
@@ -153,23 +146,22 @@ void turn(ANIMATION_CAR *car)
     if((_BV(EAST) & (map_value[car->x][car->y]-199)) != 0) dirOptions += 1;
     if((_BV(WEST) & (map_value[car->x][car->y]-199)) != 0) dirOptions += 1;
 
-
-    if(dirOptions > 2 && (rand()&7)==0) { //X&7 == X%8
+    if(dirOptions > 2 && (rand()&1)==0) { //X&1 == X%2
         int optionPicked = rand()%dirOptions;
         if((_BV(NORTH) & (map_value[car->x][car->y]-199)) != 0) {
-            if(optionPicked == 0) car->dir = NORTH;
+            if(optionPicked == 0 && car->dir != SOUTH) car->dir = NORTH;
             else                  optionPicked--;
         }
         if((_BV(SOUTH) & (map_value[car->x][car->y]-199)) != 0) {
-            if(optionPicked == 0) car->dir = SOUTH;
+            if(optionPicked == 0 && car->dir != NORTH) car->dir = SOUTH;
             else                  optionPicked--;
         }
         if((_BV(EAST) & (map_value[car->x][car->y]-199)) != 0) {
-            if(optionPicked == 0) car->dir = EAST;
+            if(optionPicked == 0 && car->dir != WEST) car->dir = EAST;
             else                  optionPicked--;
         }
         if((_BV(WEST) & (map_value[car->x][car->y]-199)) != 0) {
-            if(optionPicked == 0) car->dir = WEST;
+            if(optionPicked == 0 && car->dir != EAST) car->dir = WEST;
             else                  optionPicked--;
         }
     }
