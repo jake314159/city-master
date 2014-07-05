@@ -145,10 +145,41 @@ void getOfset(int car_number, OFSET *ofset)
 
 }
 
+void turn(ANIMATION_CAR *car)
+{
+    int dirOptions = 0;
+    if((_BV(NORTH) & (map_value[car->x][car->y]-199)) != 0) dirOptions += 1;
+    if((_BV(SOUTH) & (map_value[car->x][car->y]-199)) != 0) dirOptions += 1;
+    if((_BV(EAST) & (map_value[car->x][car->y]-199)) != 0) dirOptions += 1;
+    if((_BV(WEST) & (map_value[car->x][car->y]-199)) != 0) dirOptions += 1;
+
+
+    if(dirOptions > 2 && (rand()&7)==0) { //X&7 == X%8
+        int optionPicked = rand()%dirOptions;
+        if((_BV(NORTH) & (map_value[car->x][car->y]-199)) != 0) {
+            if(optionPicked == 0) car->dir = NORTH;
+            else                  optionPicked--;
+        }
+        if((_BV(SOUTH) & (map_value[car->x][car->y]-199)) != 0) {
+            if(optionPicked == 0) car->dir = SOUTH;
+            else                  optionPicked--;
+        }
+        if((_BV(EAST) & (map_value[car->x][car->y]-199)) != 0) {
+            if(optionPicked == 0) car->dir = EAST;
+            else                  optionPicked--;
+        }
+        if((_BV(WEST) & (map_value[car->x][car->y]-199)) != 0) {
+            if(optionPicked == 0) car->dir = WEST;
+            else                  optionPicked--;
+        }
+    }
+}
+
 void move_car_to_next_pos(ANIMATION_CAR *car)
 {
     car->frame = 0;
-
+    int oldX = car->x;
+    int oldY = car->y;
     switch(car->dir) {
         case NORTH:
             car->y -= 1;
@@ -162,7 +193,21 @@ void move_car_to_next_pos(ANIMATION_CAR *car)
         case WEST:
             car->x -= 1;
             break;
-    }  
+    }
+    //If there is a car in the new x,y values wait for it to move
+    int i;
+    for(i=0; i<number_of_cars; i++) {
+        if(&cars[i] != car && (cars[i].x == car->x && cars[i].y == car->y) && !( 
+            (cars[i].dir == SOUTH && car->dir == NORTH) ||
+            (cars[i].dir == NORTH && car->dir == SOUTH) ||
+            (cars[i].dir == EAST && car->dir == WEST) ||
+            (cars[i].dir == WEST && car->dir == EAST)) 
+            && (rand()&3)!=0) {
+            car->x = oldX;
+            car->y = oldY;
+            car->frame = 22;
+        }
+    }
 }
 
 void draw_animation_tile(SDL_Renderer* ren, int x, int y)
@@ -189,6 +234,7 @@ void draw_animation_overlay(SDL_Renderer* ren)
     int i;
     for(i=0; i<number_of_cars; i++) {
         if(cars[i].frame == 22) {
+            turn(&cars[i]);
             move_car_to_next_pos(&cars[i]);
         } else {
             if(cars[i].frame == 11) { //half way through
