@@ -8,6 +8,7 @@
 #include "drawing_functions.h"
 #include "mouse_functions.h"
 #include "game_file_io.h"
+#include "emergency_manager.h"
 
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
@@ -72,6 +73,17 @@ void setMode(MODE m)
 MODE getMode()
 {
     return mode;
+}
+
+void move_camera_to_grid_location(int x, int y)
+{
+    Point p = {x, y};
+    p.x *= GRID_TILE_SIZE;
+    p.y *= GRID_TILE_SIZE;
+    twoDToIso(&p);
+    screen_x = -p.x + (window_size_x>>1);
+    screen_y = -p.y + (window_size_y>>1);
+    printf("Jump to (%d,%d)\n", screen_x, screen_y);
 }
 
 //sets the road to the correct type
@@ -781,6 +793,7 @@ int main(int argc, char* argv[])
 
     initClips();
     fill_map();
+    init_emergency();
     
     SDL_Event e;
     bool quit = false;
@@ -815,6 +828,8 @@ int main(int argc, char* argv[])
                 }
             }
         }
+
+        update_emergency();
 
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_KEYDOWN) {
@@ -852,6 +867,9 @@ int main(int argc, char* argv[])
                         break;
                     case SDLK_s:
                         save_current_game("test_game_save");
+                        break;
+                    case SDLK_e:
+                        start_emergency();
                         break;
                     default:
                         break;
@@ -929,6 +947,7 @@ int main(int argc, char* argv[])
 
         SDL_RenderClear(ren);
         draw_city(ren);
+        draw_emergency(ren);
         draw_HUD(ren);
         SDL_RenderPresent(ren);
     }

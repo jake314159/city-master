@@ -36,5 +36,6 @@ int costOfPlannedBuild();
 
 void load_into_current_game(char *fileName);
 void save_current_game(char *fileName);
+void move_camera_to_grid_location(int x, int y);
 
 #endif

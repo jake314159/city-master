@@ -428,3 +428,12 @@ void draw_string_default(SDL_Renderer* ren, int x, int y, char* string)
     draw_string(ren, fontLarge, top_bar_text_color, x, y, string);
 }
 
+void draw_string_default_small(SDL_Renderer* ren, int x, int y, char* string)
+{
+    draw_string(ren, font, top_bar_text_color, x, y, string);
+}
+
+TTF_Font* get_large_font()
+{
+    return fontLarge;
+}

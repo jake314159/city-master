@@ -2,12 +2,12 @@
 
 CC = gcc
 CCFLAGS = -Wall
-LIBS = -I'/usr/local/include/SDL2' -I'/usr/include/SDL2' -lSDL2 -L/usr/local/lib -Wl,-rpath='/usr/local/lib' -lSDL2_image -lSDL2_ttf
+LIBS = -I'/usr/local/include/SDL2' -I'/usr/include/SDL2' -lSDL2 -L/usr/local/lib -Wl,-rpath='/usr/local/lib' -lSDL2_image -lSDL2_ttf -lm
 OUTPUT = bin/city_master
 
-FILES = city_master drawing_functions draw_utils menu_manager mouse_functions resource_manager SDL_functions tile_info animation_functions game_file_io
+FILES = city_master drawing_functions draw_utils menu_manager mouse_functions resource_manager SDL_functions tile_info animation_functions game_file_io emergency_manager
 
-IMAGE_FILES = 001_ground 002_highlight 003_single_tile_buildings 004_road 005_build_icons 006_zone_residential_1 007_zone_residential_2 008_power_stations 009_zone_retail 010_double_size_buildings 011_x4_buildings 012_cars 013_residential_3
+IMAGE_FILES = 001_ground 002_highlight 003_single_tile_buildings 004_road 005_build_icons 006_zone_residential_1 007_zone_residential_2 008_power_stations 009_zone_retail 010_double_size_buildings 011_x4_buildings 012_cars 013_residential_3 014_emergency
 
 OBJ_F = $(addprefix bin/,$(FILES:=.o))
 IMG_F = $(addprefix images/parts/,$(IMAGE_FILES:=.png))
