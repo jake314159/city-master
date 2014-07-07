@@ -3,6 +3,7 @@
 #include "city_master.h"
 #include "drawing_functions.h"
 #include "menu_manager.h"
+#include "emergency_manager.h"
 
 #define ABS(X) (((X)>0) ? (X) : (-(X)))
 #define DRAG_SENSITIVITY 5
@@ -14,6 +15,7 @@ extern bool show_sidebar;
 bool check_touch_HUD(Point *p)
 {
     if(p->x > window_size_x-30 && p->y < 30) return true;
+    else if(p->x >= window_size_x-32 && p->y < 80 && p->y > 58) return true;
     return check_touch_menu(p);
 }
 
@@ -22,6 +24,8 @@ bool touch_HUD(Point *down, Point *up)
     if(up->x > window_size_x-100-80 && up->y < 30 && up->x < window_size_x-80) {
         show_sidebar = !show_sidebar;
         return true;
+    } else if(up->x >= window_size_x-32 && up->y < 80 && up->y > 58) {
+        move_camera_to_emergency();
     }
     return touch_menu(down, up);
 }

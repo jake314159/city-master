@@ -701,6 +701,10 @@ void map_update()
     setPolution(polution);
     reqired_power = new_req_power; //Recalculate the new power values
     power_avalible = new_avli_power;
+
+    if(rand()%10000 == 0) {
+        start_emergency();
+    }
 }
 
 void inc_balance()

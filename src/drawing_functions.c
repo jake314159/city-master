@@ -4,6 +4,7 @@
 #include "menu_manager.h"
 #include "animation_functions.h"
 #include "extern_strings.h"
+#include "emergency_manager.h"
 
 typedef struct {
     float average;
@@ -421,6 +422,12 @@ void draw_HUD(SDL_Renderer* ren)
 
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
     draw_menu(ren);
+
+    if(active_emergency()) {
+        Point p = {window_size_x-16, 80};
+        drawTile(ren, &p, getClip(SPRITE_BUILD_BACKGROUND));
+        drawTile(ren, &p, getClip(SPRITE_BUILD_SERVICES_POLICE));
+    }
 }
 
 void draw_string_default(SDL_Renderer* ren, int x, int y, char* string)

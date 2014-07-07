@@ -65,16 +65,26 @@ void set_service_distance()
 }
 
 // Not a very good random function but good enough for now
-void find_random_road(int *xTarget, int *yTarget)
+bool find_random_road(int *xTarget, int *yTarget)
 {
-    bool filled = false;
-    int x, y, i;
+    int number_of_roads = -1;
     for(x=1; x<MAP_SIZE_X; x++) {
         for(y=1;y<MAP_SIZE_Y; y++) {
-            if(isRoad(map_value[x][y]) && (!filled || (rand()&63)==0)) {
+            if(isRoad(map_value[x][y])) {
+                number_of_roads++;
+            }
+        }
+    }
+    if(number_of_roads <0 ) return false; //There are no roads
+
+    int r = rand()%number_of_roads;
+    int x, y;
+    for(x=1; x<MAP_SIZE_X; x++) {
+        for(y=1;y<MAP_SIZE_Y; y++) {
+            if(isRoad(map_value[x][y]) && --r == 0) {
                 *xTarget = x;
                 *yTarget = y;
-                filled = true;;
+                return true;
             }
         }
     }
@@ -88,13 +98,19 @@ void start_emergency()
     switch(random_number) {
         case 0:
             type = EMERGENCY_CAR_CRASH;
-            find_random_road(&x, &y);
+            bool success = find_random_road(&x, &y);
+            if(!success) return; //fail
             counter = 3000;
             break;
     }
     set_service_distance();
     emergency_active = true;
     printf("Emergency activated %x %d %d %d\n", type, x, y, counter);
+}
+
+void move_camera_to_emergency()
+{
+    if(!emergency_active) return;
     move_camera_to_grid_location(x, y);
 }
 
