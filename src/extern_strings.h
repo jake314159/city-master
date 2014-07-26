@@ -19,6 +19,9 @@ extern char _binary_MODE_TEXT_CULTURE_STADIUM_start;
 extern char _binary_MODE_TEXT_CULTURE_PARK_start; 
 extern char _binary_MODE_TEXT_SCHOOL_start;
 extern char _binary_MODE_TEXT_BUILD_ROAD_start;
+extern char _binary_MODE_TEXT_WASTE_MANAGEMENT_start;
+extern char _binary_MODE_TEXT_WASTE_LANDFIL_start;
+extern char _binary_MODE_TEXT_WASTE_RECYCLE_PLANT_start;
 
 extern char _binary_VALUE_TEXT_EDUCATION_start;
 extern char _binary_VALUE_TEXT_HEALTH_start;

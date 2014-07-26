@@ -15,7 +15,7 @@ SPRITE menu[MENU_LENGTH][MENU_LONGEST_SUBMENU] = {
     {SPRITE_BUILD_SCHOOL, SPRITE_BUILD_SCHOOL, NULL_SPRITE},
     {SPRITE_BUILD_CULTURE_GENRAL, SPRITE_BUILD_CULTURE_STADIUM, SPRITE_BUILD_CULTURE_PARK, NULL_SPRITE},
     {SPRITE_BUILD_ROAD, NULL_SPRITE},
-    {SPRITE_BUILD_DESTROY, SPRITE_BUILD_DESTROY, NULL_SPRITE}, //Waste management
+    {SPRITE_WASTE_GENERAL, SPRITE_WASTE_GENERAL, SPRITE_WASTE_RECYCLE, NULL_SPRITE}, //Waste management
     {SPRITE_BUILD_DESTROY, NULL_SPRITE}
 };
 
@@ -52,7 +52,7 @@ void draw_menu(SDL_Renderer* ren)
         char* menuText = 0;
         switch(menu[hoverMenuY][hoverMenuX]) {
             case SPRITE_BUILD_ZONE_RES1:
-                if(hoverMenuX == 0) menuText = &_binary_MODE_TEXT_RESIDENTIAL_1_start;
+                if(hoverMenuX == 0) menuText = &_binary_MODE_TEXT_ZONE_start;
                 else                menuText = &_binary_MODE_TEXT_RESIDENTIAL_1_start;
                 break;
             case SPRITE_BUILD_ZONE_RES2:
@@ -100,6 +100,13 @@ void draw_menu(SDL_Renderer* ren)
                 break;
             case SPRITE_BUILD_ROAD:
                 menuText = &_binary_MODE_TEXT_BUILD_ROAD_start;
+                break;
+            case SPRITE_WASTE_GENERAL:
+                if(hoverMenuX == 0) menuText = &_binary_MODE_TEXT_WASTE_MANAGEMENT_start;
+                else                menuText = &_binary_MODE_TEXT_WASTE_LANDFIL_start;
+                break;
+            case SPRITE_WASTE_RECYCLE:
+                menuText = &_binary_MODE_TEXT_WASTE_RECYCLE_PLANT_start;
                 break;
             default:
                 break;
@@ -163,7 +170,7 @@ void button_click(int menu_x, int menu_y, SPRITE sprite)
             case SPRITE_BUILD_CULTURE_PARK:
                 setMode(MODE_BUILD_PARK);
                 break;
-            case SPRITE_BUILD_DESTROY: //Landfill
+            case SPRITE_WASTE_GENERAL: //Landfill
                 setMode(MODE_BUILD_LANDFILL);
                 break;
             default:
