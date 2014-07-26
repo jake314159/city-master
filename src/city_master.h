@@ -38,4 +38,7 @@ void load_into_current_game(char *fileName);
 void save_current_game(char *fileName);
 void move_camera_to_grid_location(int x, int y);
 
+void destory_tile(int x, int y);
+int get_destory_cost(int x, int y);
+
 #endif

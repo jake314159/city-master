@@ -91,6 +91,7 @@ void typeRoad(Point u)
 {
     TILE_TYPE t = typeOfRoad(isRoad(map_value[u.x][u.y-1]), isRoad(map_value[u.x+1][u.y]), 
                                 isRoad(map_value[u.x][u.y+1]), isRoad(map_value[u.x-1][u.y]));
+    //map_value[u.x][u.y]= t;
     build_tile(u.x, u.y, t);
 }
 
@@ -108,6 +109,87 @@ void fill_map()
                 }
             }
         }
+    }
+}
+
+int get_destory_cost(int x, int y)
+{
+    int cost;
+    switch(map_value[x][y]) {
+        case TILE_GRASS:
+        case TILE_LANDFILL_1:
+        case TILE_LANDFILL_2:
+            cost = 0;
+            break;
+        case TILE_TREES_1:
+        case TILE_TREES_2:
+        case TILE_TREES_3:
+            cost = 1;
+            break;
+        default:
+            cost = 5;
+            break;
+    }
+    return cost;
+}
+
+//A little bit of a hack
+//TODO BUG: will also destroy any adjacent stadiums 
+void destroy_stadium(int x, int y)
+{
+    if(map_value[x][y] == TILE_CULTURE_STADIUM_P1 ||
+            map_value[x][y] == TILE_CULTURE_STADIUM_P2 ||
+            map_value[x][y] == TILE_CULTURE_STADIUM_P3) {
+        map_value[x][y] = TILE_GRASS;
+        destroy_stadium(x+1, y);
+        destroy_stadium(x-1, y);
+        destroy_stadium(x, y+1);
+        destroy_stadium(x, y-1);
+    }
+}
+
+void destory_tile(int x, int y)
+{
+    changeBalance(-get_destory_cost(x, y));
+    //TODO stadium
+    switch(map_value[x][y]) {
+        case TILE_POWER_GAS_P1:
+        case TILE_COMMUNITY_SCHOOL_P1:
+        case TILE_POWER_NUCLEAR_P1:
+        case TILE_CULTURE_PARK_P1:
+            map_value[x][y] = TILE_GRASS;
+            map_value[x+1][y] = TILE_GRASS;
+            map_value[x][y+1] = TILE_GRASS;
+            map_value[x+1][y+1] = TILE_GRASS;
+            break;
+        case TILE_POWER_GAS_P2:
+        case TILE_COMMUNITY_SCHOOL_P2:
+        case TILE_POWER_NUCLEAR_P2:
+        case TILE_CULTURE_PARK_P2:
+            destory_tile(x-1, y);
+            break;
+        case TILE_POWER_GAS_P3:
+        case TILE_COMMUNITY_SCHOOL_P3:
+        case TILE_POWER_NUCLEAR_P3:
+        case TILE_CULTURE_PARK_P3:
+            destory_tile(x, y-1);
+            break;
+        case TILE_POWER_GAS_P4:
+        case TILE_COMMUNITY_SCHOOL_P4:
+        case TILE_POWER_NUCLEAR_P4:
+        case TILE_CULTURE_PARK_P4:
+            destory_tile(x-1, y-1);
+            break;
+        case TILE_CULTURE_STADIUM_P1:
+        case TILE_CULTURE_STADIUM_P2:
+        case TILE_CULTURE_STADIUM_P3:
+            destroy_stadium(x, y);
+            break;
+        case TILE_LANDFILL_1:
+        case TILE_LANDFILL_2:
+            break; //Can't be destroyed
+        default:
+            map_value[x][y] = TILE_GRASS;
     }
 }
 
@@ -171,11 +253,10 @@ int costOfPlannedBuild()
             cost = getCost(TILE_POWER_WIND)*((ABS(plan_down.y-plan_up.y)+1)*(ABS(plan_down.x-plan_up.x)+1));
             break;
         case MODE_BUILD_DESTROY:
+            cost = 0;
             for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
                 for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
-                    p.x = x;
-                    p.y = y;
-                    build_tile(p.x, p.y, TILE_GRASS); //TODO Do a proper destroy function
+                    cost += get_destory_cost(x, y);
                 }
             }
 
@@ -326,9 +407,7 @@ void placePlannedBuild()
         case MODE_BUILD_DESTROY:
             for(x = MIN(plan_down.x, plan_up.x); x<=MAX(plan_down.x, plan_up.x); x++) {
                 for(y = MIN(plan_down.y, plan_up.y); y<=MAX(plan_down.y, plan_up.y); y++) {
-                    p.x = x;
-                    p.y = y;
-                    build_tile(p.x, p.y, TILE_GRASS); //TODO Do a proper destroy function
+                    destory_tile(x, y);
                 }
             }
 
@@ -377,6 +456,7 @@ void placePlannedBuild()
                 if(canAfford(getCost(TILE_COMMUNITY_SCHOOL_P1)+getCost(TILE_COMMUNITY_SCHOOL_P2)+
                         getCost(TILE_COMMUNITY_SCHOOL_P3)+getCost(TILE_COMMUNITY_SCHOOL_P4))) {
                     build_tile(plan_up.x, plan_up.y, TILE_COMMUNITY_SCHOOL_P1);
+                    map_value[plan_up.x][plan_up.y] = TILE_COMMUNITY_SCHOOL_P1;
                     build_tile(plan_up.x+1, plan_up.y, TILE_COMMUNITY_SCHOOL_P2);
                     build_tile(plan_up.x, plan_up.y+1, TILE_COMMUNITY_SCHOOL_P3);
                     build_tile(plan_up.x+1, plan_up.y+1, TILE_COMMUNITY_SCHOOL_P4);
@@ -408,6 +488,7 @@ void placePlannedBuild()
                     setMode(MODE_VIEW);
                 }
             }
+            changeBalance(-getCost(TILE_CULTURE_STADIUM_P1));
             break;
         case MODE_BUILD_PARK:;
             if(canBuildOn(map_value[plan_up.x][plan_up.y]) && canBuildOn(map_value[plan_up.x+1][plan_up.y]) 
@@ -459,7 +540,8 @@ bool grid_supplied(int x, int y, TILE_TYPE changeTo)
 
 // Returns 0-1 based on how bad the reputation is of the grid place
 // 1 = very bad  0 = very good
-float negitive_reputation(int x, int y, int distance) {
+float negitive_reputation(int x, int y, int distance)
+{
     int cheapHousing = 0;
     int polutingPowerStation = 0;
     int nuclearPowerStation = 0;
@@ -700,7 +782,7 @@ void map_update()
     setNumberOfSchools(n_schools);
     setPolution(polution);
     reqired_power = new_req_power; //Recalculate the new power values
-    power_avalible = new_avli_power;
+    power_avalible = new_avli_power+ 1000;
 
     if(rand()%10000 == 0) {
         start_emergency();
@@ -882,11 +964,11 @@ int main(int argc, char* argv[])
                 down_point.x = e.button.x;
                 down_point.y = e.button.y;
                 if((mode == MODE_BUILD_ROAD || mode == MODE_BUILD_RESIDENTIAL_1 || mode == MODE_BUILD_RESIDENTIAL_2 
-                        || mode == MODE_BUILD_DESTROY || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
+                         || mode == MODE_BUILD_RETAIL || mode == MODE_BUILD_POWER_SOLAR
                         || mode == MODE_BUILD_HOSPITAL || mode == MODE_BUILD_POWER_GAS || mode == MODE_BUILD_POLICE
                         || mode == MODE_BUILD_POWER_WIND || mode == MODE_BUILD_SCHOOL || mode == MODE_BUILD_LANDFILL
                         || mode == MODE_BUILD_POWER_NUCLEAR || mode == MODE_BUILD_STADIUM || mode == MODE_BUILD_PARK
-                        || mode == MODE_BUILD_RESIDENTIAL_3)) {
+                        || mode == MODE_BUILD_RESIDENTIAL_3 || mode == MODE_BUILD_DESTROY)) {//
                     Point d;
                     mouseToGrid(down_point.x, down_point.y, &d);
                     updating_plan = true;
@@ -920,17 +1002,18 @@ int main(int argc, char* argv[])
                         case MODE_BUILD_SCHOOL:
                         case MODE_BUILD_STADIUM:
                         case MODE_BUILD_PARK:
+                       case MODE_BUILD_DESTROY:
                             planRoad(u, plan_down);
                             break;
-                        case MODE_BUILD_DESTROY:
-                            if(u.x == d.x && u.y == d.y) {
+ 
+                            /*if(u.x == d.x && u.y == d.y) {
                                 build_tile(u.x, u.y, TILE_GRASS);
-                            }
-                            break;
+                            }*/
+                      //      destory_tile(u.x, u.y);
+                       //     break;
                         default:
                             break;
                     }
-                    //map_value[u.x][u.y] = map_value[u.x][u.y]==0 ? 1 : 0;
                 } else {
                     updating_plan = false;
                     ready_to_place = false;

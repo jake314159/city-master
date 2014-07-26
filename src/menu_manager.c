@@ -181,9 +181,9 @@ void button_click(int menu_x, int menu_y, SPRITE sprite)
             case SPRITE_BUILD_ROAD:
                 setMode(MODE_BUILD_ROAD);
                 break;
-          /*  case SPRITE_BUILD_DESTROY:
-                setMode(MODE_BUILD_DESTROY); //TODO disabled temporally 
-                break;*/
+            case SPRITE_BUILD_DESTROY:
+                setMode(MODE_BUILD_DESTROY);
+                break;
             default:
                 break;
         }
